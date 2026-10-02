@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>സ്ഥാപന രജിസ്ട്രേഷൻ - ഫീസ് പോർട്ടൽ</title>
-    <!-- Tailwind CSS CDN for Premium Look -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -45,10 +45,10 @@
                     <select id="instType" required
                         class="w-full px-4 py-2.5 bg-slate-900/50 border border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white transition">
                         <option value="" disabled selected>തിരഞ്ഞെടുക്കുക</option>
-                        <option value="Madrasa">മദ്രസ</option>
-                        <option value="School">സ്കൂൾ</option>
-                        <option value="Mahallu">മഹല്ല്</option>
-                        <option value="Committee">മറ്റ് കമ്മറ്റികൾ</option>
+                        <option value="മദ്രസ">മദ്രസ</option>
+                        <option value="സ്കൂൾ">സ്കൂൾ</option>
+                        <option value="മഹല്ല്">മഹല്ല്</option>
+                        <option value="മറ്റ് കമ്മറ്റികൾ">മറ്റ് കമ്മറ്റികൾ</option>
                     </select>
                 </div>
 
@@ -72,8 +72,8 @@
                     <label class="block text-sm font-medium text-slate-200 mb-1">ആവശ്യമായ വേർഷൻ</label>
                     <select id="versionType" required
                         class="w-full px-4 py-2.5 bg-slate-900/50 border border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white transition">
-                        <option value="Trial">ട്രയൽ വേർഷൻ (1 മാസം സൗജന്യം)</option>
-                        <option value="Permanent">പെർമനെന്റ് വേർഷൻ (1 വർഷം)</option>
+                        <option value="ട്രയൽ (1 മാസം)">ട്രയൽ വേർഷൻ (1 മാസം സൗജന്യം)</option>
+                        <option value="പെർമനെന്റ് (1 വർഷം)">പെർമനെന്റ് വേർഷൻ (1 വർഷം)</option>
                     </select>
                 </div>
             </div>
@@ -104,70 +104,70 @@
         </div>
     </div>
 
-    <!-- Script Section -->
+    <!-- Firebase SDK Scripts -->
     <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, addTimestamp, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // Firebase Configuration
-    const firebaseConfig = {
-        apiKey: "AIzaSyA-DEAr98P18Pe3vfFdHC6bmIZyr47kLeg",
-        authDomain: "fees-management-app-62588.firebaseapp.com",
-        projectId: "fees-management-app-62588",
-        storageBucket: "fees-management-app-62588.firebasestorage.app",
-        messagingSenderId: "347392125928",
-        appId: "1:347392125928:web:f4c9f6e23cee32f0a1525d",
-        measurementId: "G-1VQGK123KY"
-    };
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA-DEAr98P18Pe3vfFdHC6bmIZyr47kLeg",
+            authDomain: "fees-management-app-62588.firebaseapp.com",
+            projectId: "fees-management-app-62588",
+            storageBucket: "fees-management-app-62588.firebasestorage.app",
+            messagingSenderId: "347392125928",
+            appId: "1:347392125928:web:f4c9f6e23cee32f0a1525d",
+            measurementId: "G-1VQGK123KY"
+        };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-    window.handleRegistration = async function(event) {
-        event.preventDefault();
-        
-        const name = document.getElementById('instName').value;
-        const type = document.getElementById('instType').value;
-        const location = document.getElementById('instLocation').value;
-        const phone = document.getElementById('instPhone').value;
-        const version = document.getElementById('versionType').value;
-        const email = document.getElementById('instEmail').value;
-        const password = document.getElementById('instPassword').value;
-        const msgBox = document.getElementById('messageBox');
-        const submitBtn = document.getElementById('submitBtn');
+        window.handleRegistration = async function(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('instName').value;
+            const type = document.getElementById('instType').value;
+            const location = document.getElementById('instLocation').value;
+            const phone = document.getElementById('instPhone').value;
+            const version = document.getElementById('versionType').value;
+            const email = document.getElementById('instEmail').value;
+            const password = document.getElementById('instPassword').value;
+            const msgBox = document.getElementById('messageBox');
+            const submitBtn = document.getElementById('submitBtn');
 
-        submitBtn.disabled = true;
-        submitBtn.innerText = "Register cheyyunnu...";
+            submitBtn.disabled = true;
+            submitBtn.innerText = "രജിസ്റ്റർ ചെയ്യുന്നു...";
 
-        try {
-            // Firestore-ile 'institutions' collection-lekku data save cheyyunnu
-            await addDoc(collection(db, "institutions"), {
-                name: name,
-                type: type,
-                location: location,
-                phone: phone,
-                version: version,
-                email: email,
-                password: password,
-                status: "Pending",
-                createdAt: new Date()
-            });
+            try {
+                // Firestore-ലേക്ക് ഡാറ്റ സേവ് ചെയ്യുന്നു
+                await addDoc(collection(db, "institutions"), {
+                    name: name,
+                    type: type,
+                    location: location,
+                    phone: phone,
+                    version: version,
+                    email: email,
+                    password: password,
+                    status: "Pending",
+                    createdAt: new Date()
+                });
 
-            msgBox.className = "mb-4 p-3 rounded-xl text-sm text-center bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
-            msgBox.innerText = "Registration vijayakaramayi poorthiyayi! Super admin-ante anumatikayi kathirikkuka.";
-            msgBox.classList.remove('hidden');
+                msgBox.className = "mb-4 p-3 rounded-xl text-sm text-center bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+                msgBox.innerText = "രജിസ്ട്രേഷൻ വിജയകരമായി പൂർത്തിയായി! സൂപ്പർ അഡ്മിന്റെ അനുമതിക്കായി കാത്തിരിക്കുക.";
+                msgBox.classList.remove('hidden');
 
-            document.getElementById('registerForm').reset();
-        } catch (error) {
-            console.error("Error adding document: ", error);
-            msgBox.className = "mb-4 p-3 rounded-xl text-sm text-center bg-rose-500/20 text-rose-300 border border-rose-500/30";
-            msgBox.innerText = "Error: Data save cheyyan kazhunjilla.";
-            msgBox.classList.remove('hidden');
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.innerText = "Register cheyyuka";
+                document.getElementById('registerForm').reset();
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                msgBox.className = "mb-4 p-3 rounded-xl text-sm text-center bg-rose-500/20 text-rose-300 border border-rose-500/30";
+                msgBox.innerText = "പ്രശ്നം സംഭവിച്ചു: ഡാറ്റ സേവ് ആയില്ല.";
+                msgBox.classList.remove('hidden');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "രജിസ്റ്റർ ചെയ്യുക";
+            }
         }
-    }
-</script>
+    </script>
 </body>
 </html>
