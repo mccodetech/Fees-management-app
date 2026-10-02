@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>സൂപ്പർ അഡ്മിൻ ഡാഷ്‌ബോർഡ് - ഫീസ് പോർട്ടൽ</title>
+    <title>സൂപ്പർ അഡ്മിൻ ഡാഷ്‌‌ബോർഡ് - ഫീസ് പോർട്ടൽ</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -39,15 +39,15 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
                 <p class="text-slate-400 text-sm">ആകെ സ്ഥാപനങ്ങൾ</p>
-                <h3 class="text-3xl font-bold mt-2 text-indigo-400" id="totalInst">3</h3>
+                <h3 class="text-3xl font-bold mt-2 text-indigo-400" id="totalInst">0</h3>
             </div>
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
                 <p class="text-slate-400 text-sm">അനുമതി കാത്തിരിക്കുന്നവ (Pending)</p>
-                <h3 class="text-3xl font-bold mt-2 text-amber-400" id="pendingInst">1</h3>
+                <h3 class="text-3xl font-bold mt-2 text-amber-400" id="pendingInst">0</h3>
             </div>
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
                 <p class="text-slate-400 text-sm">സജീവമായവ (Active)</p>
-                <h3 class="text-3xl font-bold mt-2 text-emerald-400" id="activeInst">2</h3>
+                <h3 class="text-3xl font-bold mt-2 text-emerald-400" id="activeInst">0</h3>
             </div>
         </div>
 
@@ -68,54 +68,10 @@
                             <th class="p-4 text-right">നടപടികൾ (ACTIONS)</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-800 text-sm">
-                        <!-- Sample Row 1 (Pending) -->
-                        <tr id="row-1">
-                            <td class="p-4">
-                                <div class="font-semibold text-white">മദ്രസത്തുൽ ഇസ്‌ലാം</div>
-                                <div class="text-xs text-slate-400">മദ്രസ</div>
-                            </td>
-                            <td class="p-4">
-                                <div class="text-indigo-300 text-xs">madrasathul@example.com</div>
-                                <div class="text-xs text-slate-400 mt-0.5">9876543210 (കോഴിക്കോട്)</div>
-                            </td>
-                            <td class="p-4">
-                                <span class="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2.5 py-1 rounded-full text-xs">ട്രയൽ (1 മാസം)</span>
-                            </td>
-                            <td class="p-4">
-                                <span id="status-1" class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-full text-xs">പെൻഡിംഗ്</span>
-                            </td>
-                            <td class="p-4 text-right space-x-2" id="action-1">
-                                <button onclick="approveInst(1, 'മദ്രസത്തുൽ ഇസ്‌‌ലാം', '9876543210', 'ട്രയൽ (1 മാസം)')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition">
-                                    അപ്പ്രൂവ് ചെയ്യുക
-                                </button>
-                                <button onclick="rejectInst(1)" class="bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 px-3 py-1.5 rounded-lg text-xs font-medium transition">
-                                    നിരസിക്കുക
-                                </button>
-                            </td>
-                        </tr>
-
-                        <!-- Sample Row 2 (Approved Active) -->
+                    <!-- Dynamic Data Loading Body -->
+                    <tbody class="divide-y divide-slate-800 text-sm" id="institutionTableBody">
                         <tr>
-                            <td class="p-4">
-                                <div class="font-semibold text-white">അൽ-അമീൻ പബ്ലിക് സ്കൂൾ</div>
-                                <div class="text-xs text-slate-400">സ്കൂൾ</div>
-                            </td>
-                            <td class="p-4">
-                                <div class="text-indigo-300 text-xs">alamin@example.com</div>
-                                <div class="text-xs text-slate-400 mt-0.5">9123456789 (മലപ്പുറം)</div>
-                            </td>
-                            <td class="p-4">
-                                <span class="bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2.5 py-1 rounded-full text-xs">പെർമനെന്റ് (1 വർഷം)</span>
-                            </td>
-                            <td class="p-4">
-                                <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-1 rounded-full text-xs">സജീവം (Active)</span>
-                            </td>
-                            <td class="p-4 text-right">
-                                <a href="https://wa.me/919123456789?text=നിങ്ങളുടെ%20ഫീസ്%20പോർട്ടൽ%20അക്കൗണ്ട്%20സജീവമാണ്.%20കാലാവധി:%202027%20ഒക്ടോബർ" target="_blank" class="inline-flex items-center text-xs bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 px-3 py-1.5 rounded-lg hover:bg-emerald-600/30 transition">
-                                    വാട്‌സ്ആപ്പ് അയക്കുക
-                                </a>
-                            </td>
+                            <td colspan="5" class="p-4 text-center text-slate-400">ഡാറ്റ ലോഡ് ചെയ്യുന്നു...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -123,114 +79,118 @@
         </div>
     </main>
 
-    <!-- Script Section -->
+    <!-- Firebase SDK Scripts & Logic -->
     <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyA-DEAr98P18Pe3vfFdHC6bmIZyr47kLeg",
-        authDomain: "fees-management-app-62588.firebaseapp.com",
-        projectId: "fees-management-app-62588",
-        storageBucket: "fees-management-app-62588.firebasestorage.app",
-        messagingSenderId: "347392125928",
-        appId: "1:347392125928:web:f4c9f6e23cee32f0a1525d",
-        measurementId: "G-1VQGK123KY"
-    };
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA-DEAr98P18Pe3vfFdHC6bmIZyr47kLeg",
+            authDomain: "fees-management-app-62588.firebaseapp.com",
+            projectId: "fees-management-app-62588",
+            storageBucket: "fees-management-app-62588.firebasestorage.app",
+            messagingSenderId: "347392125928",
+            appId: "1:347392125928:web:f4c9f6e23cee32f0a1525d",
+            measurementId: "G-1VQGK123KY"
+        };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-    async function loadInstitutions() {
-        const tableBody = document.getElementById('institutionTableBody');
-        tableBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">Loading...</td></tr>`;
-
-        try {
-            const querySnapshot = await getDocs(collection(db, "institutions"));
-            let rows = "";
-            let total = 0;
-            let pending = 0;
-            let active = 0;
-
-            querySnapshot.forEach((document) => {
-                const data = document.data();
-                const docId = document.id;
-                total++;
-
-                if (data.status === "Active") active++;
-                else pending++;
-
-                const statusBadge = data.status === "Active" 
-                    ? `<span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-1 rounded-full text-xs">Sajeevam (Active)</span>`
-                    : `<span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-full text-xs">Pending</span>`;
-
-                const actionBtn = data.status === "Active"
-                    ? `<a href="https://wa.me/91${data.phone}?text=Ningalude%20fee%20portal%20account%20active%20aanu." target="_blank" class="inline-flex items-center text-xs bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 px-3 py-1.5 rounded-lg hover:bg-emerald-600/30 transition">WhatsApp Ayakkuka</a>`
-                    : `<button onclick="approveInst('${docId}', '${data.name}', '${data.phone}', '${data.version}')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition">Approve Cheyyuka</button>
-                       <button onclick="rejectInst('${docId}')" class="bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 px-3 py-1.5 rounded-lg text-xs font-medium transition ml-1">Nirasikkuka</button>`;
-
-                rows += `
-                    <tr id="row-${docId}">
-                        <td class="p-4">
-                            <div class="font-semibold text-white">${data.name}</div>
-                            <div class="text-xs text-slate-400">${data.type}</div>
-                        </td>
-                        <td class="p-4">
-                            <div class="text-indigo-300 text-xs">${data.email}</div>
-                            <div class="text-xs text-slate-400 mt-0.5">${data.phone} (${data.location})</div>
-                        </td>
-                        <td class="p-4">
-                            <span class="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2.5 py-1 rounded-full text-xs">${data.version}</span>
-                        </td>
-                        <td class="p-4">${statusBadge}</td>
-                        <td class="p-4 text-right" id="action-${docId}">${actionBtn}</td>
-                    </tr>
-                `;
-            });
-
-            tableBody.innerHTML = rows || `<tr><td colspan="5" class="p-4 text-center text-slate-400">Registrations onnumilla.</td></tr>`;
-            document.getElementById('totalInst').innerText = total;
-            document.getElementById('pendingInst').innerText = pending;
-            document.getElementById('activeInst').innerText = active;
-
-        } catch (error) {
-            console.error("Error loading institutions: ", error);
-        }
-    }
-
-    window.approveInst = async function(docId, instName, phone, version) {
-        try {
-            const docRef = doc(db, "institutions", docId);
-            await updateDoc(docRef, { status: "Active" });
-
-            alert("Account vijayakaramayi approve cheythu!");
-            loadInstitutions();
-
-            const msg = encodeURIComponent(`Assalamu Alaikum / Namaskaram, ${instName}! Ningalude Fee Management portal account approve cheythirikkunnu. Version: ${version}.`);
-            window.open(`https://wa.me/91${phone}?text=${msg}`, '_blank');
-        } catch (error) {
-            console.error("Error approving: ", error);
-        }
-    }
-
-    window.rejectInst = async function(docId) {
-        if(confirm("Ee registration nirasikkanamennurappano?")) {
+        async function loadInstitutions() {
+            const tableBody = document.getElementById('institutionTableBody');
+            
             try {
-                await deleteDoc(doc(db, "institutions", docId));
-                alert("Registration nirasichu.");
-                loadInstitutions();
+                const querySnapshot = await getDocs(collection(db, "institutions"));
+                let rows = "";
+                let total = 0;
+                let pending = 0;
+                let active = 0;
+
+                querySnapshot.forEach((document) => {
+                    const data = document.data();
+                    const docId = document.id;
+                    total++;
+
+                    if (data.status === "Active") {
+                        active++;
+                    } else {
+                        pending++;
+                    }
+
+                    const statusBadge = data.status === "Active" 
+                        ? `<span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-1 rounded-full text-xs">സജീവം (Active)</span>`
+                        : `<span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-full text-xs">പെൻഡിംഗ്</span>`;
+
+                    const actionBtn = data.status === "Active"
+                        ? `<a href="https://wa.me/91${data.phone}?text=നിങ്ങളുടെ%20ഫീസ്%20പോർട്ടൽ%20അക്കൗണ്ട്%20സജീവമാണ്." target="_blank" class="inline-flex items-center text-xs bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 px-3 py-1.5 rounded-lg hover:bg-emerald-600/30 transition">വാട്‌സ്ആപ്പ് അയക്കുക</a>`
+                        : `<button onclick="approveInst('${docId}', '${data.name}', '${data.phone}', '${data.version}')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition">അപ്പ്രൂവ് ചെയ്യുക</button>
+                           <button onclick="rejectInst('${docId}')" class="bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 px-3 py-1.5 rounded-lg text-xs font-medium transition ml-1">നിരസിക്കുക</button>`;
+
+                    rows += `
+                        <tr>
+                            <td class="p-4">
+                                <div class="font-semibold text-white">${data.name}</div>
+                                <div class="text-xs text-slate-400">${data.type}</div>
+                            </td>
+                            <td class="p-4">
+                                <div class="text-indigo-300 text-xs">${data.email}</div>
+                                <div class="text-xs text-slate-400 mt-0.5">${data.phone} (${data.location})</div>
+                            </td>
+                            <td class="p-4">
+                                <span class="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2.5 py-1 rounded-full text-xs">${data.version}</span>
+                            </td>
+                            <td class="p-4">${statusBadge}</td>
+                            <td class="p-4 text-right">${actionBtn}</td>
+                        </tr>
+                    `;
+                });
+
+                tableBody.innerHTML = rows || `<tr><td colspan="5" class="p-4 text-center text-slate-400">രജിസ്ട്രേഷനുകൾ ഒന്നും ലഭ്യമല്ല.</td></tr>`;
+                document.getElementById('totalInst').innerText = total;
+                document.getElementById('pendingInst').innerText = pending;
+                document.getElementById('activeInst').innerText = active;
+
             } catch (error) {
-                console.error("Error deleting: ", error);
+                console.error("Error loading institutions: ", error);
+                tableBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-rose-400">ഡാറ്റ ലോഡ് ചെയ്യുന്നതിൽ പിശക് സംഭവിച്ചു.</td></tr>`;
             }
         }
-    }
 
-    window.logoutAdmin = function() {
-        window.location.href = 'admin-login.html';
-    }
+        window.approveInst = async function(docId, instName, phone, version) {
+            try {
+                const docRef = doc(db, "institutions", docId);
+                await updateDoc(docRef, { status: "Active" });
 
-    // Page load avumbol data fetch cheyyunnu
-    loadInstitutions();
-</script>
+                alert("സ്ഥാപനത്തിന്റെ അക്കൗണ്ട് വിജയകരമായി അപ്പ്രൂവ് ചെയ്തു!");
+                loadInstitutions();
+
+                const msg = encodeURIComponent(`അസ്സലാമു അലൈക്കും / നമസ്കാരം, ${instName}! ഫീസ് മാനേജ്മെന്റ് പോർട്ടലിലേക്കുള്ള നിങ്ങളുടെ അക്കൗണ്ട് അപ്പ്രൂവ് ചെയ്തിരിക്കുന്നു. വേർഷൻ: ${version}.`);
+                window.open(`https://wa.me/91${phone}?text=${msg}`, '_blank');
+            } catch (error) {
+                console.error("Error approving: ", error);
+            }
+        }
+
+        window.rejectInst = async function(docId) {
+            if(confirm("ഈ രജിസ്ട്രേഷൻ നിരസിക്കണമെന്നുറപ്പാണോ?")) {
+                try {
+                    await deleteDoc(doc(db, "institutions", docId));
+                    alert("രജിസ്ട്രേഷൻ നിരസിച്ചു.");
+                    loadInstitutions();
+                } catch (error) {
+                    console.error("Error deleting: ", error);
+                }
+            }
+        }
+
+        window.logoutAdmin = function() {
+            window.location.href = 'admin-login.html';
+        }
+
+        // Load data on page open
+        loadInstitutions();
+    </script>
 </body>
 </html>
