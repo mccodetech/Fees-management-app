@@ -74,7 +74,10 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1" id="extraLabel">ക്ലാസ് / വാർഡ്</label>
-                            <input type="text" id="inputExtra" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="ഉദാ: 5th Standard / Ward 2">
+                            <!-- ഇവിടെ ഇനി ടെക്സ്റ്റിന് പകരം താഴെയുള്ള സ്ക്രിപ്റ്റ് വഴി ഡ്രോപ്പ്-ഡൗൺ ആയി മാറും -->
+                            <select id="inputExtra" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+                                <option value="" disabled selected>തിരഞ്ഞെടുക്കുക</option>
+                            </select>
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1">ഫീസ് ഇനം</label>
@@ -93,7 +96,7 @@
                             <input type="number" id="feeAmount" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="500">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1">വാട്‌സ്ആപ്പ് നമ്പർ</label>
+                            <label class="block text-xs font-medium text-slate-300 mb-1">വാട്‌‌സ്ആപ്പ് നമ്പർ</label>
                             <input type="tel" id="parentPhone" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="9876543210">
                         </div>
                     </div>
@@ -178,6 +181,7 @@
 
         async function loadInstitutionDetails() {
             const userEmail = localStorage.getItem('loggedInEmail') || "madrasathul@example.com";
+            const extraSelect = document.getElementById('inputExtra');
 
             try {
                 const q = query(collection(db, "institutions"), where("email", "==", userEmail));
@@ -201,6 +205,16 @@
                         document.getElementById('tableHeading').innerText = "അംഗങ്ങളുടെ ഫണ്ട് വിവരങ്ങൾ";
                         document.getElementById('thName').innerText = "അംഗം & വീട്ടുപേര്";
                         document.getElementById('thExtra').innerText = "വാർഡ്";
+
+                        // മഹല്ല് വാർഡുകൾ ഡ്രോപ്പ്-ഡൗൺ
+                        extraSelect.innerHTML = `
+                            <option value="" disabled selected>വാർഡ് തിരഞ്ഞെടുക്കുക</option>
+                            <option value="Ward 1">Ward 1</option>
+                            <option value="Ward 2">Ward 2</option>
+                            <option value="Ward 3">Ward 3</option>
+                            <option value="Ward 4">Ward 4</option>
+                            <option value="Ward 5">Ward 5</option>
+                        `;
                     } else {
                         isMahall = false;
                         document.getElementById('statCountLabel').innerText = "ആകെ വിദ്യാർത്ഥികൾ";
@@ -211,6 +225,19 @@
                         document.getElementById('tableHeading').innerText = "വിദ്യാർത്ഥികളുടെ ഫീസ് വിവരങ്ങൾ";
                         document.getElementById('thName').innerText = "വിദ്യാർത്ഥി & ID";
                         document.getElementById('thExtra').innerText = "ക്ലാസ്";
+
+                        // മദ്രസ / സ്കൂൾ ക്ലാസുകൾ ഡ്രോപ്പ്-ഡൗൺ
+                        extraSelect.innerHTML = `
+                            <option value="" disabled selected>ക്ലാസ് തിരഞ്ഞെടുക്കുക</option>
+                            <option value="1st Standard">1st Standard</option>
+                            <option value="2nd Standard">2nd Standard</option>
+                            <option value="3rd Standard">3rd Standard</option>
+                            <option value="4th Standard">4th Standard</option>
+                            <option value="5th Standard">5th Standard</option>
+                            <option value="6th Standard">6th Standard</option>
+                            <option value="7th Standard">7th Standard</option>
+                            <option value="10th Class">10th Class</option>
+                        `;
                     }
                     found = true;
                 });
@@ -232,7 +259,6 @@
             const amount = document.getElementById('feeAmount').value;
             const phone = document.getElementById('parentPhone').value;
 
-            // സ്ഥാപന കോഡും സബ് ഇൻപുട്ടും ചേർത്ത് കൃത്യമായ ഐഡി ഉണ്ടാക്കുന്നു
             const studentId = `${currentInstCode}-${subInput}`;
 
             try {
@@ -304,7 +330,7 @@
 
         window.downloadExcelFormat = function(event) {
             event.preventDefault();
-            const csvContent = "data:text/csv;charset=utf-8,Name,ID_Number,Class_Or_Ward,Fee_Type,Amount,Phone\nMuhammed,001,Class 5,Monthly Fee,500,9876543210";
+            const csvContent = "data:text/csv;charset=utf-8,Name,ID_Number,Class_Or_Ward,Fee_Type,Amount,Phone\nMuhammed,001,5th Standard,Monthly Fee,500,9876543210";
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
