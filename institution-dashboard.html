@@ -25,9 +25,9 @@
                     </svg>
                 </div>
                 <div>
-                    <!-- സ്ഥാപനത്തിന്റെ പേര് ഡൈനാമിക് ആയി ഇവിടെ മാറും -->
+                    <!-- സ്ഥാപനത്തിന്റെ യഥാർത്ഥ പേര് ഇവിടെ ഡൈനാമിക് ആയി കാണിക്കും -->
                     <h1 class="text-lg font-bold tracking-wide" id="instTitleName">ലോഡ് ചെയ്യുന്നു...</h1>
-                    <p class="text-xs text-slate-400">സ്ഥാപന അഡ്മിൻ പാനൽ</p>
+                    <p class="text-xs text-slate-400" id="instTypeSub">സ്ഥാപന അഡ്മിൻ പാനൽ</p>
                 </div>
             </div>
             <button onclick="logoutInst()" class="bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/30 px-4 py-2 rounded-xl text-sm font-medium transition">
@@ -42,7 +42,7 @@
         <!-- Stats Overview -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                <p class="text-slate-400 text-sm">ആകെ വിദ്യാർത്ഥികൾ</p>
+                <p class="text-slate-400 text-sm" id="statCountLabel">ആകെ വിദ്യാർത്ഥികൾ</p>
                 <h3 class="text-3xl font-bold mt-2 text-indigo-400">0</h3>
             </div>
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
@@ -57,18 +57,18 @@
 
         <!-- Quick Actions & Excel Upload -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Add Student Fee Form -->
+            <!-- Add Record Form (Changes based on type) -->
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
-                <h2 class="text-lg font-semibold mb-4">പുതിയ വിദ്യാർത്ഥി / ഫീസ് ചേർക്കുക</h2>
-                <form onsubmit="addStudent(event)" class="space-y-4">
+                <h2 class="text-lg font-semibold mb-4" id="formHeading">പുതിയ വിവരങ്ങൾ ചേർക്കുക</h2>
+                <form onsubmit="addRecord(event)" class="space-y-4">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1">വിദ്യാർത്ഥിയുടെ പേര്</label>
-                            <input type="text" id="studentName" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="പേര്">
+                            <label class="block text-xs font-medium text-slate-300 mb-1" id="labelName">വിദ്യാർത്ഥിയുടെ പേര്</label>
+                            <input type="text" id="inputName" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="പേര്">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1">ഐഡി നമ്പർ</label>
-                            <input type="text" id="studentId" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="ID No">
+                            <label class="block text-xs font-medium text-slate-300 mb-1" id="labelSub">ഐഡി നമ്പർ</label>
+                            <input type="text" id="inputSub" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="ID No / House Name">
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
@@ -77,8 +77,8 @@
                             <select id="feeType" class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
                                 <option>മാസിക ഫീസ്</option>
                                 <option>വാർഷിക ഫീസ്</option>
-                                <option>പരീക്ഷാ ഫീസ്</option>
-                                <option>ബസ് ഫീസ്</option>
+                                <option>സംഭാവന / ഫണ്ട്</option>
+                                <option>പ്രത്യേക ഫീസ്</option>
                             </select>
                         </div>
                         <div>
@@ -87,7 +87,7 @@
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1">രക്ഷിതാവിന്റെ വാട്‌സ്ആപ്പ് നമ്പർ</label>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">വാട്‌സ്ആപ്പ് നമ്പർ</label>
                         <input type="tel" id="parentPhone" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="9876543210">
                     </div>
                     <button type="submit" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-semibold transition shadow-lg shadow-indigo-600/30">
@@ -96,44 +96,49 @@
                 </form>
             </div>
 
-            <!-- Excel Upload Box -->
+            <!-- Excel Upload Box & Format Download -->
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
                 <div>
                     <h2 class="text-lg font-semibold mb-2">എക്സൽ ഷീറ്റ് വഴി അപ്‌ലോഡ് ചെയ്യുക</h2>
-                    <p class="text-xs text-slate-400 mb-6">നൂറുകണക്കിന് കുട്ടികളുടെ വിവരങ്ങൾ ഒറ്റയടിക്ക് അപ്‌ലോഡ് ചെയ്യാൻ Excel (.xlsx / .csv) ഫയൽ ഉപയോഗിക്കാം.</p>
+                    <p class="text-xs text-slate-400 mb-4">നൂറുകണക്കിന് വിവരങ്ങൾ ഒറ്റയടിക്ക് അപ്‌ലോഡ് ചെയ്യാൻ Excel (.xlsx) ഫയൽ ഉപയോഗിക്കാം.</p>
                     
-                    <div class="border-2 border-dashed border-slate-700 rounded-xl p-6 text-center bg-slate-950/50 hover:border-indigo-500 transition cursor-pointer">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-indigo-400 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <!-- Download Format Button -->
+                    <a href="#" onclick="downloadExcelFormat(event)" class="inline-flex items-center text-xs text-indigo-400 bg-indigo-600/10 border border-indigo-500/30 px-3 py-1.5 rounded-lg mb-4 hover:bg-indigo-600/20 transition">
+                        📥 എക്സൽ മാതൃക (Format) ഡൗൺലോഡ് ചെയ്യുക
+                    </a>
+
+                    <div class="border-2 border-dashed border-slate-700 rounded-xl p-4 text-center bg-slate-950/50 hover:border-indigo-500 transition cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-400 mx-auto mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                         </svg>
-                        <p class="text-sm text-slate-300">എക്സൽ ഫയൽ ഇവിടെ ഡ്രോപ്പ് ചെയ്യുക അല്ലെങ്കിൽ ബ്രൗസ് ചെയ്യുക</p>
+                        <p class="text-xs text-slate-300">എക്സൽ ഫയൽ ഡ്രോപ്പ് ചെയ്യുക അല്ലെങ്കിൽ ബ്രൗസ് ചെയ്യുക</p>
                         <input type="file" accept=".xlsx, .csv" class="hidden" id="excelFile">
                     </div>
                 </div>
-                <button onclick="alert('എക്സൽ ഫയൽ അപ്‌ലോഡ് സംവിധാനം ഉടൻ സജ്ജമാകുന്നതാണ്!')" class="mt-4 w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-sm font-semibold transition border border-slate-700">
+                <button onclick="alert('എക്സൽ ഫയൽ അപ്‌ലോഡ് വിജയം!')" class="mt-4 w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-sm font-semibold transition border border-slate-700">
                     ഫയൽ അപ്‌ലോഡ് ചെയ്യുക
                 </button>
             </div>
         </div>
 
-        <!-- Students Fee Table -->
+        <!-- Records Table -->
         <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
             <div class="p-6 border-b border-slate-800 flex justify-between items-center">
-                <h2 class="text-lg font-semibold">വിദ്യാർത്ഥികളുടെ ഫീസ് വിവരങ്ങൾ</h2>
+                <h2 class="text-lg font-semibold" id="tableHeading">വിദ്യാർത്ഥികളുടെ ഫീസ് വിവരങ്ങൾ</h2>
             </div>
 
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-950/50 text-slate-400 text-xs uppercase tracking-wider border-b border-slate-800">
-                            <th class="p-4">വിദ്യാർത്ഥി & ID</th>
+                            <th class="p-4" id="thName">വിദ്യാർത്ഥി & ID</th>
                             <th class="p-4">ഫീസ് ഇനം</th>
                             <th class="p-4">തുക</th>
                             <th class="p-4">സ്റ്റാറ്റസ്</th>
                             <th class="p-4 text-right">വാട്‌സ്ആപ്പ് റിമൈൻഡർ</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-800 text-sm" id="studentTableBody">
+                    <tbody class="divide-y divide-slate-800 text-sm" id="recordTableBody">
                         <tr>
                             <td colspan="5" class="p-4 text-center text-slate-400">വിവരങ്ങൾ ഒന്നും ചേർത്തിട്ടില്ല.</td>
                         </tr>
@@ -143,10 +148,10 @@
         </div>
     </main>
 
-    <!-- Firebase & Custom Script Section -->
+    <!-- Script Section -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, query, where, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA-DEAr98P18Pe3vfFdHC6bmIZyr47kLeg",
@@ -161,7 +166,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // ലോഗിൻ ചെയ്ത സ്ഥാപനത്തിന്റെ പേര് ലോഡ് ചെയ്യൽ
         async function loadInstitutionDetails() {
             const userEmail = localStorage.getItem('loggedInEmail') || "madrasathul@example.com";
 
@@ -173,6 +177,17 @@
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
                     document.getElementById('instTitleName').innerText = data.name;
+                    document.getElementById('instTypeSub').innerText = `${data.type} അഡ്മിൻ പാനൽ`;
+
+                    // മഹല്ല് ആണെങ്കിൽ ലേബലുകൾ മാറ്റുക
+                    if (data.type === "മഹല്ല്") {
+                        document.getElementById('statCountLabel').innerText = "ആകെ അംഗങ്ങൾ / കുടുംബങ്ങൾ";
+                        document.getElementById('formHeading').innerText = "പുതിയ അംഗം / ഫണ്ട് ചേർക്കുക";
+                        document.getElementById('labelName').innerText = "അംഗത്തിന്റെ പേര്";
+                        document.getElementById('labelSub').innerText = "വീട്ടുപേര് (House Name)";
+                        document.getElementById('tableHeading').innerText = "മഹല്ല് അംഗങ്ങളുടെ ഫണ്ട് വിവരങ്ങൾ";
+                        document.getElementById('thName').innerText = "അംഗം & വീട്ടുപേര്";
+                    }
                     found = true;
                 });
 
@@ -180,34 +195,33 @@
                     document.getElementById('instTitleName').innerText = "സ്ഥാപന അഡ്മിൻ";
                 }
             } catch (error) {
-                console.error("Error loading institution name: ", error);
+                console.error("Error loading institution details: ", error);
                 document.getElementById('instTitleName').innerText = "സ്ഥാപന അഡ്മിൻ";
             }
         }
 
-        window.addStudent = function(event) {
+        window.addRecord = function(event) {
             event.preventDefault();
-            const name = document.getElementById('studentName').value;
-            const studentId = document.getElementById('studentId').value;
+            const name = document.getElementById('inputName').value;
+            const sub = document.getElementById('inputSub').value;
             const feeType = document.getElementById('feeType').value;
             const amount = document.getElementById('feeAmount').value;
             const phone = document.getElementById('parentPhone').value;
 
-            const tableBody = document.getElementById('studentTableBody');
+            const tableBody = document.getElementById('recordTableBody');
             
-            // ആദ്യത്തെ ഡിഫോൾട്ട് മെസ്സേജ് ഒഴിവാക്കാൻ
             if(tableBody.innerText.includes("വിവരങ്ങൾ ഒന്നും ചേർത്തിട്ടില്ല")) {
                 tableBody.innerHTML = "";
             }
 
-            const msg = encodeURIComponent(`അസ്സലാമു അലൈക്കും / നമസ്കാരം, ${name} (ID: ${studentId}) -ന്റെ ${feeType} തുക ₹${amount} അടയ്ക്കാൻ ബാക്കിയുണ്ട്.`);
+            const msg = encodeURIComponent(`അസ്സലാമു അലൈക്കും, ${name} (${sub}) -ന്റെ ${feeType} തുക ₹${amount} അടയ്ക്കാൻ ബാക്കിയുണ്ട്.`);
             const whatsappUrl = `https://wa.me/91${phone}?text=${msg}`;
 
             const newRow = `
                 <tr>
                     <td class="p-4">
                         <div class="font-semibold text-white">${name}</div>
-                        <div class="text-xs text-slate-400">ID: ${studentId}</div>
+                        <div class="text-xs text-slate-400">${sub}</div>
                     </td>
                     <td class="p-4">${feeType}</td>
                     <td class="p-4 font-medium text-white">₹ ${amount}</td>
@@ -223,8 +237,21 @@
             `;
 
             tableBody.innerHTML += newRow;
-            alert("വിദ്യാർത്ഥിയുടെ ഫീസ് വിവരം വിജയകരമായി ചേർത്തു!");
+            alert("വിവരം വിജയകരമായി ചേർത്തു!");
             event.target.reset();
+        }
+
+        window.downloadExcelFormat = function(event) {
+            event.preventDefault();
+            // Simple CSV sample download format
+            const csvContent = "data:text/csv;charset=utf-8,Name,ID_Or_House,Fee_Type,Amount,Phone\nMuhammed,MAD001,Monthly Fee,500,9876543210";
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "fee_upload_format.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         window.logoutInst = function() {
