@@ -54,7 +54,7 @@
         <!-- Institutions Approval Table Section -->
         <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
             <div class="p-6 border-b border-slate-800 flex justify-between items-center">
-                <h2 class="text-lg font-semibold">സ്ഥാപനങ്ങളുടെ രജിസ്ട്രേഷനും കോഡ് അസൈൻ ചെയ്യലും</h2>
+                <h2 class="text-lg font-semibold">സ്ഥാപനങ്ങളുടെ മാനേജ്‌മെന്റും കോഡ് നിയന്ത്രണവും</h2>
             </div>
 
             <div class="overflow-x-auto">
@@ -121,12 +121,20 @@
                         ? `<span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-1 rounded-full text-xs">സജീവം (Active)</span>`
                         : `<span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-full text-xs">പെൻഡിംഗ്</span>`;
 
-                    const codeDisplay = data.instCode ? `<div class="text-xs text-indigo-400 font-bold mt-1">കോഡ്: ${data.instCode}</div>` : `<div class="text-xs text-rose-400 mt-1">കോഡ് നൽകിയിട്ടില്ല</div>`;
+                    const codeDisplay = data.instCode 
+                        ? `<div class="text-xs text-indigo-400 font-bold mt-1">കോഡ്: ${data.instCode}</div>` 
+                        : `<div class="text-xs text-rose-400 mt-1 font-semibold">കോഡ് നൽകിയിട്ടില്ല</div>`;
 
                     const actionBtn = data.status === "Active"
-                        ? `<a href="https://wa.me/91${data.phone}?text=നിങ്ങളുടെ%20ഫീസ്%20പോർട്ടൽ%20അക്കൗണ്ട്%20സജീവമാണ്.%20കോഡ്:%20${data.instCode}" target="_blank" class="inline-flex items-center text-xs bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 px-3 py-1.5 rounded-lg hover:bg-emerald-600/30 transition">വാട്‌സ്ആപ്പ് അയക്കുക</a>`
-                        : `<button onclick="approveInst('${docId}', '${data.name}', '${data.phone}', '${data.version}')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition">അപ്പ്രൂവ് & കോഡ് നൽകുക</button>
-                           <button onclick="rejectInst('${docId}')" class="bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 px-3 py-1.5 rounded-lg text-xs font-medium transition ml-1">നിരസിക്കുക</button>`;
+                        ? `
+                          <button onclick="approveInst('${docId}', '${data.name}', '${data.phone}', '${data.version}', '${data.instCode || ""}')" class="bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 px-2.5 py-1 rounded-xs text-xs font-medium transition mr-1">കോഡ് മാറ്റുക</button>
+                          <a href="https://wa.me/91${data.phone}?text=നിങ്ങളുടെ%20ഫീസ്%20പോർട്ടൽ%20അക്കൗണ്ട്%20സജീവമാണ്.%20കോഡ്:%20${data.instCode}" target="_blank" class="inline-flex items-center text-xs bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-1 rounded-xs hover:bg-emerald-600/30 transition">വാട്‌സ്ആപ്പ്</a>
+                          <button onclick="deleteInst('${docId}')" class="bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 px-2 py-1 rounded-xs text-xs transition ml-1">ഡിലീറ്റ്</button>
+                          `
+                        : `
+                          <button onclick="approveInst('${docId}', '${data.name}', '${data.phone}', '${data.version}', '')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-2.5 py-1 rounded-xs text-xs font-medium transition">അപ്പ്രൂവ് & കോഡ്</button>
+                          <button onclick="deleteInst('${docId}')" class="bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 px-2 py-1 rounded-xs text-xs transition ml-1">നിരസിക്കുക</button>
+                          `;
 
                     rows += `
                         <tr>
@@ -155,12 +163,11 @@
 
             } catch (error) {
                 console.error("Error loading institutions: ", error);
-                tableBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-rose-400">ഡാറ്റ ലോഡ് ചെയ്യുന്നതിൽ പിശക് സംഭവിച്ചു.</td></tr>`;
             }
         }
 
-        window.approveInst = async function(docId, instName, phone, version) {
-            const instCode = prompt("ഈ സ്ഥാപനത്തിന് നൽകേണ്ട യൂണിക്ക് കോഡ് (Prefix) നൽകുക (ഉദാ: MAD01, SCH02):");
+        window.approveInst = async function(docId, instName, phone, version, currentCode) {
+            const instCode = prompt(`ഈ സ്ഥാപനത്തിന് നൽകേണ്ട യൂണിക്ക് കോഡ് (Prefix) നൽകുക (ഉദാ: MD01, SCH02):`, currentCode);
             if (!instCode) return;
 
             try {
@@ -170,21 +177,21 @@
                     instCode: instCode.trim().toUpperCase()
                 });
 
-                alert("സ്ഥാപനത്തിന് അപ്പ്രൂവലും കോഡും വിജയകരമായി നൽകി!");
+                alert("സ്ഥാപനത്തിന്റെ വിവരങ്ങൾ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!");
                 loadInstitutions();
 
-                const msg = encodeURIComponent(`അസ്സലാമു അലൈക്കും / നമസ്കാരം, ${instName}! ഫീസ് മാനേജ്മെന്റ് പോർട്ടലിലേക്കുള്ള നിങ്ങളുടെ അക്കൗണ്ട് അപ്പ്രൂവ് ചെയ്തിരിക്കുന്നു. നിങ്ങളുടെ സ്ഥാപന കോഡ്: ${instCode.toUpperCase()}.`);
+                const msg = encodeURIComponent(`അസ്സലാമു അലൈക്കും / നമസ്കാരം, ${instName}! ഫീസ് മാനേജ്മെന്റ് പോർട്ടലിലേക്കുള്ള നിങ്ങളുടെ അക്കൗണ്ട് കോഡ്: ${instCode.toUpperCase()}.`);
                 window.open(`https://wa.me/91${phone}?text=${msg}`, '_blank');
             } catch (error) {
-                console.error("Error approving: ", error);
+                console.error("Error updating: ", error);
             }
         }
 
-        window.rejectInst = async function(docId) {
-            if(confirm("ഈ രജിസ്ട്രേഷൻ നിരസിക്കണമെന്നുറപ്പാണോ?")) {
+        window.deleteInst = async function(docId) {
+            if(confirm("ഈ സ്ഥാപനത്തിന്റെ അക്കൗണ്ട് ഡിലീറ്റ് ചെയ്യണമെന്നുറപ്പാണോ?")) {
                 try {
                     await deleteDoc(doc(db, "institutions", docId));
-                    alert("രജിസ്ട്രേഷൻ നിരസിച്ചു.");
+                    alert("സ്ഥാപനത്തിന്റെ അക്കൗണ്ട് നീക്കം ചെയ്തു.");
                     loadInstitutions();
                 } catch (error) {
                     console.error("Error deleting: ", error);
