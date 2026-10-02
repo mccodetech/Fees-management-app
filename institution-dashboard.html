@@ -25,7 +25,7 @@
                     </svg>
                 </div>
                 <div>
-                    <!-- സ്ഥാപനത്തിന്റെ യഥാർത്ഥ പേര് ഇവിടെ ഡൈനാമിക് ആയി കാണിക്കും -->
+                    <!-- സ്ഥാപനത്തിന്റെ യഥാർത്ഥ പേരും കോഡും ഇവിടെ കാണിക്കും -->
                     <h1 class="text-lg font-bold tracking-wide" id="instTitleName">ലോഡ് ചെയ്യുന്നു...</h1>
                     <p class="text-xs text-slate-400" id="instTypeSub">സ്ഥാപന അഡ്മിൻ പാനൽ</p>
                 </div>
@@ -43,7 +43,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
                 <p class="text-slate-400 text-sm" id="statCountLabel">ആകെ വിദ്യാർത്ഥികൾ</p>
-                <h3 class="text-3xl font-bold mt-2 text-indigo-400">0</h3>
+                <h3 class="text-3xl font-bold mt-2 text-indigo-400" id="totalCount">0</h3>
             </div>
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
                 <p class="text-slate-400 text-sm">പിരിഞ്ഞു കിട്ടാനുള്ള ഫീസ്</p>
@@ -57,9 +57,9 @@
 
         <!-- Quick Actions & Excel Upload -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Add Record Form (Changes based on type) -->
+            <!-- Add Record Form -->
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
-                <h2 class="text-lg font-semibold mb-4" id="formHeading">പുതിയ വിവരങ്ങൾ ചേർക്കുക</h2>
+                <h2 class="text-lg font-semibold mb-4" id="formHeading">പുതിയ വിദ്യാർത്ഥി / ഫീസ് ചേർക്കുക</h2>
                 <form onsubmit="addRecord(event)" class="space-y-4">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
@@ -67,8 +67,8 @@
                             <input type="text" id="inputName" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="പേര്">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1" id="labelSub">ഐഡി നമ്പർ</label>
-                            <input type="text" id="inputSub" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="ID No / House Name">
+                            <label class="block text-xs font-medium text-slate-300 mb-1" id="labelSub">ഐഡി നമ്പർ / വീട്ടുപേര്</label>
+                            <input type="text" id="inputSub" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="001 / വീട്ടുപേര്">
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
@@ -100,9 +100,8 @@
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
                 <div>
                     <h2 class="text-lg font-semibold mb-2">എക്സൽ ഷീറ്റ് വഴി അപ്‌ലോഡ് ചെയ്യുക</h2>
-                    <p class="text-xs text-slate-400 mb-4">നൂറുകണക്കിന് വിവരങ്ങൾ ഒറ്റയടിക്ക് അപ്‌ലോഡ് ചെയ്യാൻ Excel (.xlsx) ഫയൽ ഉപയോഗിക്കാം.</p>
+                    <p class="text-xs text-slate-400 mb-4">നൂറുകണക്കിന് വിവരങ്ങൾ ഒറ്റയടിക്ക് അപ്‌ലോഡ് ചെയ്യാൻ Excel ഫയൽ ഉപയോഗിക്കാം.</p>
                     
-                    <!-- Download Format Button -->
                     <a href="#" onclick="downloadExcelFormat(event)" class="inline-flex items-center text-xs text-indigo-400 bg-indigo-600/10 border border-indigo-500/30 px-3 py-1.5 rounded-lg mb-4 hover:bg-indigo-600/20 transition">
                         📥 എക്സൽ മാതൃക (Format) ഡൗൺലോഡ് ചെയ്യുക
                     </a>
@@ -151,7 +150,7 @@
     <!-- Script Section -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, query, where, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA-DEAr98P18Pe3vfFdHC6bmIZyr47kLeg",
@@ -166,6 +165,8 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        let currentInstCode = "INST";
+
         async function loadInstitutionDetails() {
             const userEmail = localStorage.getItem('loggedInEmail') || "madrasathul@example.com";
 
@@ -176,10 +177,11 @@
                 let found = false;
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    document.getElementById('instTitleName').innerText = data.name;
+                    currentInstCode = data.instCode || "INST";
+                    
+                    document.getElementById('instTitleName').innerText = `${data.name} (${currentInstCode})`;
                     document.getElementById('instTypeSub').innerText = `${data.type} അഡ്മിൻ പാനൽ`;
 
-                    // മഹല്ല് ആണെങ്കിൽ ലേബലുകൾ മാറ്റുക
                     if (data.type === "മഹല്ല്") {
                         document.getElementById('statCountLabel').innerText = "ആകെ അംഗങ്ങൾ / കുടുംബങ്ങൾ";
                         document.getElementById('formHeading').innerText = "പുതിയ അംഗം / ഫണ്ട് ചേർക്കുക";
@@ -200,51 +202,83 @@
             }
         }
 
-        window.addRecord = function(event) {
+        window.addRecord = async function(event) {
             event.preventDefault();
             const name = document.getElementById('inputName').value;
-            const sub = document.getElementById('inputSub').value;
+            const subInput = document.getElementById('inputSub').value;
             const feeType = document.getElementById('feeType').value;
             const amount = document.getElementById('feeAmount').value;
             const phone = document.getElementById('parentPhone').value;
 
+            // സ്ഥാപന കോഡും സീരിയൽ നമ്പറും ചേർത്ത് യൂണിക്ക് ഐഡി ഉണ്ടാക്കുന്നു (ഉദാ: MAD01-001)
+            const studentId = `${currentInstCode}-${subInput}`;
+
+            try {
+                await addDoc(collection(db, "students"), {
+                    name: name,
+                    studentId: studentId,
+                    subInput: subInput,
+                    feeType: feeType,
+                    amount: amount,
+                    phone: phone,
+                    instCode: currentInstCode,
+                    createdAt: new Date()
+                });
+
+                alert("വിവരം വിജയകരമായി സേവ് ചെയ്തു!");
+                event.target.reset();
+                loadStudents();
+            } catch (error) {
+                console.error("Error adding student: ", error);
+                alert("ഡാറ്റ സേവ് ചെയ്യുന്നതിൽ പിശക് സംഭവിച്ചു.");
+            }
+        }
+
+        async function loadStudents() {
             const tableBody = document.getElementById('recordTableBody');
             
-            if(tableBody.innerText.includes("വിവരങ്ങൾ ഒന്നും ചേർത്തിട്ടില്ല")) {
-                tableBody.innerHTML = "";
+            try {
+                const q = query(collection(db, "students"), where("instCode", "==", currentInstCode));
+                const querySnapshot = await getDocs(q);
+                let rows = "";
+                let count = 0;
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    count++;
+                    const msg = encodeURIComponent(`അസ്സലാമു അലൈക്കും, ${data.name} (ID: ${data.studentId}) -ന്റെ ${data.feeType} തുക ₹${data.amount} അടയ്ക്കാൻ ബാക്കിയുണ്ട്.`);
+                    const whatsappUrl = `https://wa.me/91${data.phone}?text=${msg}`;
+
+                    rows += `
+                        <tr>
+                            <td class="p-4">
+                                <div class="font-semibold text-white">${data.name}</div>
+                                <div class="text-xs text-slate-400">ID: ${data.studentId}</div>
+                            </td>
+                            <td class="p-4">${data.feeType}</td>
+                            <td class="p-4 font-medium text-white">₹ ${data.amount}</td>
+                            <td class="p-4">
+                                <span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-full text-xs">അടയ്ക്കാനുണ്ട്</span>
+                            </td>
+                            <td class="p-4 text-right">
+                                <a href="${whatsappUrl}" target="_blank" class="inline-flex items-center text-xs bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 px-3 py-1.5 rounded-lg hover:bg-emerald-600/30 transition">
+                                    വാട്‌സ്ആപ്പ് അയക്കുക
+                                </a>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                tableBody.innerHTML = rows || `<tr><td colspan="5" class="p-4 text-center text-slate-400">വിവരങ്ങൾ ഒന്നും ചേർത്തിട്ടില്ല.</td></tr>`;
+                document.getElementById('totalCount').innerText = count;
+            } catch (error) {
+                console.error("Error loading students: ", error);
             }
-
-            const msg = encodeURIComponent(`അസ്സലാമു അലൈക്കും, ${name} (${sub}) -ന്റെ ${feeType} തുക ₹${amount} അടയ്ക്കാൻ ബാക്കിയുണ്ട്.`);
-            const whatsappUrl = `https://wa.me/91${phone}?text=${msg}`;
-
-            const newRow = `
-                <tr>
-                    <td class="p-4">
-                        <div class="font-semibold text-white">${name}</div>
-                        <div class="text-xs text-slate-400">${sub}</div>
-                    </td>
-                    <td class="p-4">${feeType}</td>
-                    <td class="p-4 font-medium text-white">₹ ${amount}</td>
-                    <td class="p-4">
-                        <span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-full text-xs">അടയ്ക്കാനുണ്ട്</span>
-                    </td>
-                    <td class="p-4 text-right">
-                        <a href="${whatsappUrl}" target="_blank" class="inline-flex items-center text-xs bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 px-3 py-1.5 rounded-lg hover:bg-emerald-600/30 transition">
-                            വാട്‌സ്ആപ്പ് അയക്കുക
-                        </a>
-                    </td>
-                </tr>
-            `;
-
-            tableBody.innerHTML += newRow;
-            alert("വിവരം വിജയകരമായി ചേർത്തു!");
-            event.target.reset();
         }
 
         window.downloadExcelFormat = function(event) {
             event.preventDefault();
-            // Simple CSV sample download format
-            const csvContent = "data:text/csv;charset=utf-8,Name,ID_Or_House,Fee_Type,Amount,Phone\nMuhammed,MAD001,Monthly Fee,500,9876543210";
+            const csvContent = "data:text/csv;charset=utf-8,Name,ID_Or_House,Fee_Type,Amount,Phone\nMuhammed,001,Monthly Fee,500,9876543210";
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
@@ -259,7 +293,10 @@
             window.location.href = 'index.html';
         }
 
-        loadInstitutionDetails();
+        // Initialize
+        loadInstitutionDetails().then(() => {
+            loadStudents();
+        });
     </script>
 </body>
 </html>
