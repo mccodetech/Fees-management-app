@@ -192,6 +192,7 @@
                     const data = doc.data();
                     currentInstCode = data.instCode || "INST";
                     
+                    // സ്ഥാപനത്തിന്റെ യഥാർത്ഥ പേര് ഇവിടെ കൃത്യമായി സെറ്റ് ചെയ്യുന്നു
                     document.getElementById('instTitleName').innerText = `${data.name} (${currentInstCode})`;
                     document.getElementById('instTypeSub').innerText = `${data.type} അഡ്മിൻ പാനൽ`;
 
@@ -206,7 +207,6 @@
                         document.getElementById('thName').innerText = "അംഗം & വീട്ടുപേര്";
                         document.getElementById('thExtra').innerText = "വാർഡ്";
 
-                        // മഹല്ല് വാർഡുകൾ ഡ്രോപ്പ്-ഡൗൺ
                         extraSelect.innerHTML = `
                             <option value="" disabled selected>വാർഡ് തിരഞ്ഞെടുക്കുക</option>
                             <option value="Ward 1">Ward 1</option>
@@ -226,7 +226,6 @@
                         document.getElementById('thName').innerText = "വിദ്യാർത്ഥി & ID";
                         document.getElementById('thExtra').innerText = "ക്ലാസ്";
 
-                        // മദ്രസ / സ്കൂൾ ക്ലാസുകൾ ഡ്രോപ്പ്-ഡൗൺ
                         extraSelect.innerHTML = `
                             <option value="" disabled selected>ക്ലാസ് തിരഞ്ഞെടുക്കുക</option>
                             <option value="1st Standard">1st Standard</option>
