@@ -8,15 +8,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
+        body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
 <body class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 min-h-screen flex items-center justify-center p-4">
 
+    <!-- Login Card -->
     <div class="max-w-md w-full bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-8 text-white" id="loginCard">
-        <!-- Header Section -->
         <div class="text-center mb-8">
             <div class="inline-flex bg-indigo-600/30 p-3 rounded-full mb-3 border border-indigo-400/30">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -27,22 +25,20 @@
             <p class="text-slate-300 text-sm mt-1">ഫീസ് വിവരങ്ങൾ പരിശോധിക്കാൻ ലോഗിൻ ചെയ്യുക</p>
         </div>
 
-        <!-- Error Message Box -->
         <div id="messageBox" class="hidden mb-4 p-3 rounded-xl text-sm text-center"></div>
 
-        <!-- Login Form -->
-        <form id="memberLoginForm" onsubmit="handleMemberLogin(event)" class="space-y-6">
+        <form onsubmit="handleMemberLogin(event)" class="space-y-6">
             <div>
-                <label class="block text-sm font-medium text-slate-200 mb-2">അംഗത്തിന്റെ ഐഡി / കോഡ് (ഉദാ: MD01-001)</label>
+                <label class="block text-sm font-medium text-slate-200 mb-2">അംഗത്തിന്റെ ഐഡി (ഉദാ: MD01-001)</label>
                 <input type="text" id="memberId" required 
-                    class="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-white placeholder-slate-500 transition"
+                    class="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white uppercase placeholder-slate-500 transition"
                     placeholder="INSTCODE-001">
             </div>
 
             <div>
                 <label class="block text-sm font-medium text-slate-200 mb-2">മൊബൈൽ നമ്പർ</label>
                 <input type="tel" id="memberPhone" required 
-                    class="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-white placeholder-slate-500 transition"
+                    class="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-white placeholder-slate-500 transition"
                     placeholder="9876543210">
             </div>
 
@@ -57,8 +53,9 @@
     <div class="max-w-lg w-full bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 text-white hidden" id="dashboardCard">
         <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-800">
             <div>
-                <h2 class="text-lg font-bold" id="displayName">അംഗത്തിന്റെ പേര്</h2>
-                <p class="text-xs text-slate-400" id="displayDetails">ID: <span id="displayId"></span></p>
+                <p class="text-xs text-indigo-400 font-bold" id="displayInstName">സ്ഥാപനത്തിന്റെ പേര്</p>
+                <h2 class="text-lg font-bold uppercase mt-1" id="displayName">അംഗത്തിന്റെ പേര്</h2>
+                <p class="text-xs text-slate-400">ID: <span id="displayId"></span> | വീട്: <span id="displayHouse"></span></p>
             </div>
             <button onclick="logoutMember()" class="bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/30 px-3 py-1.5 rounded-xl text-xs font-medium transition">
                 പുറത്തു കടക്കുക
@@ -66,18 +63,33 @@
         </div>
 
         <div class="space-y-4">
-            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                <p class="text-xs text-slate-400">ഫീസ് ഇനം</p>
-                <p class="text-sm font-semibold text-indigo-300 mt-1" id="displayFeeType">മാസിക ഫീസ്</p>
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                <div>
+                    <p class="text-xs text-slate-400">ഫീസ് ഇനം</p>
+                    <p class="text-sm font-semibold text-indigo-300 mt-1" id="displayFeeType">മന്ത്ലി ഫീസ്</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs text-slate-400">ക്ലാസ് / വാർഡ്</p>
+                    <p class="text-sm font-medium text-slate-200 mt-1" id="displayExtra">-</p>
+                </div>
             </div>
+
             <div class="grid grid-cols-2 gap-4">
                 <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                    <p class="text-xs text-slate-400">ആകെ തുക</p>
+                    <p class="text-xs text-slate-400">അടയ്ക്കാനുള്ള തുക</p>
                     <p class="text-xl font-bold text-amber-400 mt-1" id="displayAmount">₹ 0</p>
                 </div>
                 <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
                     <p class="text-xs text-slate-400">സ്റ്റാറ്റസ്</p>
                     <p class="text-sm font-bold text-rose-400 mt-1" id="displayStatus">അടയ്ക്കാനുണ്ട്</p>
+                </div>
+            </div>
+
+            <!-- Paid History Section -->
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                <p class="text-xs font-semibold text-slate-400 mb-2">അടച്ച ഫീസുകളുടെ വിവരങ്ങൾ</p>
+                <div id="paidHistoryBox" class="text-xs text-slate-400">
+                    ഇതുവരെ ഫീസുകൾ ഒന്നും അടച്ചിട്ടില്ല.
                 </div>
             </div>
         </div>
@@ -101,18 +113,37 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // പേജ് ലോഡ് ചെയ്യുമ്പോൾ ലോക്കൽ സ്റ്റോറേജിൽ ലോഗിൻ വിവരങ്ങൾ ഉണ്ടോ എന്ന് നോക്കുന്നു
+        window.onload = function() {
+            const savedId = localStorage.getItem('memberId');
+            const savedPhone = localStorage.getItem('memberPhone');
+            if (savedId && savedPhone) {
+                document.getElementById('memberId').value = savedId;
+                document.getElementById('memberPhone').value = savedPhone;
+                fetchMemberData(savedId, savedPhone);
+            }
+        }
+
         window.handleMemberLogin = async function(event) {
             event.preventDefault();
-            const memberId = document.getElementById('memberId').value.trim();
+            const memberId = document.getElementById('memberId').value.trim().toUpperCase();
             const phone = document.getElementById('memberPhone').value.trim();
+            
+            localStorage.setItem('memberId', memberId);
+            localStorage.setItem('memberPhone', phone);
+
+            await fetchMemberData(memberId, phone);
+        }
+
+        async function fetchMemberData(memberId, phone) {
             const msgBox = document.getElementById('messageBox');
             const submitBtn = document.getElementById('submitBtn');
-
-            submitBtn.disabled = true;
-            submitBtn.innerText = "പരിശോധിക്കുന്നു...";
+            if(submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerText = "പരിശോധിക്കുന്നു...";
+            }
 
             try {
-                // ഫയർബേസിൽ നിന്ന് അംഗത്തിന്റെ ഐഡിയും ഫോൺ നമ്പറും മാച്ച് ചെയ്യുന്നു
                 const q = query(
                     collection(db, "students"), 
                     where("studentId", "==", memberId),
@@ -122,39 +153,52 @@
                 const querySnapshot = await getDocs(q);
                 let found = false;
 
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    document.getElementById('displayName').innerText = data.name;
+                querySnapshot.forEach(async (docSnap) => {
+                    const data = docSnap.data();
+                    
+                    // സ്ഥാപനത്തിന്റെ പേര് എടുക്കുന്നു
+                    let instName = "സ്ഥാപനം";
+                    const instQ = query(collection(db, "institutions"), where("instCode", "==", data.instCode));
+                    const instSnap = await getDocs(instQ);
+                    instSnap.forEach((instDoc) => {
+                        instName = instDoc.data().name;
+                    });
+
+                    document.getElementById('displayInstName').innerText = instName;
+                    document.getElementById('displayName').innerText = data.name.toUpperCase();
                     document.getElementById('displayId').innerText = data.studentId;
-                    document.getElementById('displayFeeType').innerText = data.feeType || "മാസിക ഫീസ്";
+                    document.getElementById('displayHouse').innerText = data.house ? data.house.toUpperCase() : '-';
+                    document.getElementById('displayFeeType').innerText = data.feeType || "മന്ത്ലി ഫീസ്";
+                    document.getElementById('displayExtra').innerText = data.extraInput || '-';
                     document.getElementById('displayAmount').innerText = `₹ ${data.amount}`;
                     
-                    // കാർഡുകൾ മാറ്റി സ്ഥാപിക്കുക
                     document.getElementById('loginCard').classList.add('hidden');
                     document.getElementById('dashboardCard').classList.remove('hidden');
                     found = true;
                 });
 
-                if (!found) {
+                if (!found && submitBtn) {
                     msgBox.className = "mb-4 p-3 rounded-xl text-sm text-center bg-rose-500/20 text-rose-300 border border-rose-500/30";
                     msgBox.innerText = "നൽകിയ ഐഡിയും ഫോൺ നമ്പറും തമ്മിൽ പൊരുത്തപ്പെടുന്നില്ല.";
                     msgBox.classList.remove('hidden');
                 }
             } catch (error) {
                 console.error("Login error: ", error);
-                msgBox.className = "mb-4 p-3 rounded-xl text-sm text-center bg-rose-500/20 text-rose-300 border border-rose-500/30";
-                msgBox.innerText = "ലോഗിൻ ചെയ്യുന്നതിൽ തടസ്സം നേരിട്ടു.";
-                msgBox.classList.remove('hidden');
             } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerText = "വിവരങ്ങൾ പരിശോധിക്കുക";
+                if(submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "വിവരങ്ങൾ പരിശോധിക്കുക";
+                }
             }
         }
 
         window.logoutMember = function() {
+            localStorage.removeItem('memberId');
+            localStorage.removeItem('memberPhone');
             document.getElementById('dashboardCard').classList.add('hidden');
             document.getElementById('loginCard').classList.remove('hidden');
-            document.getElementById('memberLoginForm').reset();
+            document.getElementById('memberId').value = '';
+            document.getElementById('memberPhone').value = '';
         }
     </script>
 </body>
