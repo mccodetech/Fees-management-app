@@ -72,10 +72,44 @@
     </div>
 
     <!-- Script Section -->
-    <script>
-        function handleLogin(event) {
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA-DEAr98P18Pe3vfFdHC6bmIZyr47kLeg",
+            authDomain: "fees-management-app-62588.firebaseapp.com",
+            projectId: "fees-management-app-62588",
+            storageBucket: "fees-management-app-62588.firebasestorage.app",
+            messagingSenderId: "347392125928",
+            appId: "1:347392125928:web:f4c9f6e23cee32f0a1525d",
+            measurementId: "G-1VQGK123KY"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // ലോഗിൻ ഫങ്ഷൻ
+        window.handleLogin = async function(event) {
             event.preventDefault();
-            window.location.href = 'institution-dashboard.html';
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            try {
+                // ഫയർബേസ് ഓതന്റിക്കേഷൻ വഴി ലോഗിൻ ചെയ്യുന്നു
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                
+                // ലോഗിൻ വിജയിച്ചാൽ ഇമെയിൽ ലോക്കൽ സ്റ്റോറേജിൽ സേവ് ചെയ്യുന്നു
+                localStorage.setItem('loggedInEmail', email);
+
+                alert("ലോഗിൻ വിജയം!");
+                
+                // സ്ഥാപനത്തിന്റെ ഡാഷ്‌ബോർഡിലേക്ക് തിരിച്ചുവിടുന്നു
+                window.location.href = 'institution-dashboard.html';
+            } catch (error) {
+                console.error("Login error: ", error);
+                alert("ലോഗിൻ പരാജയപ്പെട്ടു. ഇമെയിലും പാസ്‌വേഡും പരിശോധിക്കുക.");
+            }
         }
     </script>
 </body>
