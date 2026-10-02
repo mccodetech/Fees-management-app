@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>സൂപ്പർ അഡ്മിൻ ലോഗിൻ - ഫീസ് പോർട്ടൽ</title>
+    <!-- Tailwind CSS CDN for Premium Look -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 min-h-screen flex items-center justify-center p-4">
+
+    <div class="max-w-md w-full bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-8 text-white">
+        <!-- Header Section -->
+        <div class="text-center mb-8">
+            <div class="inline-flex bg-indigo-600/30 p-3 rounded-full mb-3 border border-indigo-400/30">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.654 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold tracking-wide">സൂപ്പർ അഡ്മിൻ പോർട്ടൽ</h1>
+            <p class="text-slate-300 text-sm mt-1">സിസ്റ്റം മാനേജ്മെന്റ് ലോഗിൻ</p>
+        </div>
+
+        <!-- Error / Success Message Box -->
+        <div id="messageBox" class="hidden mb-4 p-3 rounded-xl text-sm text-center"></div>
+
+        <!-- Login Form -->
+        <form id="adminLoginForm" onsubmit="handleSuperAdminLogin(event)" class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-slate-200 mb-2">യൂസർ നേം (Username)</label>
+                <input type="text" id="username" required 
+                    class="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-white placeholder-slate-500 transition"
+                    placeholder="sadmin">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-200 mb-2">പാസ്‌വേഡ് (Password)</label>
+                <input type="password" id="password" required 
+                    class="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-white placeholder-slate-500 transition"
+                    placeholder="••••••••">
+            </div>
+
+            <button type="submit" id="submitBtn"
+                class="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/30 transition duration-200">
+                സൂപ്പർ അഡ്മിൻ ലോഗിൻ
+            </button>
+        </form>
+
+        <!-- Footer Note -->
+        <div class="mt-8 text-center text-xs text-slate-400">
+            <p>സുരക്ഷിതമായ സൂപ്പർ അഡ്മിൻ കൺട്രോൾ പാനൽ</p>
+        </div>
+    </div>
+
+    <!-- Script Section -->
+    <script>
+        function handleSuperAdminLogin(event) {
+            event.preventDefault();
+            
+            const userInput = document.getElementById('username').value.trim();
+            const passInput = document.getElementById('password').value;
+            const msgBox = document.getElementById('messageBox');
+            
+            // നിശ്ചയിച്ച യൂസർ നേമും പാസ്‌വേഡും പരിശോധിക്കുന്നു
+            const correctUser = "sadmin";
+            const correctPass = "admin123";
+
+            if (userInput === correctUser && passInput === correctPass) {
+                msgBox.className = "mb-4 p-3 rounded-xl text-sm text-center bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+                msgBox.innerText = "ലോഗിൻ വിജയകരം! ഡാഷ്‌ബോർഡിലേക്ക് പോകുന്നു...";
+                msgBox.classList.remove('hidden');
+
+                // വിജയകരമായാൽ സൂപ്പർ അഡ്മിൻ ഡാഷ്‌ബോർഡിലേക്ക് റീഡirect ചെയ്യാം
+                setTimeout(() => {
+                    window.location.href = 'admin-dashboard.html';
+                }, 1000);
+            } else {
+                msgBox.className = "mb-4 p-3 rounded-xl text-sm text-center bg-rose-500/20 text-rose-300 border border-rose-500/30";
+                msgBox.innerText = "തെറ്റായ യൂസർ നേം അല്ലെങ്കിൽ പാസ്‌വേഡ്!";
+                msgBox.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
