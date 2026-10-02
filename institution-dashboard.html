@@ -25,7 +25,8 @@
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-lg font-bold tracking-wide">മദ്രസത്തുൽ ഇസ്‌ലാം</h1>
+                    <!-- സ്ഥാപനത്തിന്റെ പേര് ഡൈനാമിക് ആയി ഇവിടെ മാറും -->
+                    <h1 class="text-lg font-bold tracking-wide" id="instTitleName">ലോഡ് ചെയ്യുന്നു...</h1>
                     <p class="text-xs text-slate-400">സ്ഥാപന അഡ്മിൻ പാനൽ</p>
                 </div>
             </div>
@@ -42,15 +43,15 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
                 <p class="text-slate-400 text-sm">ആകെ വിദ്യാർത്ഥികൾ</p>
-                <h3 class="text-3xl font-bold mt-2 text-indigo-400">120</h3>
+                <h3 class="text-3xl font-bold mt-2 text-indigo-400">0</h3>
             </div>
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
                 <p class="text-slate-400 text-sm">പിരിഞ്ഞു കിട്ടാനുള്ള ഫീസ്</p>
-                <h3 class="text-3xl font-bold mt-2 text-amber-400">₹ 15,400</h3>
+                <h3 class="text-3xl font-bold mt-2 text-amber-400">₹ 0</h3>
             </div>
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
                 <p class="text-slate-400 text-sm">ആകെ പിരിച്ച തുക</p>
-                <h3 class="text-3xl font-bold mt-2 text-emerald-400">₹ 48,000</h3>
+                <h3 class="text-3xl font-bold mt-2 text-emerald-400">₹ 0</h3>
             </div>
         </div>
 
@@ -63,17 +64,17 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1">വിദ്യാർത്ഥിയുടെ പേര്</label>
-                            <input type="text" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="പേര്">
+                            <input type="text" id="studentName" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="പേര്">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1">ഐഡി നമ്പർ</label>
-                            <input type="text" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="ID No">
+                            <input type="text" id="studentId" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="ID No">
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1">ഫീസ് ഇനം</label>
-                            <select class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+                            <select id="feeType" class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
                                 <option>മാസിക ഫീസ്</option>
                                 <option>വാർഷിക ഫീസ്</option>
                                 <option>പരീക്ഷാ ഫീസ്</option>
@@ -82,12 +83,12 @@
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1">തുക (₹)</label>
-                            <input type="number" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="500">
+                            <input type="number" id="feeAmount" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="500">
                         </div>
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-slate-300 mb-1">രക്ഷിതാവിന്റെ വാട്‌സ്ആപ്പ് നമ്പർ</label>
-                        <input type="tel" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="9876543210">
+                        <input type="tel" id="parentPhone" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="9876543210">
                     </div>
                     <button type="submit" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-semibold transition shadow-lg shadow-indigo-600/30">
                         വിവരം സേവ് ചെയ്യുക
@@ -109,7 +110,7 @@
                         <input type="file" accept=".xlsx, .csv" class="hidden" id="excelFile">
                     </div>
                 </div>
-                <button onclick="alert('എക്സൽ ഫയൽ അപ്‌ലോഡ് വിജയം!')" class="mt-4 w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-sm font-semibold transition border border-slate-700">
+                <button onclick="alert('എക്സൽ ഫയൽ അപ്‌ലോഡ് സംവിധാനം ഉടൻ സജ്ജമാകുന്നതാണ്!')" class="mt-4 w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-sm font-semibold transition border border-slate-700">
                     ഫയൽ അപ്‌ലോഡ് ചെയ്യുക
                 </button>
             </div>
@@ -132,22 +133,9 @@
                             <th class="p-4 text-right">വാട്‌സ്ആപ്പ് റിമൈൻഡർ</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-800 text-sm">
+                    <tbody class="divide-y divide-slate-800 text-sm" id="studentTableBody">
                         <tr>
-                            <td class="p-4">
-                                <div class="font-semibold text-white">മുഹമ്മദ് അബ്‌ദുല്ല</div>
-                                <div class="text-xs text-slate-400">ID: MAD001</div>
-                            </td>
-                            <td class="p-4">മാസിക ഫീസ് (ഒക്ടോബർ)</td>
-                            <td class="p-4 font-medium text-white">₹ 500</td>
-                            <td class="p-4">
-                                <span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-full text-xs">അടയ്ക്കാനുണ്ട്</span>
-                            </td>
-                            <td class="p-4 text-right">
-                                <a href="https://wa.me/919876543210?text=ಅಸ್ಸಲಾಮು%20ಅಲೈಕುಮ್,%20മുഹമ്മദ്%20അബ്‌ദുല്ലയുടെ%20മാസിക%20ഫീസ്%20₹500%20അടയ്ക്കാൻ%20ബാക്കിയുണ്ട്." target="_blank" class="inline-flex items-center text-xs bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 px-3 py-1.5 rounded-lg hover:bg-emerald-600/30 transition">
-                                    വാട്‌സ്ആപ്പ് അയക്കുക
-                                </a>
-                            </td>
+                            <td colspan="5" class="p-4 text-center text-slate-400">വിവരങ്ങൾ ഒന്നും ചേർത്തിട്ടില്ല.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -155,17 +143,96 @@
         </div>
     </main>
 
-    <!-- Script Section -->
-    <script>
-        function addStudent(event) {
+    <!-- Firebase & Custom Script Section -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA-DEAr98P18Pe3vfFdHC6bmIZyr47kLeg",
+            authDomain: "fees-management-app-62588.firebaseapp.com",
+            projectId: "fees-management-app-62588",
+            storageBucket: "fees-management-app-62588.firebasestorage.app",
+            messagingSenderId: "347392125928",
+            appId: "1:347392125928:web:f4c9f6e23cee32f0a1525d",
+            measurementId: "G-1VQGK123KY"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // ലോഗിൻ ചെയ്ത സ്ഥാപനത്തിന്റെ പേര് ലോഡ് ചെയ്യൽ
+        async function loadInstitutionDetails() {
+            const userEmail = localStorage.getItem('loggedInEmail') || "madrasathul@example.com";
+
+            try {
+                const q = query(collection(db, "institutions"), where("email", "==", userEmail));
+                const querySnapshot = await getDocs(q);
+
+                let found = false;
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    document.getElementById('instTitleName').innerText = data.name;
+                    found = true;
+                });
+
+                if (!found) {
+                    document.getElementById('instTitleName').innerText = "സ്ഥാപന അഡ്മിൻ";
+                }
+            } catch (error) {
+                console.error("Error loading institution name: ", error);
+                document.getElementById('instTitleName').innerText = "സ്ഥാപന അഡ്മിൻ";
+            }
+        }
+
+        window.addStudent = function(event) {
             event.preventDefault();
-            alert("വിദ്യാർത്ഥിയുടെ വിവരങ്ങൾ വിജയകരമായി ചേർത്തു!");
+            const name = document.getElementById('studentName').value;
+            const studentId = document.getElementById('studentId').value;
+            const feeType = document.getElementById('feeType').value;
+            const amount = document.getElementById('feeAmount').value;
+            const phone = document.getElementById('parentPhone').value;
+
+            const tableBody = document.getElementById('studentTableBody');
+            
+            // ആദ്യത്തെ ഡിഫോൾട്ട് മെസ്സേജ് ഒഴിവാക്കാൻ
+            if(tableBody.innerText.includes("വിവരങ്ങൾ ഒന്നും ചേർത്തിട്ടില്ല")) {
+                tableBody.innerHTML = "";
+            }
+
+            const msg = encodeURIComponent(`അസ്സലാമു അലൈക്കും / നമസ്കാരം, ${name} (ID: ${studentId}) -ന്റെ ${feeType} തുക ₹${amount} അടയ്ക്കാൻ ബാക്കിയുണ്ട്.`);
+            const whatsappUrl = `https://wa.me/91${phone}?text=${msg}`;
+
+            const newRow = `
+                <tr>
+                    <td class="p-4">
+                        <div class="font-semibold text-white">${name}</div>
+                        <div class="text-xs text-slate-400">ID: ${studentId}</div>
+                    </td>
+                    <td class="p-4">${feeType}</td>
+                    <td class="p-4 font-medium text-white">₹ ${amount}</td>
+                    <td class="p-4">
+                        <span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-full text-xs">അടയ്ക്കാനുണ്ട്</span>
+                    </td>
+                    <td class="p-4 text-right">
+                        <a href="${whatsappUrl}" target="_blank" class="inline-flex items-center text-xs bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 px-3 py-1.5 rounded-lg hover:bg-emerald-600/30 transition">
+                            വാട്‌സ്ആപ്പ് അയക്കുക
+                        </a>
+                    </td>
+                </tr>
+            `;
+
+            tableBody.innerHTML += newRow;
+            alert("വിദ്യാർത്ഥിയുടെ ഫീസ് വിവരം വിജയകരമായി ചേർത്തു!");
             event.target.reset();
         }
 
-        function logoutInst() {
+        window.logoutInst = function() {
+            localStorage.removeItem('loggedInEmail');
             window.location.href = 'index.html';
         }
+
+        loadInstitutionDetails();
     </script>
 </body>
 </html>
