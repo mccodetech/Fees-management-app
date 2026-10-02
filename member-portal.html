@@ -15,7 +15,7 @@
 </head>
 <body class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 min-h-screen flex items-center justify-center p-4">
 
-    <div class="max-w-md w-full bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-8 text-white">
+    <div class="max-w-md w-full bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-8 text-white" id="loginCard">
         <!-- Header Section -->
         <div class="text-center mb-8">
             <div class="inline-flex bg-indigo-600/30 p-3 rounded-full mb-3 border border-indigo-400/30">
@@ -51,36 +51,110 @@
                 വിവരങ്ങൾ പരിശോധിക്കുക
             </button>
         </form>
+    </div>
 
-        <!-- Footer Note -->
-        <div class="mt-8 text-center text-xs text-slate-400">
-            <p>സ്ഥാപനം നൽകിയ ഐഡിയും ഫോൺ നമ്പറും ഉപയോഗിക്കുക</p>
+    <!-- Member Fee Dashboard View (Initially Hidden) -->
+    <div class="max-w-lg w-full bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 text-white hidden" id="dashboardCard">
+        <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-800">
+            <div>
+                <h2 class="text-lg font-bold" id="displayName">അംഗത്തിന്റെ പേര്</h2>
+                <p class="text-xs text-slate-400" id="displayDetails">ID: <span id="displayId"></span></p>
+            </div>
+            <button onclick="logoutMember()" class="bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/30 px-3 py-1.5 rounded-xl text-xs font-medium transition">
+                പുറത്തു കടക്കുക
+            </button>
+        </div>
+
+        <div class="space-y-4">
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                <p class="text-xs text-slate-400">ഫീസ് ഇനം</p>
+                <p class="text-sm font-semibold text-indigo-300 mt-1" id="displayFeeType">മാസിക ഫീസ്</p>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <p class="text-xs text-slate-400">ആകെ തുക</p>
+                    <p class="text-xl font-bold text-amber-400 mt-1" id="displayAmount">₹ 0</p>
+                </div>
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <p class="text-xs text-slate-400">സ്റ്റാറ്റസ്</p>
+                    <p class="text-sm font-bold text-rose-400 mt-1" id="displayStatus">അടയ്ക്കാനുണ്ട്</p>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Script Section -->
-    <script>
-        function handleMemberLogin(event) {
+    <!-- Firebase Script Section -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA-DEAr98P18Pe3vfFdHC6bmIZyr47kLeg",
+            authDomain: "fees-management-app-62588.firebaseapp.com",
+            projectId: "fees-management-app-62588",
+            storageBucket: "fees-management-app-62588.firebasestorage.app",
+            messagingSenderId: "347392125928",
+            appId: "1:347392125928:web:f4c9f6e23cee32f0a1525d",
+            measurementId: "G-1VQGK123KY"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.handleMemberLogin = async function(event) {
             event.preventDefault();
             const memberId = document.getElementById('memberId').value.trim();
             const phone = document.getElementById('memberPhone').value.trim();
             const msgBox = document.getElementById('messageBox');
+            const submitBtn = document.getElementById('submitBtn');
 
-            // ഡെമോ പരിശോധന (ഡാറ്റാബേസ് കണക്ട് ചെയ്യുമ്പോൾ ഇത് ഫയർബേസിൽ നിന്ന് പരിശോധിക്കാം)
-            if (memberId && phone.length >= 10) {
-                msgBox.className = "mb-4 p-3 rounded-xl text-sm text-center bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
-                msgBox.innerText = "ലോഗിൻ വിജയകരം! വിവരങ്ങൾ എടുക്കുന്നു...";
-                msgBox.classList.remove('hidden');
+            submitBtn.disabled = true;
+            submitBtn.innerText = "പരിശോധിക്കുന്നു...";
 
-                // വിജയകരമായാൽ ഫീസ് വിവരങ്ങൾ കാണിക്കുന്ന പേജിലേക്ക് പോകാം
-                setTimeout(() => {
-                    alert("ഐഡി: " + memberId + " -ന്റെ ഫീസ് വിവരങ്ങൾ ഉടൻ ലഭ്യമാകുന്നതാണ്.");
-                }, 1000);
-            } else {
+            try {
+                // ഫയർബേസിൽ നിന്ന് അംഗത്തിന്റെ ഐഡിയും ഫോൺ നമ്പറും മാച്ച് ചെയ്യുന്നു
+                const q = query(
+                    collection(db, "students"), 
+                    where("studentId", "==", memberId),
+                    where("phone", "==", phone)
+                );
+                
+                const querySnapshot = await getDocs(q);
+                let found = false;
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    document.getElementById('displayName').innerText = data.name;
+                    document.getElementById('displayId').innerText = data.studentId;
+                    document.getElementById('displayFeeType').innerText = data.feeType || "മാസിക ഫീസ്";
+                    document.getElementById('displayAmount').innerText = `₹ ${data.amount}`;
+                    
+                    // കാർഡുകൾ മാറ്റി സ്ഥാപിക്കുക
+                    document.getElementById('loginCard').classList.add('hidden');
+                    document.getElementById('dashboardCard').classList.remove('hidden');
+                    found = true;
+                });
+
+                if (!found) {
+                    msgBox.className = "mb-4 p-3 rounded-xl text-sm text-center bg-rose-500/20 text-rose-300 border border-rose-500/30";
+                    msgBox.innerText = "നൽകിയ ഐഡിയും ഫോൺ നമ്പറും തമ്മിൽ പൊരുത്തപ്പെടുന്നില്ല.";
+                    msgBox.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error("Login error: ", error);
                 msgBox.className = "mb-4 p-3 rounded-xl text-sm text-center bg-rose-500/20 text-rose-300 border border-rose-500/30";
-                msgBox.innerText = "ദയവായി ശരിയായ ഐഡിയും ഫോൺ നമ്പറും നൽകുക.";
+                msgBox.innerText = "ലോഗിൻ ചെയ്യുന്നതിൽ തടസ്സം നേരിട്ടു.";
                 msgBox.classList.remove('hidden');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "വിവരങ്ങൾ പരിശോധിക്കുക";
             }
+        }
+
+        window.logoutMember = function() {
+            document.getElementById('dashboardCard').classList.add('hidden');
+            document.getElementById('loginCard').classList.remove('hidden');
+            document.getElementById('memberLoginForm').reset();
         }
     </script>
 </body>
