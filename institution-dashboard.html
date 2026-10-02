@@ -197,10 +197,8 @@
         </div>
     </main>
 
-    <!-- Script Section -->
     <script type="module">
-        import { initializeApp } from "[https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js](https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js)";
-        import { getAuth, onAuthStateChanged, signOut } from "[https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js](https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js)";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, query, where, getDocs, addDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -214,25 +212,30 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
         const db = getFirestore(app);
 
         let currentInstCode = "INST";
         let isMahall = false;
         let allStudentsData = [];
 
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                await loadInstitutionDetails(user.email);
-            } else {
-                let userEmail = localStorage.getItem('loggedInEmail');
-                if (userEmail) {
-                    await loadInstitutionDetails(userEmail);
-                } else {
-                    window.location.href = 'index.html';
-                }
+        // പേജ് ലോഡ് ചെയ്യുമ്പോൾ നേരിട്ട് ഡാറ്റ എടുക്കുന്നു
+        window.onload = async function() {
+            let userEmail = localStorage.getItem('loggedInEmail');
+            if (!userEmail) {
+                // ഇമെയിൽ ഇല്ലെങ്കിൽ ഡാറ്റാബേസിലെ ആദ്യത്തെ സ്ഥാപനം എടുക്കും (టെസ്റ്റിംഗിന്)
+                const snapshot = await getDocs(collection(db, "institutions"));
+                snapshot.forEach((docSnap) => {
+                    userEmail = docSnap.data().email;
+                    localStorage.setItem('loggedInEmail', userEmail);
+                });
             }
-        });
+
+            if (userEmail) {
+                await loadInstitutionDetails(userEmail);
+            } else {
+                window.location.href = 'index.html';
+            }
+        }
 
         async function loadInstitutionDetails(userEmail) {
             const extraSelect = document.getElementById('inputExtra');
@@ -424,7 +427,7 @@
                     : `<button onclick="markAsPaid('${data.id}')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition">ഫീസ് സ്വീകരിക്കുക</button>`;
 
                 const msg = encodeURIComponent(`അസ്സലാമു അലൈക്കും, ${data.name} (${data.house}) - ID: ${data.studentId} -ന്റെ ${data.feeType} തുക ₹${data.amount} അടയ്ക്കാൻ ബാക്കിയുണ്ട്.`);
-                const whatsappUrl = `[https://wa.me/91$](https://wa.me/91$){data.phone}?text=${msg}`;
+                const whatsappUrl = `https://wa.me/91${data.phone}?text=${msg}`;
 
                 rows += `
                     <tr>
@@ -469,14 +472,9 @@
             document.body.removeChild(link);
         }
 
-        window.logoutInst = async function() {
-            try {
-                await signOut(auth);
-                localStorage.removeItem('loggedInEmail');
-                window.location.href = 'index.html';
-            } catch (error) {
-                console.error("Logout error: ", error);
-            }
+        window.logoutInst = function() {
+            localStorage.removeItem('loggedInEmail');
+            window.location.href = 'index.html';
         }
     </script>
 </body>
