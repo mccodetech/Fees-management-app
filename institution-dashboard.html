@@ -25,6 +25,7 @@
                     </svg>
                 </div>
                 <div>
+                    <!-- സ്ഥാപനത്തിന്റെ യഥാർത്ഥ പേരും കോഡും ഇവിടെ കാണിക്കും -->
                     <h1 class="text-lg font-bold tracking-wide" id="instTitleName">ലോഡ് ചെയ്യുന്നു...</h1>
                     <p class="text-xs text-slate-400" id="instTypeSub">സ്ഥാപന അഡ്മിൻ പാനൽ</p>
                 </div>
@@ -74,7 +75,6 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1" id="extraLabel">ക്ലാസ് / വാർഡ്</label>
-                            <!-- ഇവിടെ ഇനി ടെക്സ്റ്റിന് പകരം താഴെയുള്ള സ്ക്രിപ്റ്റ് വഴി ഡ്രോപ്പ്-ഡൗൺ ആയി മാറും -->
                             <select id="inputExtra" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
                                 <option value="" disabled selected>തിരഞ്ഞെടുക്കുക</option>
                             </select>
@@ -96,7 +96,7 @@
                             <input type="number" id="feeAmount" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="500">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1">വാട്‌‌സ്ആപ്പ് നമ്പർ</label>
+                            <label class="block text-xs font-medium text-slate-300 mb-1">വാട്‌സ്ആപ്പ് നമ്പർ</label>
                             <input type="tel" id="parentPhone" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="9876543210">
                         </div>
                     </div>
@@ -125,7 +125,7 @@
                         <input type="file" accept=".xlsx, .csv" class="hidden" id="excelFile">
                     </div>
                 </div>
-                <button onclick="alert('എക്സൽ ഫയൽ അപ്‌ലോഡ് വിജയം!')" class="mt-4 w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-sm font-semibold transition border border-slate-700">
+                <button onclick="alert('എക്സൽ ഫയൽ അപ്‌‌ലോഡ് വിജയം!')" class="mt-4 w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-sm font-semibold transition border border-slate-700">
                     ഫയൽ അപ്‌ലോഡ് ചെയ്യുക
                 </button>
             </div>
@@ -158,8 +158,10 @@
         </div>
     </main>
 
+    <!-- Script Section -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, query, where, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -173,29 +175,36 @@
         };
 
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getFirestore(app);
 
         let currentInstCode = "INST";
         let isMahall = false;
 
-        async function loadInstitutionDetails() {
-            // ബ്രൗസറിൽ ലോഗിൻ ചെയ്ത യൂസറുടെ ഇമെയിൽ അല്ലെങ്കിൽ ഐഡി എടുക്കുന്നു
-            const userEmail = localStorage.getItem('loggedInEmail');
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                await loadInstitutionDetails(user.email);
+            } else {
+                let userEmail = localStorage.getItem('loggedInEmail');
+                if (userEmail) {
+                    await loadInstitutionDetails(userEmail);
+                } else {
+                    window.location.href = 'index.html';
+                }
+            }
+        });
+
+        async function loadInstitutionDetails(userEmail) {
             const extraSelect = document.getElementById('inputExtra');
 
             try {
-                let querySnapshot;
-                if (userEmail) {
-                    const q = query(collection(db, "institutions"), where("email", "==", userEmail));
-                    querySnapshot = await getDocs(q);
-                } else {
-                    querySnapshot = await getDocs(collection(db, "institutions"));
-                }
+                const q = query(collection(db, "institutions"), where("email", "==", userEmail));
+                const querySnapshot = await getDocs(q);
 
                 let found = false;
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    currentInstCode = data.instCode || "INST";
+                    currentInstCode = data.instCode || "INST01";
                     
                     document.getElementById('instTitleName').innerText = `${data.name} (${currentInstCode})`;
                     document.getElementById('instTypeSub').innerText = `${data.type} അഡ്മിൻ പാനൽ`;
@@ -244,6 +253,12 @@
                     }
                     found = true;
                 });
+
+                if (found) {
+                    loadStudents();
+                } else {
+                    document.getElementById('instTitleName').innerText = "സ്ഥാപനം കണ്ടെത്തിയില്ല";
+                }
             } catch (error) {
                 console.error("Error loading institution details: ", error);
             }
@@ -339,14 +354,15 @@
             document.body.removeChild(link);
         }
 
-        window.logoutInst = function() {
-            localStorage.removeItem('loggedInEmail');
-            window.location.href = 'index.html';
+        window.logoutInst = async function() {
+            try {
+                await signOut(auth);
+                localStorage.removeItem('loggedInEmail');
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error("Logout error: ", error);
+            }
         }
-
-        loadInstitutionDetails().then(() => {
-            loadStudents();
-        });
     </script>
 </body>
 </html>
