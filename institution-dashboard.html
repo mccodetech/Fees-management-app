@@ -158,7 +158,6 @@
         </div>
     </main>
 
-    <!-- Script Section -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, query, where, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -180,19 +179,25 @@
         let isMahall = false;
 
         async function loadInstitutionDetails() {
-            const userEmail = localStorage.getItem('loggedInEmail') || "madrasathul@example.com";
+            // ലോക്കൽ സ്റ്റോറേജിൽ ഇല്ലെങ്കിൽ ഡാറ്റാബേസിൽ നിന്ന് ആദ്യത്തെ Active സ്ഥാപനം എടുക്കുന്നു
+            let userEmail = localStorage.getItem('loggedInEmail');
             const extraSelect = document.getElementById('inputExtra');
 
             try {
-                const q = query(collection(db, "institutions"), where("email", "==", userEmail));
-                const querySnapshot = await getDocs(q);
+                let querySnapshot;
+                if (userEmail) {
+                    const q = query(collection(db, "institutions"), where("email", "==", userEmail));
+                    querySnapshot = await getDocs(q);
+                } else {
+                    querySnapshot = await getDocs(collection(db, "institutions"));
+                }
 
                 let found = false;
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    currentInstCode = data.instCode || "INST";
+                    currentInstCode = data.instCode || "MD01"; // കോഡ് ഇല്ലെങ്കിൽ ഡിഫോൾട്ട്
                     
-                    // സ്ഥാപനത്തിന്റെ യഥാർത്ഥ പേര് ഇവിടെ കൃത്യമായി സെറ്റ് ചെയ്യുന്നു
+                    // സ്ഥാപനത്തിന്റെ യഥാർത്ഥ പേര് മുകളിൽ കാണിക്കുന്നു
                     document.getElementById('instTitleName').innerText = `${data.name} (${currentInstCode})`;
                     document.getElementById('instTypeSub').innerText = `${data.type} അഡ്മിൻ പാനൽ`;
 
@@ -242,10 +247,11 @@
                 });
 
                 if (!found) {
-                    document.getElementById('instTitleName').innerText = "സ്ഥാപന അഡ്മിൻ";
+                    document.getElementById('instTitleName').innerText = "മദ്രസത്തുൽ ഇസ്‌ലാം (MD01)";
                 }
             } catch (error) {
                 console.error("Error loading institution details: ", error);
+                document.getElementById('instTitleName').innerText = "സ്ഥാപന അഡ്മിൻ";
             }
         }
 
