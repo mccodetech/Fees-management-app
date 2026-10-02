@@ -124,38 +124,113 @@
     </main>
 
     <!-- Script Section -->
-    <script>
-        function approveInst(id, instName, phone, version) {
-            const statusSpan = document.getElementById(`status-${id}`);
-            const actionTd = document.getElementById(`action-${id}`);
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-            statusSpan.className = "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-1 rounded-full text-xs";
-            statusSpan.innerText = "സജീവം (Active)";
+    const firebaseConfig = {
+        apiKey: "AIzaSyA-DEAr98P18Pe3vfFdHC6bmIZyr47kLeg",
+        authDomain: "fees-management-app-62588.firebaseapp.com",
+        projectId: "fees-management-app-62588",
+        storageBucket: "fees-management-app-62588.firebasestorage.app",
+        messagingSenderId: "347392125928",
+        appId: "1:347392125928:web:f4c9f6e23cee32f0a1525d",
+        measurementId: "G-1VQGK123KY"
+    };
 
-            // WhatsApp message text encoded
-            const msg = encodeURIComponent(`അസ്സലാമു അലൈക്കും / নমસ્കാരം, ${instName}! ഫീസ് മാനേജ്മെന്റ് പോർട്ടലിലേക്കുള്ള നിങ്ങളുടെ അക്കൗണ്ട് അപ്പ്രൂവ് ചെയ്തിരിക്കുന്നു. വേർഷൻ: ${version}. ഇനി ലോഗിൻ ചെയ്ത് ഉപയോഗിക്കാവുന്നതാണ്.`);
-            const whatsappUrl = `https://wa.me/91${phone}?text=${msg}`;
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-            actionTd.innerHTML = `
-                <span class="text-xs text-emerald-400 font-medium mr-2">അപ്പ്രൂവ് ചെയ്തു</span>
-                <a href="${whatsappUrl}" target="_blank" class="inline-flex items-center text-xs bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 px-3 py-1.5 rounded-lg hover:bg-emerald-600/30 transition">
-                    വാട്‌സ്ആപ്പ് അയക്കുക
-                </a>
-            `;
-            
-            alert("സ്ഥാപനത്തിന്റെ അക്കൗണ്ട് വിജയകരമായി അപ്പ്രൂവ് ചെയ്തു! വാട്‌സ്ആപ്പ് വഴി സന്ദേശം അയക്കാം.");
+    async function loadInstitutions() {
+        const tableBody = document.getElementById('institutionTableBody');
+        tableBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">Loading...</td></tr>`;
+
+        try {
+            const querySnapshot = await getDocs(collection(db, "institutions"));
+            let rows = "";
+            let total = 0;
+            let pending = 0;
+            let active = 0;
+
+            querySnapshot.forEach((document) => {
+                const data = document.data();
+                const docId = document.id;
+                total++;
+
+                if (data.status === "Active") active++;
+                else pending++;
+
+                const statusBadge = data.status === "Active" 
+                    ? `<span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-1 rounded-full text-xs">Sajeevam (Active)</span>`
+                    : `<span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-full text-xs">Pending</span>`;
+
+                const actionBtn = data.status === "Active"
+                    ? `<a href="https://wa.me/91${data.phone}?text=Ningalude%20fee%20portal%20account%20active%20aanu." target="_blank" class="inline-flex items-center text-xs bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 px-3 py-1.5 rounded-lg hover:bg-emerald-600/30 transition">WhatsApp Ayakkuka</a>`
+                    : `<button onclick="approveInst('${docId}', '${data.name}', '${data.phone}', '${data.version}')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition">Approve Cheyyuka</button>
+                       <button onclick="rejectInst('${docId}')" class="bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 px-3 py-1.5 rounded-lg text-xs font-medium transition ml-1">Nirasikkuka</button>`;
+
+                rows += `
+                    <tr id="row-${docId}">
+                        <td class="p-4">
+                            <div class="font-semibold text-white">${data.name}</div>
+                            <div class="text-xs text-slate-400">${data.type}</div>
+                        </td>
+                        <td class="p-4">
+                            <div class="text-indigo-300 text-xs">${data.email}</div>
+                            <div class="text-xs text-slate-400 mt-0.5">${data.phone} (${data.location})</div>
+                        </td>
+                        <td class="p-4">
+                            <span class="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2.5 py-1 rounded-full text-xs">${data.version}</span>
+                        </td>
+                        <td class="p-4">${statusBadge}</td>
+                        <td class="p-4 text-right" id="action-${docId}">${actionBtn}</td>
+                    </tr>
+                `;
+            });
+
+            tableBody.innerHTML = rows || `<tr><td colspan="5" class="p-4 text-center text-slate-400">Registrations onnumilla.</td></tr>`;
+            document.getElementById('totalInst').innerText = total;
+            document.getElementById('pendingInst').innerText = pending;
+            document.getElementById('activeInst').innerText = active;
+
+        } catch (error) {
+            console.error("Error loading institutions: ", error);
         }
+    }
 
-        function rejectInst(id) {
-            if(confirm("ഈ രജിസ്ട്രേഷൻ നിരസിക്കണമെന്നുറപ്പാണോ?")) {
-                alert("രജിസ്ട്രേഷൻ നിരസിച്ചു.");
-                location.reload();
+    window.approveInst = async function(docId, instName, phone, version) {
+        try {
+            const docRef = doc(db, "institutions", docId);
+            await updateDoc(docRef, { status: "Active" });
+
+            alert("Account vijayakaramayi approve cheythu!");
+            loadInstitutions();
+
+            const msg = encodeURIComponent(`Assalamu Alaikum / Namaskaram, ${instName}! Ningalude Fee Management portal account approve cheythirikkunnu. Version: ${version}.`);
+            window.open(`https://wa.me/91${phone}?text=${msg}`, '_blank');
+        } catch (error) {
+            console.error("Error approving: ", error);
+        }
+    }
+
+    window.rejectInst = async function(docId) {
+        if(confirm("Ee registration nirasikkanamennurappano?")) {
+            try {
+                await deleteDoc(doc(db, "institutions", docId));
+                alert("Registration nirasichu.");
+                loadInstitutions();
+            } catch (error) {
+                console.error("Error deleting: ", error);
             }
         }
+    }
 
-        function logoutAdmin() {
-            window.location.href = 'admin-login.html';
-        }
-    </script>
+    window.logoutAdmin = function() {
+        window.location.href = 'admin-login.html';
+    }
+
+    // Page load avumbol data fetch cheyyunnu
+    loadInstitutions();
+</script>
 </body>
 </html>
