@@ -44,11 +44,11 @@
             </div>
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
                 <p class="text-slate-400 text-sm">പിരിഞ്ഞു കിട്ടാനുള്ള ഫീസ്</p>
-                <h3 class="text-3xl font-bold mt-2 text-amber-400">₹ 0</h3>
+                <h3 class="text-3xl font-bold mt-2 text-amber-400" id="totalPendingAmount">₹ 0</h3>
             </div>
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
                 <p class="text-slate-400 text-sm">ആകെ പിരിച്ച തുക</p>
-                <h3 class="text-3xl font-bold mt-2 text-emerald-400">₹ 0</h3>
+                <h3 class="text-3xl font-bold mt-2 text-emerald-400" id="totalCollectedAmount">₹ 0</h3>
             </div>
         </div>
 
@@ -61,11 +61,11 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1" id="labelName">വിദ്യാർത്ഥിയുടെ പേര്</label>
-                            <input type="text" id="inputName" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none transition" placeholder="പേര്">
+                            <input type="text" id="inputName" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none uppercase transition" placeholder="പേര്">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1" id="labelHouse">വീട്ടുപേര് (House Name)</label>
-                            <input type="text" id="inputHouse" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none transition" placeholder="വീട്ടുപേര്">
+                            <input type="text" id="inputHouse" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none uppercase transition" placeholder="വീട്ടുപേര്">
                         </div>
                     </div>
                     
@@ -144,7 +144,7 @@
                             <th class="p-4" id="thExtra">ക്ലാസ്</th>
                             <th class="p-4">ഫീസ് ഇനം & തുക</th>
                             <th class="p-4">സ്റ്റാറ്റസ്</th>
-                            <th class="p-4 text-right">വാട്‌സ്ആപ്പ് റിമൈൻഡർ</th>
+                            <th class="p-4 text-right">നടപടികൾ (Actions)</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-800 text-sm" id="recordTableBody">
@@ -161,7 +161,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, query, where, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, query, where, getDocs, addDoc, doc, updateId, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA-DEAr98P18Pe3vfFdHC6bmIZyr47kLeg",
@@ -205,7 +205,7 @@
                     const data = doc.data();
                     currentInstCode = data.instCode || "INST01";
                     
-                    document.getElementById('instTitleName').innerText = `${data.name} (${currentInstCode})`;
+                    document.getElementById('instTitleName').innerText = `${data.name.toUpperCase()} (${currentInstCode})`;
                     document.getElementById('instTypeSub').innerText = `${data.type} അഡ്മിൻ പാനൽ`;
 
                     if (data.type === "മഹല്ല്" || data.type === "മറ്റ് കമ്മറ്റികൾ") {
@@ -265,15 +265,14 @@
 
         window.addRecord = async function(event) {
             event.preventDefault();
-            const name = document.getElementById('inputName').value.trim();
-            const house = document.getElementById('inputHouse').value.trim();
+            const name = document.getElementById('inputName').value.trim().toUpperCase();
+            const house = document.getElementById('inputHouse').value.trim().toUpperCase();
             const extraInput = document.getElementById('inputExtra').value;
             const feeType = document.getElementById('feeType').value;
-            const amount = document.getElementById('feeAmount').value;
+            const amount = Number(document.getElementById('feeAmount').value);
             const phone = document.getElementById('parentPhone').value;
 
             try {
-                // നിലവിലുള്ള റെക്കോർഡുകൾ പരിശോധിച്ച് ഓട്ടോമാറ്റിക് സീരിയൽ നമ്പർ (001, 002...) ഉണ്ടാക്കുന്നു
                 const q = query(collection(db, "students"), where("instCode", "==", currentInstCode));
                 const querySnapshot = await getDocs(q);
                 let nextSerial = querySnapshot.size + 1;
@@ -289,6 +288,9 @@
                     feeType: feeType,
                     amount: amount,
                     phone: phone,
+                    status: "Pending", // ഡിഫോൾട്ട് സ്റ്റാറ്റസ്
+                    paidDate: "",
+                    receiptNo: "",
                     instCode: currentInstCode,
                     createdAt: new Date()
                 });
@@ -302,6 +304,29 @@
             }
         }
 
+        // ഫീസ് സ്വീകരിച്ചു എന്ന് മാർക്ക് ചെയ്യുന്ന ഫങ്ഷൻ
+        window.markAsPaid = async function(docId, amount) {
+            const receiptNo = prompt("രസീത് നമ്പർ (Receipt No) നൽകുക:", "REC-001");
+            if (!receiptNo) return;
+
+            const today = new Date().toLocaleDateString('en-GB'); // DD/MM/YYYY ഫോർമാറ്റ്
+
+            try {
+                const studentDocRef = doc(db, "students", docId);
+                await updateDoc(studentDocRef, {
+                    status: "Paid",
+                    paidDate: today,
+                    receiptNo: receiptNo
+                });
+
+                alert("ഫീസ് വിജയകരമായി സ്വീകരിച്ചു എന്ന് രേഖപ്പെടുത്തി!");
+                loadStudents();
+            } catch (error) {
+                console.error("Error updating payment: ", error);
+                alert("അപ്ഡേറ്റ് ചെയ്യുന്നതിൽ പിശക് സംഭവിച്ചു.");
+            }
+        }
+
         async function loadStudents() {
             const tableBody = document.getElementById('recordTableBody');
             
@@ -310,10 +335,29 @@
                 const querySnapshot = await getDocs(q);
                 let rows = "";
                 let count = 0;
+                let totalPending = 0;
+                let totalCollected = 0;
 
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
+                querySnapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const docId = docSnap.id;
                     count++;
+
+                    const isPaid = data.status === "Paid";
+                    if (isPaid) {
+                        totalCollected += Number(data.amount);
+                    } else {
+                        totalPending += Number(data.amount);
+                    }
+
+                    const statusBadge = isPaid 
+                        ? `<span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-1 rounded-full text-xs font-semibold">അടച്ചു (Paid)</span>`
+                        : `<span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-full text-xs font-semibold">അടയ്ക്കാനുണ്ട്</span>`;
+
+                    const actionBtn = isPaid
+                        ? `<span class="text-xs text-emerald-400 font-medium">രസീത്: ${data.receiptNo}</span>`
+                        : `<button onclick="markAsPaid('${docId}', ${data.amount})" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition">ഫീസ് സ്വീകരിക്കുക</button>`;
+
                     const msg = encodeURIComponent(`അസ്സലാമു അലൈക്കും, ${data.name} (${data.house}) - ID: ${data.studentId} -ന്റെ ${data.feeType} തുക ₹${data.amount} അടയ്ക്കാൻ ബാക്കിയുണ്ട്.`);
                     const whatsappUrl = `https://wa.me/91${data.phone}?text=${msg}`;
 
@@ -331,12 +375,11 @@
                                 <div class="text-white">${data.feeType}</div>
                                 <div class="text-xs font-semibold text-amber-400">₹ ${data.amount}</div>
                             </td>
-                            <td class="p-4">
-                                <span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-full text-xs">അടയ്ക്കാനുണ്ട്</span>
-                            </td>
-                            <td class="p-4 text-right">
-                                <a href="${whatsappUrl}" target="_blank" class="inline-flex items-center text-xs bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 px-3 py-1.5 rounded-lg hover:bg-emerald-600/30 transition">
-                                    വാട്‌സ്ആപ്പ് അയക്കുക
+                            <td class="p-4">${statusBadge}</td>
+                            <td class="p-4 text-right space-x-2">
+                                ${actionBtn}
+                                <a href="${whatsappUrl}" target="_blank" class="inline-flex items-center text-xs bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-1.5 rounded-lg hover:bg-emerald-600/30 transition">
+                                    വാട്‌‌സ്ആപ്പ്
                                 </a>
                             </td>
                         </tr>
@@ -345,6 +388,8 @@
 
                 tableBody.innerHTML = rows || `<tr><td colspan="6" class="p-4 text-center text-slate-400">വിവരങ്ങൾ ഒന്നും ചേർത്തിട്ടില്ല.</td></tr>`;
                 document.getElementById('totalCount').innerText = count;
+                document.getElementById('totalPendingAmount').innerText = `₹ ${totalPending}`;
+                document.getElementById('totalCollectedAmount').innerText = `₹ ${totalCollected}`;
             } catch (error) {
                 console.error("Error loading records: ", error);
             }
@@ -352,7 +397,7 @@
 
         window.downloadExcelFormat = function(event) {
             event.preventDefault();
-            const csvContent = "data:text/csv;charset=utf-8,Name,House,Class_Or_Ward,Fee_Type,Amount,Phone\nMuhammed,Kunnath,5th Standard,Monthly Fee,500,9876543210";
+            const csvContent = "data:text/csv;charset=utf-8,Name,House,Class_Or_Ward,Fee_Type,Amount,Phone\nMUHAMMED,KURIKKAL,5th Standard,Monthly Fee,500,9876543210";
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
