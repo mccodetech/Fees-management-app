@@ -105,25 +105,69 @@
     </div>
 
     <!-- Script Section -->
-    <script>
-        function handleRegistration(event) {
-            event.preventDefault();
-            
-            const name = document.getElementById('instName').value;
-            const type = document.getElementById('instType').value;
-            const location = document.getElementById('instLocation').value;
-            const phone = document.getElementById('instPhone.value');
-            const version = document.getElementById('versionType').value;
-            const email = document.getElementById('instEmail').value;
-            const msgBox = document.getElementById('messageBox');
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addTimestamp, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-            // തൽക്കാലത്തേക്ക് ഡാറ്റ കളക്ട് ചെയ്ത് സന്ദേശം കാണിക്കുന്നു (ഫയർബേസ് കണക്റ്റ് ചെയ്യുമ്പോൾ ഇത് ഡാറ്റാബേസിലേക്ക് സേവ് ചെയ്യാം)
+    // Firebase Configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyA-DEAr98P18Pe3vfFdHC6bmIZyr47kLeg",
+        authDomain: "fees-management-app-62588.firebaseapp.com",
+        projectId: "fees-management-app-62588",
+        storageBucket: "fees-management-app-62588.firebasestorage.app",
+        messagingSenderId: "347392125928",
+        appId: "1:347392125928:web:f4c9f6e23cee32f0a1525d",
+        measurementId: "G-1VQGK123KY"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.handleRegistration = async function(event) {
+        event.preventDefault();
+        
+        const name = document.getElementById('instName').value;
+        const type = document.getElementById('instType').value;
+        const location = document.getElementById('instLocation').value;
+        const phone = document.getElementById('instPhone').value;
+        const version = document.getElementById('versionType').value;
+        const email = document.getElementById('instEmail').value;
+        const password = document.getElementById('instPassword').value;
+        const msgBox = document.getElementById('messageBox');
+        const submitBtn = document.getElementById('submitBtn');
+
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Register cheyyunnu...";
+
+        try {
+            // Firestore-ile 'institutions' collection-lekku data save cheyyunnu
+            await addDoc(collection(db, "institutions"), {
+                name: name,
+                type: type,
+                location: location,
+                phone: phone,
+                version: version,
+                email: email,
+                password: password,
+                status: "Pending",
+                createdAt: new Date()
+            });
+
             msgBox.className = "mb-4 p-3 rounded-xl text-sm text-center bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
-            msgBox.innerText = "രജിസ്ട്രേഷൻ വിജയകരമായി പൂർത്തിയായി! സൂപ്പർ അഡ്മിന്റെ അനുമതിക്കായി കാത്തിരിക്കുക.";
+            msgBox.innerText = "Registration vijayakaramayi poorthiyayi! Super admin-ante anumatikayi kathirikkuka.";
             msgBox.classList.remove('hidden');
 
             document.getElementById('registerForm').reset();
+        } catch (error) {
+            console.error("Error adding document: ", error);
+            msgBox.className = "mb-4 p-3 rounded-xl text-sm text-center bg-rose-500/20 text-rose-300 border border-rose-500/30";
+            msgBox.innerText = "Error: Data save cheyyan kazhunjilla.";
+            msgBox.classList.remove('hidden');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Register cheyyuka";
         }
-    </script>
+    }
+</script>
 </body>
 </html>
