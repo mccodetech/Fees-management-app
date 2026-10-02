@@ -64,8 +64,8 @@
                             <input type="text" id="inputName" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none transition" placeholder="പേര്">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1" id="labelSub">ഐഡി നമ്പർ / വീട്ടുപേര്</label>
-                            <input type="text" id="inputSub" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none transition" placeholder="001 / വീട്ടുപേര്">
+                            <label class="block text-xs font-medium text-slate-300 mb-1" id="labelHouse">വീട്ടുപേര് (House Name)</label>
+                            <input type="text" id="inputHouse" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none transition" placeholder="വീട്ടുപേര്">
                         </div>
                     </div>
                     
@@ -123,7 +123,7 @@
                         <input type="file" accept=".xlsx, .csv" class="hidden" id="excelFile">
                     </div>
                 </div>
-                <button onclick="alert('എക്സൽ ഫയൽ അപ്‌‌ലോഡ് വിജയം!')" class="mt-4 w-full py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-sm font-semibold transition border border-slate-700">
+                <button onclick="alert('എക്സൽ ഫയൽ അപ്‌ലോഡ് വിജയം!')" class="mt-4 w-full py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-sm font-semibold transition border border-slate-700">
                     ഫയൽ അപ്‌ലോഡ് ചെയ്യുക
                 </button>
             </div>
@@ -139,7 +139,8 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-950/50 text-slate-400 text-xs uppercase tracking-wider border-b border-slate-800">
-                            <th class="p-4" id="thName">വിദ്യാർത്ഥി & ID</th>
+                            <th class="p-4" id="thName">വിദ്യാർത്ഥി</th>
+                            <th class="p-4">ഐഡി നമ്പർ (ID)</th>
                             <th class="p-4" id="thExtra">ക്ലാസ്</th>
                             <th class="p-4">ഫീസ് ഇനം & തുക</th>
                             <th class="p-4">സ്റ്റാറ്റസ്</th>
@@ -148,7 +149,7 @@
                     </thead>
                     <tbody class="divide-y divide-slate-800 text-sm" id="recordTableBody">
                         <tr>
-                            <td colspan="5" class="p-4 text-center text-slate-400">വിവരങ്ങൾ ഒന്നും ചേർത്തിട്ടില്ല.</td>
+                            <td colspan="6" class="p-4 text-center text-slate-400">വിവരങ്ങൾ ഒന്നും ചേർത്തിട്ടില്ല.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -212,10 +213,10 @@
                         document.getElementById('statCountLabel').innerText = "ആകെ അംഗങ്ങൾ / കുടുംബങ്ങൾ";
                         document.getElementById('formHeading').innerText = "പുതിയ അംഗം / ഫണ്ട് ചേർക്കുക";
                         document.getElementById('labelName').innerText = "അംഗത്തിന്റെ പേര്";
-                        document.getElementById('labelSub').innerText = "ഐഡി / വീട്ടുപേര്";
+                        document.getElementById('labelHouse').innerText = "വീട്ടുപേര് (House Name)";
                         document.getElementById('extraLabel').innerText = "വാർഡ് / ഏരിയ";
                         document.getElementById('tableHeading').innerText = "അംഗങ്ങളുടെ ഫണ്ട് വിവരങ്ങൾ";
-                        document.getElementById('thName').innerText = "അംഗം & വീട്ടുപേര്";
+                        document.getElementById('thName').innerText = "അംഗം";
                         document.getElementById('thExtra').innerText = "വാർഡ്";
 
                         extraSelect.innerHTML = `
@@ -231,10 +232,10 @@
                         document.getElementById('statCountLabel').innerText = "ആകെ വിദ്യാർത്ഥികൾ";
                         document.getElementById('formHeading').innerText = "പുതിയ വിദ്യാർത്ഥി / ഫീസ് ചേർക്കുക";
                         document.getElementById('labelName').innerText = "വിദ്യാർത്ഥിയുടെ പേര്";
-                        document.getElementById('labelSub').innerText = "ഐഡി നമ്പർ";
+                        document.getElementById('labelHouse').innerText = "വീട്ടുപേര് / രക്ഷിതാവ്";
                         document.getElementById('extraLabel').innerText = "ക്ലാസ്";
                         document.getElementById('tableHeading').innerText = "വിദ്യാർത്ഥികളുടെ ഫീസ് വിവരങ്ങൾ";
-                        document.getElementById('thName').innerText = "വിദ്യാർത്ഥി & ID";
+                        document.getElementById('thName').innerText = "വിദ്യാർത്ഥി";
                         document.getElementById('thExtra').innerText = "ക്ലാസ്";
 
                         extraSelect.innerHTML = `
@@ -264,20 +265,26 @@
 
         window.addRecord = async function(event) {
             event.preventDefault();
-            const name = document.getElementById('inputName').value;
-            const subInput = document.getElementById('inputSub').value;
+            const name = document.getElementById('inputName').value.trim();
+            const house = document.getElementById('inputHouse').value.trim();
             const extraInput = document.getElementById('inputExtra').value;
             const feeType = document.getElementById('feeType').value;
             const amount = document.getElementById('feeAmount').value;
             const phone = document.getElementById('parentPhone').value;
 
-            const studentId = `${currentInstCode}-${subInput}`;
-
             try {
+                // നിലവിലുള്ള റെക്കോർഡുകൾ പരിശോധിച്ച് ഓട്ടോമാറ്റിക് സീരിയൽ നമ്പർ (001, 002...) ഉണ്ടാക്കുന്നു
+                const q = query(collection(db, "students"), where("instCode", "==", currentInstCode));
+                const querySnapshot = await getDocs(q);
+                let nextSerial = querySnapshot.size + 1;
+                let formattedSerial = String(nextSerial).padStart(3, '0');
+
+                const studentId = `${currentInstCode}-${formattedSerial}`;
+
                 await addDoc(collection(db, "students"), {
                     name: name,
+                    house: house,
                     studentId: studentId,
-                    subInput: subInput,
                     extraInput: extraInput,
                     feeType: feeType,
                     amount: amount,
@@ -286,7 +293,7 @@
                     createdAt: new Date()
                 });
 
-                alert("വിവരം വിജയകരമായി സേവ് ചെയ്തു!");
+                alert(`വിവരം വിജയകരമായി സേവ് ചെയ്തു! ഐഡി: ${studentId}`);
                 event.target.reset();
                 loadStudents();
             } catch (error) {
@@ -307,14 +314,17 @@
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
                     count++;
-                    const msg = encodeURIComponent(`അസ്സലാമു അലൈക്കും, ${data.name} (ID: ${data.studentId}) -ന്റെ ${data.feeType} തുക ₹${data.amount} അടയ്ക്കാൻ ബാക്കിയുണ്ട്.`);
+                    const msg = encodeURIComponent(`അസ്സലാമു അലൈക്കും, ${data.name} (${data.house}) - ID: ${data.studentId} -ന്റെ ${data.feeType} തുക ₹${data.amount} അടയ്ക്കാൻ ബാക്കിയുണ്ട്.`);
                     const whatsappUrl = `https://wa.me/91${data.phone}?text=${msg}`;
 
                     rows += `
                         <tr>
                             <td class="p-4">
                                 <div class="font-semibold text-white">${data.name}</div>
-                                <div class="text-xs text-indigo-400">ID: ${data.studentId}</div>
+                                <div class="text-xs text-slate-400">വീട്: ${data.house}</div>
+                            </td>
+                            <td class="p-4">
+                                <span class="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2.5 py-1 rounded-lg text-xs font-bold">${data.studentId}</span>
                             </td>
                             <td class="p-4 text-slate-300">${data.extraInput || '-'}</td>
                             <td class="p-4">
@@ -333,7 +343,7 @@
                     `;
                 });
 
-                tableBody.innerHTML = rows || `<tr><td colspan="5" class="p-4 text-center text-slate-400">വിവരങ്ങൾ ഒന്നും ചേർത്തിട്ടില്ല.</td></tr>`;
+                tableBody.innerHTML = rows || `<tr><td colspan="6" class="p-4 text-center text-slate-400">വിവരങ്ങൾ ഒന്നും ചേർത്തിട്ടില്ല.</td></tr>`;
                 document.getElementById('totalCount').innerText = count;
             } catch (error) {
                 console.error("Error loading records: ", error);
@@ -342,7 +352,7 @@
 
         window.downloadExcelFormat = function(event) {
             event.preventDefault();
-            const csvContent = "data:text/csv;charset=utf-8,Name,ID_Number,Class_Or_Ward,Fee_Type,Amount,Phone\nMuhammed,001,5th Standard,Monthly Fee,500,9876543210";
+            const csvContent = "data:text/csv;charset=utf-8,Name,House,Class_Or_Ward,Fee_Type,Amount,Phone\nMuhammed,Kunnath,5th Standard,Monthly Fee,500,9876543210";
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
