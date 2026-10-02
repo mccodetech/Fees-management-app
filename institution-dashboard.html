@@ -19,9 +19,7 @@
             <div class="flex items-center space-x-3">
                 <div class="bg-indigo-600/30 p-2 rounded-xl border border-indigo-400/30">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 നിങ്ങൾ ആവശ്യപ്പെട്ട സെർച്ച് ചെയ്യാനും (Search) ക്ലാസ്/വാർഡ് അനുസരിച്ച് ഫിൽട്ടർ ചെയ്യാനുമുള്ള സൗകര്യം ഉൾപ്പെടെയുള്ള **`institution-dashboard.html`** ഫയലിന്റെ സമ്പൂർണ്ണ കോഡ് താഴെ നൽകുന്നു:
-
-### സമ്പൂർണ്ണമായ `institution-dashboard.html` കോഡ്:
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1hനമുക്ക് ഇതെല്ലാം പൂർണ്ണമായി ഒപ്പിച്ചു ഒരൊറ്റ ഫയലായി ഉപയോഗിക്കാൻ പാകത്തിലുള്ള സമ്പൂർണ്ണ **`institution-dashboard.html`** കോഡ് താഴെ നൽകുന്നു. ഇത് പൂർണ്ണമായും കോപ്പി ചെയ്ത് നിങ്ങളുടെ ഫയലിൽ പേസ്റ്റ് ചെയ്യുക:
 
 ```html
 <!DOCTYPE html>
@@ -197,9 +195,10 @@
         </div>
     </main>
 
+    <!-- Script Section -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, query, where, getDocs, addDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { initializeApp } from "[https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js](https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js)";
+        import { getFirestore, collection, query, where, getDocs, addDoc, doc, updateDoc } from "[https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js](https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js)";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA-DEAr98P18Pe3vfFdHC6bmIZyr47kLeg",
@@ -218,11 +217,9 @@
         let isMahall = false;
         let allStudentsData = [];
 
-        // പേജ് ലോഡ് ചെയ്യുമ്പോൾ നേരിട്ട് ഡാറ്റ എടുക്കുന്നു
         window.onload = async function() {
             let userEmail = localStorage.getItem('loggedInEmail');
             if (!userEmail) {
-                // ഇമെയിൽ ഇല്ലെങ്കിൽ ഡാറ്റാബേസിലെ ആദ്യത്തെ സ്ഥാപനം എടുക്കും (టെസ്റ്റിംഗിന്)
                 const snapshot = await getDocs(collection(db, "institutions"));
                 snapshot.forEach((docSnap) => {
                     userEmail = docSnap.data().email;
@@ -427,7 +424,7 @@
                     : `<button onclick="markAsPaid('${data.id}')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition">ഫീസ് സ്വീകരിക്കുക</button>`;
 
                 const msg = encodeURIComponent(`അസ്സലാമു അലൈക്കും, ${data.name} (${data.house}) - ID: ${data.studentId} -ന്റെ ${data.feeType} തുക ₹${data.amount} അടയ്ക്കാൻ ബാക്കിയുണ്ട്.`);
-                const whatsappUrl = `https://wa.me/91${data.phone}?text=${msg}`;
+                const whatsappUrl = `[https://wa.me/91$](https://wa.me/91$){data.phone}?text=${msg}`;
 
                 rows += `
                     <tr>
