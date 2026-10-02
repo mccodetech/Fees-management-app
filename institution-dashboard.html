@@ -179,8 +179,8 @@
         let isMahall = false;
 
         async function loadInstitutionDetails() {
-            // ലോക്കൽ സ്റ്റോറേജിൽ ഇല്ലെങ്കിൽ ഡാറ്റാബേസിൽ നിന്ന് ആദ്യത്തെ Active സ്ഥാപനം എടുക്കുന്നു
-            let userEmail = localStorage.getItem('loggedInEmail');
+            // ബ്രൗസറിൽ ലോഗിൻ ചെയ്ത യൂസറുടെ ഇമെയിൽ അല്ലെങ്കിൽ ഐഡി എടുക്കുന്നു
+            const userEmail = localStorage.getItem('loggedInEmail');
             const extraSelect = document.getElementById('inputExtra');
 
             try {
@@ -195,9 +195,8 @@
                 let found = false;
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    currentInstCode = data.instCode || "MD01"; // കോഡ് ഇല്ലെങ്കിൽ ഡിഫോൾട്ട്
+                    currentInstCode = data.instCode || "INST";
                     
-                    // സ്ഥാപനത്തിന്റെ യഥാർത്ഥ പേര് മുകളിൽ കാണിക്കുന്നു
                     document.getElementById('instTitleName').innerText = `${data.name} (${currentInstCode})`;
                     document.getElementById('instTypeSub').innerText = `${data.type} അഡ്മിൻ പാനൽ`;
 
@@ -245,13 +244,8 @@
                     }
                     found = true;
                 });
-
-                if (!found) {
-                    document.getElementById('instTitleName').innerText = "മദ്രസത്തുൽ ഇസ്‌ലാം (MD01)";
-                }
             } catch (error) {
                 console.error("Error loading institution details: ", error);
-                document.getElementById('instTitleName').innerText = "സ്ഥാപന അഡ്മിൻ";
             }
         }
 
