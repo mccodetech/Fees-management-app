@@ -27,10 +27,13 @@
             <p class="text-slate-300 text-sm mt-1">മദ്രസ / സ്ഥാപന ലോഗിൻ</p>
         </div>
 
+        <!-- Error / Success Message Box -->
+        <div id="messageBox" class="hidden mb-4 p-3 rounded-xl text-sm text-center"></div>
+
         <!-- Login Form -->
         <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-6">
             <div>
-                <label class="block text-sm font-medium text-slate-200 mb-2">ഇമെയിൽ വിലാസം / ഐഡി</label>
+                <label class="block text-sm font-medium text-slate-200 mb-2">ഇമെയിൽ വിലാസം</label>
                 <input type="email" id="email" required 
                     class="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-white placeholder-slate-500 transition"
                     placeholder="name@example.com">
@@ -51,7 +54,7 @@
                 <a href="#" class="text-indigo-400 hover:text-indigo-300 transition">പാസ്‌വേഡ് മറന്നോ?</a>
             </div>
 
-            <button type="submit" 
+            <button type="submit" id="submitBtn"
                 class="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/30 transition duration-200">
                 ലോഗിൻ ചെയ്യുക
             </button>
@@ -63,19 +66,65 @@
         </div>
     </div>
 
-    <!-- Script Section -->
-    <script>
-        function handleLogin(event) {
+    <!-- Firebase SDK Scripts -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA-DEAr98P18Pe3vfFdHC6bmIZyr47kLeg",
+            authDomain: "fees-management-app-62588.firebaseapp.com",
+            projectId: "fees-management-app-62588",
+            storageBucket: "fees-management-app-62588.firebasestorage.app",
+            messagingSenderId: "347392125928",
+            appId: "1:347392125928:web:f4c9f6e23cee32f0a1525d",
+            measurementId: "G-1VQGK123KY"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Make handleLogin function available globally
+        window.handlelogin = function(event) {
             event.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            
-            // ഇവിടെ ഫയർബേസ് ലോഗിൻ കോഡ് കണക്റ്റ് ചെയ്യാം
-            console.log("Login attempted with:", email);
-            alert("ലോഗിൻ വിജയകരം! (ഡെമോ)");
-            
-            // തൽക്കാലത്തേക്ക് ഡാഷ്‌ബോർഡിലേക്ക് റീഡirect ചെയ്യാം (പിന്നീട് മാറ്റാം)
-            // window.location.href = 'dashboard.html';
+            const msgBox = document.getElementById('messageBox');
+            const submitBtn = document.getElementById('submitBtn');
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = "ലോഗിൻ ചെയ്യുന്നു...";
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Signed in 
+                    msgBox.className = "mb-4 p-3 rounded-xl text-sm text-center bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+                    msgBox.innerText = "ലോഗിൻ വിജയകരം! ഡാഷ്‌ബോർഡിലേക്ക് പോകുന്നു...";
+                    msgBox.classList.remove('hidden');
+
+                    // Redirect to dashboard (create dashboard.html later)
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1000);
+                })
+                .catch((error) => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "ലോഗിൻ ചെയ്യുക";
+                    
+                    msgBox.className = "mb-4 p-3 rounded-xl text-sm text-center bg-rose-500/20 text-rose-300 border border-rose-500/30";
+                    msgBox.innerText = "ലോഗിൻ പരാജയപ്പെട്ടു: ഇമെയിലും പാസ്‌വേഡും പരിശോധിക്കുക.";
+                    msgBox.classList.remove('hidden');
+                });
+        }
+    </script>
+    <script>
+        // Form submit wrapper
+        function handleLogin(event) {
+            if(window.handlelogin) {
+                window.handlelogin(event);
+            }
         }
     </script>
 </body>
