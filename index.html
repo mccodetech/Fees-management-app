@@ -11,45 +11,50 @@
         body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
     <!-- Navbar -->
-    <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-3">
-            <div class="flex items-center space-x-3">
-                <div class="bg-indigo-600 p-2 rounded-xl text-white font-bold shadow-lg shadow-indigo-600/30">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <header class="border-b border-slate-800/80 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-3.5 flex justify-between items-center">
+            <div class="flex items-center space-x-2.5">
+                <div class="bg-indigo-600 p-2 rounded-lg text-white font-bold shadow-md shadow-indigo-600/30">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                     </svg>
                 </div>
-                <span class="text-lg font-bold tracking-wider text-white">ഫീസ് പോർട്ടൽ</span>
+                <span class="text-base font-bold tracking-wide text-white">ഫീസ് പോർട്ടൽ (Fee Portal)</span>
             </div>
             <div class="flex items-center space-x-3">
-                <a href="member-portal.html" class="text-xs sm:text-sm font-medium text-slate-300 hover:text-white bg-slate-800 border border-slate-700 px-3.5 py-2 rounded-xl transition">അംഗങ്ങളുടെ പോർട്ടൽ</a>
-                <a href="registration.html" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition shadow-lg shadow-indigo-600/30">സ്ഥാപന രജിസ്ട്രേഷൻ</a>
+                <a href="member-portal.html" class="text-xs font-medium text-slate-300 hover:text-white bg-slate-800/80 border border-slate-700 px-3 py-1.5 rounded-lg transition">അംഗങ്ങളുടെ പോർട്ടൽ</a>
+                <a href="registration.html" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3.5 py-1.5 rounded-lg text-xs font-medium transition shadow-md shadow-indigo-600/20">സ്ഥാപന രജിസ്ട്രേഷൻ</a>
             </div>
         </div>
     </header>
 
-    <!-- Main Hero & Login Section -->
-    <main class="max-w-7xl mx-auto px-4 py-8 md:py-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center my-auto">
-        <!-- Left Hero Content -->
-        <div class="space-y-6 text-center lg:text-left">
-            <div class="inline-block bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide">
-                സുരക്ഷിത ഡിജിറ്റൽ ഫീസ് മാനേജ്‌‌മെന്റ്
+    <!-- Main Section -->
+    <main class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center my-auto">
+        
+        <!-- Left Content -->
+        <div class="lg:col-span-7 space-y-5 text-center lg:text-left">
+            <div class="inline-flex items-center space-x-2 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-3 py-1 rounded-md text-xs font-medium">
+                <span class="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
+                <span>സുരക്ഷിത ഡിജിറ്റൽ ഫീസ് മാനേജ്‌മെന്റ് സിസ്റ്റം</span>
             </div>
-            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-snug">
-                മദ്രസകൾക്കും, സ്കൂളുകൾക്കും, മഹല്ലുകൾക്കുമുള്ള <span class="text-indigo-400">സ്മാർട്ട് ഫീസ് പോർട്ടൽ</span>
+            
+            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight leading-tight text-white">
+                മദ്രസകൾ, സ്കൂളുകൾ, മഹല്ലുകൾ എന്നിവയ്ക്കായുള്ള <span class="text-indigo-400">സ്മാർട്ട് ഫീസ് മാനേജർ</span>
             </h1>
-            <p class="text-slate-400 text-sm sm:text-base leading-relaxed max-w-xl mx-auto lg:mx-0">
-                സ്ഥാപനങ്ങളുടെ ഫീസ് ശേഖരണവും വാട്‌സ്ആപ്പ് റിമൈൻഡറുകളും എളുപ്പത്തിൽ കൈകാര്യം ചെയ്യൂ. സുരക്ഷിതവും വിശ്വസനീയവുമായ ഡിജിറ്റൽ സംവിധാനം.
+            
+            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto lg:mx-0">
+                സ്ഥാപനങ്ങളുടെ ഫീസ് ശേഖരണവും വാട്‌സ്ആപ്പ് റിമൈൻഡറുകളും ഒരමരത്ത് എളുപ്പത്തിൽ കൈകാര്യം ചെയ്യൂ. സുരക്ഷിതവും ലളിതവുമായ ഡിജിറ്റൽ സംവിധാനം.
             </p>
+            
             <div class="flex flex-wrap justify-center lg:justify-start items-center gap-6 text-xs text-slate-400 pt-2">
-                <div class="flex items-center space-x-2">
+                <div class="flex items-center space-x-1.5">
                     <svg class="h-4 w-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                     <span>യൂണീക്ക് കോഡ് സുരക്ഷ</span>
                 </div>
-                <div class="flex items-center space-x-2">
+                <div class="flex items-center space-x-1.5">
                     <svg class="h-4 w-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                     <span>വാട്‌സ്ആപ്പ് ഇന്റഗ്രേഷൻ</span>
                 </div>
@@ -57,41 +62,41 @@
         </div>
 
         <!-- Right Login Card -->
-        <div class="bg-slate-950/80 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative max-w-md w-full mx-auto">
-            <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-indigo-600 text-white p-3 rounded-2xl shadow-lg shadow-indigo-600/40">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div class="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl relative max-w-sm w-full mx-auto">
+            <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-indigo-600 text-white p-2.5 rounded-xl shadow-md shadow-indigo-600/30">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
             </div>
 
-            <div class="text-center mt-4 mb-6">
-                <h2 class="text-xl font-bold">സ്ഥാപന അഡ്മിൻ ലോഗിൻ</h2>
-                <p class="text-xs text-slate-400 mt-1">നിങ്ങളുടെ ലോഗിൻ വിവരങ്ങൾ നൽകുക</p>
+            <div class="text-center mt-3 mb-5">
+                <h2 class="text-base font-bold text-white">സ്ഥാപന അഡ്മിൻ ലോഗിൻ</h2>
+                <p class="text-xs text-slate-400 mt-0.5">ലോഗിൻ വിവരങ്ങൾ നൽകി പ്രവേശിക്കുക</p>
             </div>
 
-            <form onsubmit="handleDirectLogin(event)" class="space-y-4">
+            <form onsubmit="handleDirectLogin(event)" class="space-y-3.5">
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1.5">ഇമെയിൽ വിലാസം</label>
-                    <input type="email" id="email" required class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none transition" placeholder="admin@example.com">
+                    <label class="block text-xs font-medium text-slate-300 mb-1">ഇമെയിൽ വിലാസം</label>
+                    <input type="email" id="email" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none transition" placeholder="admin@example.com">
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1.5">പാസ്‌വേഡ്</label>
-                    <input type="password" id="password" required class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none transition" placeholder="••••••••">
+                    <label class="block text-xs font-medium text-slate-300 mb-1">പാസ്‌വേഡ്</label>
+                    <input type="password" id="password" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none transition" placeholder="••••••••">
                 </div>
-                <button type="submit" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-semibold transition shadow-lg shadow-indigo-600/30 mt-2">
+                <button type="submit" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold transition shadow-md shadow-indigo-600/20 mt-1">
                     ലോഗിൻ ചെയ്യുക
                 </button>
             </form>
 
-            <div class="mt-6 text-center text-xs text-slate-400 border-t border-slate-800 pt-4">
-                <p>പുതിയ സ്ഥാപനമാണോ? <a href="registration.html" class="text-indigo-400 font-medium hover:underline">ഇവിടെ രജിസ്റ്റർ ചെയ്യുക</a></p>
+            <div class="mt-5 text-center text-xs text-slate-400 border-t border-slate-800 pt-3.5">
+                <p>പുതിയ സ്ഥാപനമാണോ? <a href="registration.html" class="text-indigo-400 font-medium hover:underline">രജിസ്റ്റർ ചെയ്യുക</a></p>
             </div>
         </div>
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-slate-800 bg-slate-900 py-6 text-center text-xs text-slate-500">
-        <p>© 2026 ഫീസ് മാനേജ്‌‌മെന്റ് പോർട്ടൽ. സർവ്വ അവകാശങ്ങളും സുരക്ഷിതം.</p>
+    <footer class="border-t border-slate-900 bg-slate-950 py-4 text-center text-[11px] text-slate-500">
+        <p>© 2026 ഫീസ് മാനേജ്‌മെന്റ് പോർട്ടൽ. സർവ്വ അവകാശങ്ങളും സുരക്ഷിതം.</p>
     </footer>
 
     <!-- Scripting -->
