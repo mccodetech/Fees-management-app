@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ഫീസ് മാനേജ്‌മെന്റ് പോർട്ടൽ - ഡിജിറ്റൽ ഫീസ് ശേഖരണ സിസ്റ്റം</title>
+    <title>ഫീസ് മാനേജ്‌മെന്റ് പോർട്ടൽ</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -11,40 +11,40 @@
         body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
     <!-- Navbar -->
-    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+    <header class="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-3">
             <div class="flex items-center space-x-3">
-                <div class="bg-indigo-600 p-2 rounded-xl text-white font-bold shadow-lg shadow-indigo-600/30">
+                <div class="bg-indigo-600 p-2 rounded-xl text-white font-bold shadow-lg shadow-indigo-600/20">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                     </svg>
                 </div>
                 <span class="text-lg font-bold tracking-wider text-white">ഫീസ് പോർട്ടൽ</span>
             </div>
-            <div class="space-x-4">
-                <a href="member-portal.html" class="text-xs md:text-sm font-medium text-indigo-400 hover:text-indigo-300 transition">അംഗങ്ങളുടെ പോർട്ടൽ</a>
-                <a href="registration.html" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-xs md:text-sm font-medium transition shadow-lg shadow-indigo-600/30">സ്ഥാപന രജിസ്ട്രേഷൻ</a>
+            <div class="flex items-center space-x-3">
+                <a href="member-portal.html" class="text-xs sm:text-sm font-medium text-slate-300 hover:text-white bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl transition">അംഗങ്ങളുടെ പോർട്ടൽ</a>
+                <a href="registration.html" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-medium transition shadow-lg shadow-indigo-600/20">സ്ഥാപന രജിസ്ട്രേഷൻ</a>
             </div>
         </div>
     </header>
 
     <!-- Main Hero & Login Section -->
-    <main class="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-2 gap-12 items-center my-auto">
+    <main class="max-w-7xl mx-auto px-4 py-8 md:py-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center my-auto">
         <!-- Left Hero Content -->
-        <div class="space-y-6">
-            <span class="bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-3 py-1 rounded-full text-xs font-semibold tracking-wide">
+        <div class="space-y-6 text-center lg:text-left">
+            <div class="inline-block bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide">
                 സുരക്ഷിത ഡിജിറ്റൽ ഫീസ് മാനേജ്‌മെന്റ്
-            </span>
-            <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight">
+            </div>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-snug">
                 മദ്രസകൾക്കും, സ്കൂളുകൾക്കും, മഹല്ലുകൾക്കുമുള്ള <span class="text-indigo-400">സ്മാർട്ട് ഫീസ് പോർട്ടൽ</span>
             </h1>
-            <p class="text-slate-400 text-sm md:text-base leading-relaxed">
+            <p class="text-slate-400 text-sm sm:text-base leading-relaxed max-w-xl mx-auto lg:mx-0">
                 സ്ഥാപനങ്ങളുടെ ഫീസ് ശേഖരണവും വാട്‌സ്ആപ്പ് റിമൈൻഡറുകളും എളുപ്പത്തിൽ കൈകാര്യം ചെയ്യൂ. സുരക്ഷിതവും വിശ്വസനീയവുമായ ഡിജിറ്റൽ സംവിധാനം.
             </p>
-            <div class="flex items-center space-x-6 text-xs text-slate-400 pt-2">
+            <div class="flex flex-wrap justify-center lg:justify-start items-center gap-6 text-xs text-slate-400 pt-2">
                 <div class="flex items-center space-x-2">
                     <svg class="h-4 w-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                     <span>യൂണീക്ക് കോഡ് സുരക്ഷ</span>
@@ -57,8 +57,8 @@
         </div>
 
         <!-- Right Login Card -->
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl relative">
-            <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-indigo-600 text-white p-3 rounded-2xl shadow-lg shadow-indigo-600/40">
+        <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative max-w-md w-full mx-auto">
+            <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-indigo-600 text-white p-3 rounded-2xl shadow-lg shadow-indigo-600/30">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
@@ -71,19 +71,19 @@
 
             <form onsubmit="handleDirectLogin(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">ഇമെയിൽ വിലാസം</label>
-                    <input type="email" id="email" required class="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none transition" placeholder="admin@example.com">
+                    <label class="block text-xs font-medium text-slate-300 mb-1.5">ഇമെയിൽ വിലാസം</label>
+                    <input type="email" id="email" required class="w-full px-4 py-3 bg-slate-950 border border-slate-700/80 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none transition" placeholder="admin@example.com">
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">പാസ്‌വേഡ്</label>
-                    <input type="password" id="password" required class="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none transition" placeholder="••••••••">
+                    <label class="block text-xs font-medium text-slate-300 mb-1.5">പാസ്‌വേഡ്</label>
+                    <input type="password" id="password" required class="w-full px-4 py-3 bg-slate-950 border border-slate-700/80 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none transition" placeholder="••••••••">
                 </div>
-                <button type="submit" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-semibold transition shadow-lg shadow-indigo-600/30">
+                <button type="submit" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-semibold transition shadow-lg shadow-indigo-600/30 mt-2">
                     ലോഗിൻ ചെയ്യുക
                 </button>
             </form>
 
-            <div class="mt-6 text-center text-xs text-slate-400 border-t border-slate-800 pt-4">
+            <div class="mt-6 text-center text-xs text-slate-400 border-t border-slate-800/80 pt-4">
                 <p>പുതിയ സ്ഥാപനമാണോ? <a href="registration.html" class="text-indigo-400 font-medium hover:underline">ഇവിടെ രജിസ്റ്റർ ചെയ്യുക</a></p>
             </div>
         </div>
