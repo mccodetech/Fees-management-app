@@ -47,6 +47,7 @@
                         <option value="" disabled selected>സ്ഥാപനത്തിന്റെ തരം തിരഞ്ഞെടുക്കുക</option>
                         <option value="മദ്രസ">മദ്രസ</option>
                         <option value="സ്കൂൾ">സ്കൂൾ</option>
+                        <option value="കോളേജ്">കോളേജ്</option>
                         <option value="മഹല്ല്">മഹല്ല്</option>
                         <option value="മറ്റ് കമ്മറ്റികൾ">മറ്റ് കമ്മറ്റികൾ</option>
                     </select>
@@ -69,8 +70,8 @@
                         <input type="tel" id="instPhone" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="9876543210">
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1">പ്രീഫിക്സ് കോഡ് (ഉദാ: MD01)</label>
-                        <input type="text" id="instCode" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500 outline-none uppercase" placeholder="MD01 / MH01">
+                        <label class="block text-xs font-medium text-slate-300 mb-1">പ്രീഫിക്സ് കോഡ് (ഉദാ: COL01)</label>
+                        <input type="text" id="instCode" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500 outline-none uppercase" placeholder="COL01 / MD01">
                     </div>
                 </div>
 
@@ -80,7 +81,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">പാസ്‌വേഡ്</label>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">പാസ്‌‌വേഡ്</label>
                     <input type="password" id="instPassword" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="••••••••">
                 </div>
 
@@ -133,7 +134,7 @@
                     instCode: instCode,
                     email: email,
                     password: password,
-                    status: "Active", // പെട്ടെന്ന് ലോഗിൻ ചെയ്യാൻ Active എന്ന് സെറ്റ് ചെയ്യുന്നു
+                    status: "Active",
                     createdAt: new Date()
                 });
 
