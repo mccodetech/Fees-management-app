@@ -65,7 +65,7 @@
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1" id="labelHouse">വീട്ടുപേര് (House Name)</label>
-                            <input type="text" id="inputHouse" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none uppercase transition" placeholder="വീട്ടുപേര്">
+                            <input type="text" id="inputHouse" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none uppercase transition" placeholder="വീട്ടുപേര്">
                         </div>
                     </div>
                     
@@ -105,7 +105,7 @@
                 </form>
             </div>
 
-            <!-- Bulk Fee Assignment for Class (Exam Fee / Special Fee) -->
+            <!-- Bulk Fee Assignment for Class -->
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl flex flex-col justify-between">
                 <div>
                     <h2 class="text-lg font-semibold mb-2">ക്ലാസ് അടിസ്ഥാനത്തിൽ ഒരുമിച്ച് ഫീസ് ചേർക്കുക</h2>
@@ -309,11 +309,16 @@
             const phone = document.getElementById('parentPhone').value;
 
             try {
+                // നിലവിലുള്ള ആകെ കുട്ടികളുടെ എണ്ണം നോക്കി അടുത്ത ഐഡി ഉണ്ടാക്കുന്നു
                 const q = query(collection(db, "students"), where("instCode", "==", currentInstCode));
                 const querySnapshot = await getDocs(q);
-                let nextSerial = querySnapshot.size + 1;
+                
+                // യൂണീക്ക് ഐഡികൾ മാത്രം കണക്കാക്കുന്നു
+                const uniqueIds = new Set();
+                querySnapshot.forEach(docSnap => uniqueIds.add(docSnap.data().studentId));
+                
+                let nextSerial = uniqueIds.size + 1;
                 let formattedSerial = String(nextSerial).padStart(3, '0');
-
                 const studentId = `${currentInstCode}-${formattedSerial}`;
 
                 await addDoc(collection(db, "students"), {
@@ -340,20 +345,13 @@
             }
         }
 
-        // ക്ലാസ് അടിസ്ഥാനത്തിൽ എല്ലാവർക്കും ഒരുമിച്ച് ഫീസ് ചേർക്കുന്ന ഫങ്ഷൻ
         window.addBulkFee = async function(event) {
             event.preventDefault();
             const targetClass = document.getElementById('bulkClassSelect').value;
-            const feeType = document.getElementById('bulkFeeType').value;
+            const feeType = document.getElementById('bulkFeeType.value') || document.getElementById('bulkFeeType').value;
             const amount = Number(document.getElementById('bulkAmount').value);
 
-            if (!targetClass) {
-                alert("దయവായി ഒരു ക്ലാസ് തിരഞ്ഞെടുക്കുക.");
-                return;
-            }
-
             try {
-                // ആ ക്ലാസിലുള്ള മുഴുവൻ വിദ്യാർത്ഥികളെയും കണ്ടെത്തുന്നു
                 const q = query(
                     collection(db, "students"), 
                     where("instCode", "==", currentInstCode),
@@ -361,30 +359,31 @@
                 );
                 const querySnapshot = await getDocs(q);
 
-                if (querySnapshot.empty) {
-                    alert(`${targetClass}-ൽ വിദ്യാർത്ഥികൾ ആരും ഇല്ല.`);
-                    return;
-                }
-
+                // ക്ലാസിലെ ഓരോ യൂണീക്ക് കുട്ടിക്കും മാത്രം ഫീസ് ചേർക്കുന്നു
+                const processedStudents = new Set();
                 let count = 0;
+
                 for (const docSnap of querySnapshot.docs) {
                     const studentData = docSnap.data();
-                    // ഓരോ വിദ്യാർത്ഥിക്കും പുതിയ ഫീസ് റെക്കോർഡ് ചേർക്കുന്നു
-                    await addDoc(collection(db, "students"), {
-                        name: studentData.name,
-                        house: studentData.house,
-                        studentId: studentData.studentId,
-                        extraInput: studentData.extraInput,
-                        feeType: feeType,
-                        amount: amount,
-                        phone: studentData.phone,
-                        status: "Pending",
-                        paidDate: "",
-                        receiptNo: "",
-                        instCode: currentInstCode,
-                        createdAt: new Date()
-                    });
-                    count++;
+                    if (!processedStudents.has(studentData.studentId)) {
+                        processedStudents.add(studentData.studentId);
+                        
+                        await addDoc(collection(db, "students"), {
+                            name: studentData.name,
+                            house: studentData.house,
+                            studentId: studentData.studentId,
+                            extraInput: studentData.extraInput,
+                            feeType: feeType,
+                            amount: amount,
+                            phone: studentData.phone,
+                            status: "Pending",
+                            paidDate: "",
+                            receiptNo: "",
+                            instCode: currentInstCode,
+                            createdAt: new Date()
+                        });
+                        count++;
+                    }
                 }
 
                 alert(`${targetClass}-ലെ ${count} വിദ്യാർത്ഥികൾക്ക് ${feeType} (₹${amount}) വിജയകരമായി ചേർത്തു!`);
@@ -453,6 +452,10 @@
             let totalPending = 0;
             let totalCollected = 0;
 
+            // യഥാർത്ഥ കുട്ടികളുടെ എണ്ണം കണക്കാക്കാൻ Set ഉപയോഗിക്കുന്നു
+            const uniqueStudentsSet = new Set();
+            allStudentsData.forEach(student => uniqueStudentsSet.add(student.studentId));
+
             dataList.forEach((data) => {
                 const isPaid = data.status === "Paid";
                 if (isPaid) {
@@ -498,7 +501,9 @@
             });
 
             tableBody.innerHTML = rows || `<tr><td colspan="6" class="p-4 text-center text-slate-400">വിവരങ്ങൾ ഒന്നും കണ്ടെത്തിയില്ല.</td></tr>`;
-            document.getElementById('totalCount').innerText = allStudentsData.length;
+            
+            // ഇവിടെ ആകെ കുട്ടികളുടെ എണ്ണം കൃത്യമായി കാണിക്കുന്നു
+            document.getElementById('totalCount').innerText = uniqueStudentsSet.size;
             document.getElementById('totalPendingAmount').innerText = `₹ ${totalPending}`;
             document.getElementById('totalCollectedAmount').innerText = `₹ ${totalCollected}`;
         }
