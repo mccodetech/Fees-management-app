@@ -80,7 +80,7 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1" id="extraLabel">ഗ്രൂപ്പ് / ക്ലാസ്</label>
-                            <input type="text" id="inputExtra" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none uppercase transition" placeholder="ഉദാ: Ward 1 / Class 5">
+                            <input type="text" id="inputExtra" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none uppercase transition" placeholder="ഉദാ: WARD 1">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1">ഫീസ് ഇനം</label>
@@ -307,6 +307,7 @@
                     document.getElementById('instTitleName').innerText = `${data.name.toUpperCase()} (${currentInstCode})`;
                     document.getElementById('instTypeSub').innerText = `${data.type} അഡ്മിൻ പാനൽ`;
 
+                    // ഇവിടെ തെറ്റായ രീതിയിലുള്ള ബഹുവചനം ഒഴിവാക്കി കൃത്യമായ ലേബലുകൾ നൽകുന്നു
                     document.getElementById('statCountLabel').innerText = `ആകെ ${pLabel}കൾ`;
                     document.getElementById('formHeading').innerText = `പുതിയ ${pLabel} / ഫീസ് ചേർക്കുക`;
                     document.getElementById('labelName').innerText = `${pLabel}യുടെ പേര്`;
@@ -458,9 +459,10 @@
                     ? `<span class="text-xs text-emerald-400 font-medium">രസീത്: ${data.receiptNo}</span>`
                     : `<button onclick="markAsPaid('${data.id}')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition">ഫീസ് സ്വീകരിക്കുക</button>`;
 
-                const whatsappUrl = `https://wa.me/91${data.phone}?text=` + encodeURIComponent(`അസ്സലാമു അലൈക്കും, ${data.name} (${data.house}) - ID: ${data.studentId} -ന്റെ ${data.feeType} തുക ₹${data.amount} അടയ്ക്കാൻ ബാക്കിയുണ്ട്.`);
+                const whatsappUrl = `https://wa.me/91${data.phone}?text=` + encodeURIComponent(`അസ്സലാമു അലൈക്കും, ${data.name} (${data.house}) - ID:${data.studentId} -ന്റെ ${data.feeType} തുക ₹${data.amount} അടയ്ക്കാൻ ബാക്കിയുണ്ട്.`);
 
                 rows += `
+                    rows += \`
                     <tr>
                         <td class="p-4"><div class="font-semibold text-white">${data.name}</div><div class="text-xs text-slate-400">വീട്: ${data.house}</div></td>
                         <td class="p-4"><span class="bg-indigo-500/20 text-indigo-300 px-2.5 py-1 rounded-lg text-xs font-bold">${data.studentId}</span></td>
