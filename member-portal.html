@@ -63,33 +63,19 @@
         </div>
 
         <div class="space-y-4">
-            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
-                <div>
-                    <p class="text-xs text-slate-400">ഫീസ് ഇനം</p>
-                    <p class="text-sm font-semibold text-indigo-300 mt-1" id="displayFeeType">മന്ത്ലി ഫീസ്</p>
-                </div>
-                <div class="text-right">
-                    <p class="text-xs text-slate-400">ക്ലാസ് / വാർഡ്</p>
-                    <p class="text-sm font-medium text-slate-200 mt-1" id="displayExtra">-</p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                    <p class="text-xs text-slate-400">അടയ്ക്കാനുള്ള തുക</p>
-                    <p class="text-xl font-bold text-amber-400 mt-1" id="displayAmount">₹ 0</p>
-                </div>
-                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                    <p class="text-xs text-slate-400">സ്റ്റാറ്റസ്</p>
-                    <p class="text-sm font-bold text-rose-400 mt-1" id="displayStatus">അടയ്ക്കാനുണ്ട്</p>
+            <!-- Pending Fees Section -->
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                <p class="text-xs font-semibold text-amber-400 mb-2">അടയ്ക്കാനുള്ള ഫീസുകൾ (Pending Fees)</p>
+                <div id="pendingFeesBox" class="space-y-2">
+                    <p class="text-xs text-slate-400">അടയ്ക്കാൻ ബാക്കി ഫീസുകൾ ഒന്നുമില്ല.</p>
                 </div>
             </div>
 
             <!-- Paid History Section -->
             <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                <p class="text-xs font-semibold text-slate-400 mb-2">അടച്ച ഫീസുകളുടെ വിവരങ്ങൾ</p>
-                <div id="paidHistoryBox" class="text-xs text-slate-400">
-                    ഇതുവരെ ഫീസുകൾ ഒന്നും അടച്ചിട്ടില്ല.
+                <p class="text-xs font-semibold text-emerald-400 mb-2">അടച്ച ഫീസുകളുടെ വിവരങ്ങൾ (Paid History)</p>
+                <div id="paidHistoryBox" class="space-y-2">
+                    <p class="text-xs text-slate-400">ഇതുവരെ ഫീസുകൾ ഒന്നും അടച്ചിട്ടില്ല.</p>
                 </div>
             </div>
         </div>
@@ -113,7 +99,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // പേജ് ലോഡ് ചെയ്യുമ്പോൾ ലോക്കൽ സ്റ്റോറേജിൽ ലോഗിൻ വിവരങ്ങൾ ഉണ്ടോ എന്ന് നോക്കുന്നു
         window.onload = function() {
             const savedId = localStorage.getItem('memberId');
             const savedPhone = localStorage.getItem('memberPhone');
@@ -153,31 +138,65 @@
                 const querySnapshot = await getDocs(q);
                 let found = false;
 
-                querySnapshot.forEach(async (docSnap) => {
+                let studentName = "";
+                let studentHouse = "";
+                let instCode = "";
+                let pendingHtml = "";
+                let paidHtml = "";
+                let hasPending = false;
+                let hasPaid = false;
+
+                querySnapshot.forEach((docSnap) => {
                     const data = docSnap.data();
-                    
-                    // സ്ഥാപനത്തിന്റെ പേര് എടുക്കുന്നു
+                    studentName = data.name;
+                    studentHouse = data.house;
+                    instCode = data.instCode;
+
+                    if (data.status === "Paid") {
+                        hasPaid = true;
+                        paidHtml += `
+                            <div class="bg-slate-900 border border-emerald-500/30 rounded-lg p-2.5 flex justify-between items-center text-xs">
+                                <div>
+                                    <span class="font-semibold text-white">${data.feeType} (${data.extraInput || '-'})</span>
+                                    <p class="text-slate-400 text-[10px]">തീയതി: ${data.paidDate} | രസീത്: ${data.receiptNo}</p>
+                                </div>
+                                <span class="text-emerald-400 font-bold">₹ ${data.amount} (Paid)</span>
+                            </div>
+                        `;
+                    } else {
+                        hasPending = true;
+                        pendingHtml += `
+                            <div class="bg-slate-900 border border-amber-500/30 rounded-lg p-2.5 flex justify-between items-center text-xs">
+                                <div>
+                                    <span class="font-semibold text-white">${data.feeType} (${data.extraInput || '-'})</span>
+                                    <p class="text-amber-400 text-[10px]">അടയ്ക്കാനുണ്ട്</p>
+                                </div>
+                                <span class="text-amber-400 font-bold text-sm">₹ ${data.amount}</span>
+                            </div>
+                        `;
+                    }
+                    found = true;
+                });
+
+                if (found) {
                     let instName = "സ്ഥാപനം";
-                    const instQ = query(collection(db, "institutions"), where("instCode", "==", data.instCode));
+                    const instQ = query(collection(db, "institutions"), where("instCode", "==", instCode));
                     const instSnap = await getDocs(instQ);
                     instSnap.forEach((instDoc) => {
                         instName = instDoc.data().name;
                     });
 
-                    document.getElementById('displayInstName').innerText = instName;
-                    document.getElementById('displayName').innerText = data.name.toUpperCase();
-                    document.getElementById('displayId').innerText = data.studentId;
-                    document.getElementById('displayHouse').innerText = data.house ? data.house.toUpperCase() : '-';
-                    document.getElementById('displayFeeType').innerText = data.feeType || "മന്ത്ലി ഫീസ്";
-                    document.getElementById('displayExtra').innerText = data.extraInput || '-';
-                    document.getElementById('displayAmount').innerText = `₹ ${data.amount}`;
-                    
+                    document.getElementById('displayInstName').innerText = instName.toUpperCase();
+                    document.getElementById('displayName').innerText = studentName;
+                    document.getElementById('displayId').innerText = memberId;
+                    document.getElementById('displayHouse').innerText = studentHouse ? studentHouse.toUpperCase() : '-';
+
+                    document.getElementById('pendingFeesBox').innerHTML = hasPending ? pendingHtml : `<p class="text-xs text-emerald-400">അടയ്ക്കാൻ ബാക്കി ഫീസുകൾ ഒന്നുമില്ല!</p>`;
+                    document.getElementById('paidHistoryBox').innerHTML = hasPaid ? paidHtml : `<p class="text-xs text-slate-400">ഇതുവരെ ഫീസുകൾ ഒന്നും അടച്ചിട്ടില്ല.</p>`;
+
                     document.getElementById('loginCard').classList.add('hidden');
                     document.getElementById('dashboardCard').classList.remove('hidden');
-                    found = true;
-                });
-
-                if (!found && submitBtn) {
+                } else if (submitBtn) {
                     msgBox.className = "mb-4 p-3 rounded-xl text-sm text-center bg-rose-500/20 text-rose-300 border border-rose-500/30";
                     msgBox.innerText = "നൽകിയ ഐഡിയും ഫോൺ നമ്പറും തമ്മിൽ പൊരുത്തപ്പെടുന്നില്ല.";
                     msgBox.classList.remove('hidden');
