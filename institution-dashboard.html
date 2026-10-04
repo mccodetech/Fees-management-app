@@ -52,9 +52,9 @@
             </div>
         </div>
 
-        <!-- Quick Actions & Form -->
+        <!-- Quick Actions & Forms -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Add Record Form -->
+            <!-- Add Single Record Form -->
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl">
                 <h2 class="text-lg font-semibold mb-4" id="formHeading">പുതിയ വിദ്യാർത്ഥി / ഫീസ് ചേർക്കുക</h2>
                 <form onsubmit="addRecord(event)" class="space-y-4">
@@ -65,7 +65,7 @@
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1" id="labelHouse">വീട്ടുപേര് (House Name)</label>
-                            <input type="text" id="inputHouse" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none uppercase transition" placeholder="വീട്ടുപേര്">
+                            <input type="text" id="inputHouse" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none uppercase transition" placeholder="വീട്ടുപേര്">
                         </div>
                     </div>
                     
@@ -105,27 +105,38 @@
                 </form>
             </div>
 
-            <!-- Excel Upload Box -->
+            <!-- Bulk Fee Assignment for Class (Exam Fee / Special Fee) -->
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl flex flex-col justify-between">
                 <div>
-                    <h2 class="text-lg font-semibold mb-2">എക്സൽ ഷീറ്റ് വഴി അപ്‌ലോഡ് ചെയ്യുക</h2>
-                    <p class="text-xs text-slate-400 mb-4">നൂറുകണക്കിന് വിവരങ്ങൾ ഒറ്റയടിക്ക് അപ്‌ലോഡ് ചെയ്യാൻ Excel ഫയൽ ഉപയോഗിക്കാം.</p>
+                    <h2 class="text-lg font-semibold mb-2">ക്ലാസ് അടിസ്ഥാനത്തിൽ ഒരുമിച്ച് ഫീസ് ചേർക്കുക</h2>
+                    <p class="text-xs text-slate-400 mb-4">ഒരു പ്രത്യേക ക്ലാസിലെ മുഴുവൻ വിദ്യാർത്ഥികൾക്കും ഒരേസമയം എക്സാം ഫീസോ പ്രത്യേക ഫീസോ ചുമത്താം.</p>
                     
-                    <a href="#" onclick="downloadExcelFormat(event)" class="inline-flex items-center text-xs text-indigo-400 bg-indigo-600/10 border border-indigo-500/30 px-3 py-1.5 rounded-lg mb-4 hover:bg-indigo-600/20 transition">
-                        📥 എക്സൽ മാതൃക (Format) ഡൗൺലോഡ് ചെയ്യുക
-                    </a>
-
-                    <div class="border-2 border-dashed border-slate-700 rounded-xl p-4 text-center bg-slate-950/50 hover:border-indigo-500 transition cursor-pointer">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-400 mx-auto mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                        </svg>
-                        <p class="text-xs text-slate-300">എക്സൽ ഫയൽ ഡ്രോപ്പ് ചെയ്യുക അല്ലെങ്കിൽ ബ്രൗസ് ചെയ്യുക</p>
-                        <input type="file" accept=".xlsx, .csv" class="hidden" id="excelFile">
-                    </div>
+                    <form onsubmit="addBulkFee(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-300 mb-1">ക്ലാസ് തിരഞ്ഞെടുക്കുക</label>
+                            <select id="bulkClassSelect" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                                <option value="" disabled selected>ക്ലാസ് തിരഞ്ഞെടുക്കുക</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-300 mb-1">ഫീസ് തരം</label>
+                                <select id="bulkFeeType" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                                    <option>എക്സാം ഫീസ് (Exam Fee)</option>
+                                    <option>പ്രത്യേക ഫീസ് (Special Fee)</option>
+                                    <option>മറ്റു ഫീസ് (Other Fee)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-300 mb-1">തുക (₹)</label>
+                                <input type="number" id="bulkAmount" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none transition" placeholder="200">
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-sm font-semibold transition shadow-lg shadow-emerald-600/30">
+                            ക്ലാസിലെ എല്ലാവർക്കും ഫീസ് ചേർക്കുക
+                        </button>
+                    </form>
                 </div>
-                <button onclick="alert('എക്സൽ ഫയൽ അപ്‌ലോഡ് വിജയം!')" class="mt-4 w-full py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-sm font-semibold transition border border-slate-700">
-                    ഫയൽ അപ്‌ലോഡ് ചെയ്യുക
-                </button>
             </div>
         </div>
 
@@ -195,8 +206,6 @@
 
         window.onload = async function() {
             let userEmail = localStorage.getItem('loggedInEmail');
-            
-            // ലോക്കൽ സ്റ്റോറേജിൽ ഇമെയിൽ ഇല്ലെങ്കിൽ ഡാറ്റാബേസിൽ നിന്നുള്ള അവസാന ലോഗിൻ ചെയ്ത സ്ഥാപനം എടുക്കാൻ ശ്രമിക്കുന്നു
             if (!userEmail) {
                 const snapshot = await getDocs(collection(db, "institutions"));
                 snapshot.forEach((docSnap) => {
@@ -214,6 +223,7 @@
         async function loadInstitutionDetails(userEmail) {
             const extraSelect = document.getElementById('inputExtra');
             const filterSelect = document.getElementById('filterExtra');
+            const bulkClassSelect = document.getElementById('bulkClassSelect');
 
             try {
                 const q = query(collection(db, "institutions"), where("email", "==", userEmail));
@@ -248,6 +258,7 @@
                             <option value="Ward 5">Ward 5</option>
                         `;
                         filterSelect.innerHTML = `<option value="">എല്ലാ വാർഡുകളും (All Wards)</option><option value="Ward 1">Ward 1</option><option value="Ward 2">Ward 2</option><option value="Ward 3">Ward 3</option><option value="Ward 4">Ward 4</option><option value="Ward 5">Ward 5</option>`;
+                        bulkClassSelect.innerHTML = optionsHtml;
                     } else {
                         isMahall = false;
                         document.getElementById('statCountLabel').innerText = "ആകെ വിദ്യാർത്ഥികൾ";
@@ -272,6 +283,7 @@
                             <option value="Degree">Degree</option>
                         `;
                         filterSelect.innerHTML = `<option value="">എല്ലാ ക്ലാസുകളും (All Classes)</option><option value="1st Standard">1st Standard</option><option value="2nd Standard">2nd Standard</option><option value="3rd Standard">3rd Standard</option><option value="4th Standard">4th Standard</option><option value="5th Standard">5th Standard</option><option value="6th Standard">6th Standard</option><option value="7th Standard">7th Standard</option><option value="10th Class">10th Class</option><option value="Degree">Degree</option>`;
+                        bulkClassSelect.innerHTML = optionsHtml;
                     }
                     extraSelect.innerHTML = optionsHtml;
                     found = true;
@@ -325,6 +337,62 @@
             } catch (error) {
                 console.error("Error adding record: ", error);
                 alert("ഡാറ്റ സേവ് ചെയ്യുന്നതിൽ പിശക് സംഭവിച്ചു.");
+            }
+        }
+
+        // ക്ലാസ് അടിസ്ഥാനത്തിൽ എല്ലാവർക്കും ഒരുമിച്ച് ഫീസ് ചേർക്കുന്ന ഫങ്ഷൻ
+        window.addBulkFee = async function(event) {
+            event.preventDefault();
+            const targetClass = document.getElementById('bulkClassSelect').value;
+            const feeType = document.getElementById('bulkFeeType').value;
+            const amount = Number(document.getElementById('bulkAmount').value);
+
+            if (!targetClass) {
+                alert("దయവായി ഒരു ക്ലാസ് തിരഞ്ഞെടുക്കുക.");
+                return;
+            }
+
+            try {
+                // ആ ക്ലാസിലുള്ള മുഴുവൻ വിദ്യാർത്ഥികളെയും കണ്ടെത്തുന്നു
+                const q = query(
+                    collection(db, "students"), 
+                    where("instCode", "==", currentInstCode),
+                    where("extraInput", "==", targetClass)
+                );
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    alert(`${targetClass}-ൽ വിദ്യാർത്ഥികൾ ആരും ഇല്ല.`);
+                    return;
+                }
+
+                let count = 0;
+                for (const docSnap of querySnapshot.docs) {
+                    const studentData = docSnap.data();
+                    // ഓരോ വിദ്യാർത്ഥിക്കും പുതിയ ഫീസ് റെക്കോർഡ് ചേർക്കുന്നു
+                    await addDoc(collection(db, "students"), {
+                        name: studentData.name,
+                        house: studentData.house,
+                        studentId: studentData.studentId,
+                        extraInput: studentData.extraInput,
+                        feeType: feeType,
+                        amount: amount,
+                        phone: studentData.phone,
+                        status: "Pending",
+                        paidDate: "",
+                        receiptNo: "",
+                        instCode: currentInstCode,
+                        createdAt: new Date()
+                    });
+                    count++;
+                }
+
+                alert(`${targetClass}-ലെ ${count} വിദ്യാർത്ഥികൾക്ക് ${feeType} (₹${amount}) വിജയകരമായി ചേർത്തു!`);
+                event.target.reset();
+                loadStudents();
+            } catch (error) {
+                console.error("Error adding bulk fee: ", error);
+                alert("ഫീസ് ചേർക്കുന്നതിൽ പിശക് സംഭവിച്ചു.");
             }
         }
 
