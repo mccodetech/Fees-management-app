@@ -36,19 +36,19 @@
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 py-8 space-y-6">
         
-        <!-- 5 Main Navigation Tabs (Moved to Top) -->
+        <!-- 5 Main Navigation Tabs -->
         <div class="flex flex-wrap gap-2 border-b border-slate-800 pb-4">
             <button onclick="switchTab('tab-register')" id="btn-tab-register" class="px-4 py-2.5 rounded-xl text-xs font-semibold bg-indigo-600 text-white transition shadow-md">1. പുതിയ രജിസ്ട്രേഷൻ</button>
-            <button onclick="switchTab('tab-directory')" id="btn-tab-directory" class="px-4 py-2.5 rounded-xl text-xs font-semibold bg-slate-900 text-slate-300 border border-slate-800 hover:bg-slate-800 transition">2. വിദ്യാർത്ഥികളുടെ ലിസ്റ്റ്</button>
+            <button onclick="switchTab('tab-directory')" id="btn-tab-directory" class="px-4 py-2.5 rounded-xl text-xs font-semibold bg-slate-900 text-slate-300 border border-slate-800 hover:bg-slate-800 transition">2. ലിസ്റ്റ്</button>
             <button onclick="switchTab('tab-fee-fix')" id="btn-tab-fee-fix" class="px-4 py-2.5 rounded-xl text-xs font-semibold bg-slate-900 text-slate-300 border border-slate-800 hover:bg-slate-800 transition">3. ഫീസ് ഫിക്സ് ചെയ്യൽ</button>
             <button onclick="switchTab('tab-collection')" id="btn-tab-collection" class="px-4 py-2.5 rounded-xl text-xs font-semibold bg-slate-900 text-slate-300 border border-slate-800 hover:bg-slate-800 transition">4. ഫീസ് കളക്ഷൻ</button>
             <button onclick="switchTab('tab-accounts')" id="btn-tab-accounts" class="px-4 py-2.5 rounded-xl text-xs font-semibold bg-slate-900 text-slate-300 border border-slate-800 hover:bg-slate-800 transition">5. അക്കൗണ്ട്സ്</button>
         </div>
 
-        <!-- Stats Overview (Below Tabs) -->
+        <!-- Stats Overview -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
-                <p class="text-slate-400 text-sm" id="statCountLabel">ആകെ വിദ്യാർത്ഥികൾ</p>
+                <p class="text-slate-400 text-sm" id="statCountLabel">ആകെ ആളുകൾ</p>
                 <h3 class="text-3xl font-bold mt-2 text-indigo-400" id="totalCount">0</h3>
             </div>
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
@@ -61,14 +61,14 @@
             </div>
         </div>
 
-        <!-- TAB 1: New Students Registration -->
+        <!-- TAB 1: New Registration -->
         <div id="tab-register" class="tab-content grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl">
-                <h2 class="text-lg font-semibold mb-4" id="formHeading">പുതിയ വിദ്യാർത്ഥി / ഫീസ് ചേർക്കുക</h2>
+                <h2 class="text-lg font-semibold mb-4" id="formHeading">പുതിയ വിവരങ്ങൾ ചേർക്കുക</h2>
                 <form onsubmit="addRecord(event)" class="space-y-4">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1" id="labelName">വിദ്യാർത്ഥിയുടെ പേര്</label>
+                            <label class="block text-xs font-medium text-slate-300 mb-1" id="labelName">പേര്</label>
                             <input type="text" id="inputName" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none uppercase transition" placeholder="പേര്">
                         </div>
                         <div>
@@ -79,10 +79,8 @@
                     
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1" id="extraLabel">ക്ലാസ് / വാർഡ്</label>
-                            <select id="inputExtra" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
-                                <option value="" disabled selected>തിരഞ്ഞെടുക്കുക</option>
-                            </select>
+                            <label class="block text-xs font-medium text-slate-300 mb-1" id="extraLabel">ഗ്രൂപ്പ് / ക്ലാസ്</label>
+                            <input type="text" id="inputExtra" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none uppercase transition" placeholder="ഉദാ: Ward 1 / Class 5">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1">ഫീസ് ഇനം</label>
@@ -137,17 +135,17 @@
             </div>
         </div>
 
-        <!-- TAB 2: Students Directory -->
+        <!-- TAB 2: Directory -->
         <div id="tab-directory" class="tab-content hidden space-y-4">
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl">
-                <h2 class="text-lg font-semibold mb-4">വിദ്യാർത്ഥികളുടെ ഡയറക്ടറി (Students Directory)</h2>
+                <h2 class="text-lg font-semibold mb-4" id="dirHeading">ലിസ്റ്റ് ഡയറക്ടറി</h2>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-slate-950/50 text-slate-400 text-xs uppercase tracking-wider border-b border-slate-800">
                                 <th class="p-4">പേര് & വീട്</th>
                                 <th class="p-4">ഐഡി നമ്പർ</th>
-                                <th class="p-4">ക്ലാസ്</th>
+                                <th class="p-4" id="thDirGroup">ഗ്രൂപ്പ്</th>
                                 <th class="p-4">ഫോൺ നമ്പർ</th>
                             </tr>
                         </thead>
@@ -159,18 +157,16 @@
             </div>
         </div>
 
-        <!-- TAB 3: Fee Fix / Assignment -->
+        <!-- TAB 3: Fee Fix -->
         <div id="tab-fee-fix" class="tab-content hidden space-y-4">
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl max-w-xl mx-auto">
-                <h2 class="text-lg font-semibold mb-2">ക്ലാസ് അടിസ്ഥാനത്തിൽ ഫീസ് ഫിക്സ് ചെയ്യുക</h2>
-                <p class="text-xs text-slate-400 mb-4">ഒരു പ്രത്യേക ക്ലാസിലെ മുഴുവൻ വിദ്യാർത്ഥികൾക്കും ഒരേസമയം എക്സാം ഫീസോ പ്രത്യേക ഫീസോ ചുമത്താം.</p>
+                <h2 class="text-lg font-semibold mb-2">ഫീസ് ഫിക്സ് ചെയ്യുക</h2>
+                <p class="text-xs text-slate-400 mb-4">ഒരു പ്രത്യേക ഗ്രൂപ്പിലെ മുഴുവൻ ആളുകൾക്കും ഒരേസമയം ഫീസ് ചുമത്താം.</p>
                 
                 <form onsubmit="addBulkFee(event)" class="space-y-4">
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1">ക്ലാസ് തിരഞ്ഞെടുക്കുക</label>
-                        <select id="bulkClassSelect" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
-                            <option value="" disabled selected>ക്ലാസ് തിരഞ്ഞെടുക്കുക</option>
-                        </select>
+                        <label class="block text-xs font-medium text-slate-300 mb-1" id="labelGroupSelect">ഗ്രൂപ്പ് തിരഞ്ഞെടുക്കുക</label>
+                        <input type="text" id="bulkClassSelect" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none uppercase transition" placeholder="ഉദാ: WARD 1">
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
@@ -187,7 +183,7 @@
                         </div>
                     </div>
                     <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-sm font-semibold transition shadow-lg shadow-emerald-600/30">
-                        ക്ലാസിലെ എല്ലാവർക്കും ഫീസ് ചേർക്കുക
+                        എല്ലാവർക്കും ഫീസ് ചേർക്കുക
                     </button>
                 </form>
             </div>
@@ -201,10 +197,8 @@
                         class="w-full px-4 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
                 </div>
                 <div class="w-full md:w-1/2">
-                    <select id="filterExtra" onchange="filterStudents()" 
+                    <input type="text" id="filterExtra" onkeyup="filterStudents()" placeholder="ഗ്രൂപ്പ് വെച്ച് ഫിൽട്ടർ ചെയ്യുക..." 
                         class="w-full px-4 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
-                        <option value="">എല്ലാ ക്ലാസുകളും / വാർഡുകളും (Filter)</option>
-                    </select>
                 </div>
             </div>
 
@@ -216,9 +210,9 @@
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-slate-950/50 text-slate-400 text-xs uppercase tracking-wider border-b border-slate-800">
-                                <th class="p-4" id="thName">വിദ്യാർത്ഥി</th>
+                                <th class="p-4" id="thName">ആൾ</th>
                                 <th class="p-4">ഐഡി നമ്പർ (ID)</th>
-                                <th class="p-4" id="thExtra">ക്ലാസ്</th>
+                                <th class="p-4" id="thExtra">ഗ്രൂപ്പ്</th>
                                 <th class="p-4">ഫീസ് ഇനം & തുക</th>
                                 <th class="p-4">സ്റ്റാറ്റസ്</th>
                                 <th class="p-4 text-right">നടപടികൾ (Actions)</th>
@@ -270,6 +264,8 @@
 
         let currentInstCode = "INST";
         let allStudentsData = [];
+        let pLabel = "വിദ്യാർത്ഥി";
+        let gLabel = "ക്ലാസ്";
 
         window.switchTab = function(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
@@ -296,10 +292,6 @@
         }
 
         async function loadInstitutionDetails(userEmail) {
-            const extraSelect = document.getElementById('inputExtra');
-            const filterSelect = document.getElementById('filterExtra');
-            const bulkClassSelect = document.getElementById('bulkClassSelect');
-
             try {
                 const q = query(collection(db, "institutions"), where("email", "==", userEmail));
                 const querySnapshot = await getDocs(q);
@@ -309,23 +301,22 @@
                     const data = doc.data();
                     currentInstCode = data.instCode || "INST01";
                     
+                    pLabel = data.personLabel || (data.type === "മഹല്ല്" ? "അംഗം" : "വിദ്യാർത്ഥി");
+                    gLabel = data.groupLabel || (data.type === "മഹല്ല്" ? "വാർഡ്" : "ക്ലാസ്");
+                    
                     document.getElementById('instTitleName').innerText = `${data.name.toUpperCase()} (${currentInstCode})`;
                     document.getElementById('instTypeSub').innerText = `${data.type} അഡ്മിൻ പാനൽ`;
 
-                    let optionsHtml = `
-                        <option value="" disabled selected>ക്ലാസ് / വാർഡ് തിരഞ്ഞെടുക്കുക</option>
-                        <option value="1st Standard">1st Standard</option>
-                        <option value="2nd Standard">2nd Standard</option>
-                        <option value="3rd Standard">3rd Standard</option>
-                        <option value="4th Standard">4th Standard</option>
-                        <option value="5th Standard">5th Standard</option>
-                        <option value="6th Standard">6th Standard</option>
-                        <option value="7th Standard">7th Standard</option>
-                        <option value="10th Class">10th Class</option>
-                    `;
-                    extraSelect.innerHTML = optionsHtml;
-                    filterSelect.innerHTML = `<option value="">എല്ലാ ക്ലാസുകളും (All Classes)</option>` + optionsHtml.replace('<option value="" disabled selected>ക്ലാസ് / വാർഡ് തിരഞ്ഞെടുക്കുക</option>', '');
-                    bulkClassSelect.innerHTML = optionsHtml;
+                    document.getElementById('statCountLabel').innerText = `ആകെ ${pLabel}കൾ`;
+                    document.getElementById('formHeading').innerText = `പുതിയ ${pLabel} / ഫീസ് ചേർക്കുക`;
+                    document.getElementById('labelName').innerText = `${pLabel}യുടെ പേര്`;
+                    document.getElementById('extraLabel').innerText = gLabel;
+                    document.getElementById('dirHeading').innerText = `${pLabel}കളുടെ ലിസ്റ്റ് ഡയറക്ടറി`;
+                    document.getElementById('thDirGroup').innerText = gLabel;
+                    document.getElementById('labelGroupSelect').innerText = `${gLabel} തിരഞ്ഞെടുക്കുക / നൽകുക`;
+                    document.getElementById('thName').innerText = pLabel;
+                    document.getElementById('thExtra').innerText = gLabel;
+
                     found = true;
                 });
 
@@ -337,7 +328,7 @@
             event.preventDefault();
             const name = document.getElementById('inputName').value.trim().toUpperCase();
             const house = document.getElementById('inputHouse').value.trim().toUpperCase();
-            const extraInput = document.getElementById('inputExtra').value;
+            const extraInput = document.getElementById('inputExtra').value.trim().toUpperCase();
             const feeType = document.getElementById('feeType').value;
             const amount = Number(document.getElementById('feeAmount').value);
             const phone = document.getElementById('parentPhone').value;
@@ -364,7 +355,7 @@
 
         window.addBulkFee = async function(event) {
             event.preventDefault();
-            const targetClass = document.getElementById('bulkClassSelect').value;
+            const targetClass = document.getElementById('bulkClassSelect').value.trim().toUpperCase();
             const feeType = document.getElementById('bulkFeeType').value;
             const amount = Number(document.getElementById('bulkAmount').value);
 
@@ -388,7 +379,7 @@
                     }
                 }
 
-                alert(`${targetClass}-ലെ ${count} വിദ്യാർത്ഥികൾക്ക് ${feeType} (₹${amount}) വിജയകരമായി ചേർത്തു!`);
+                alert(`${targetClass}-ലെ ${count} പേർക്ക് ${feeType} (₹${amount}) വിജയകരമായി ചേർത്തു!`);
                 event.target.reset();
                 loadStudents();
             } catch (error) { alert("ഫീസ് ചേർക്കുന്നതിൽ പിശക് സംഭവിച്ചു."); }
@@ -419,10 +410,10 @@
 
         window.filterStudents = function() {
             const searchVal = document.getElementById('searchInput').value.trim().toUpperCase();
-            const filterVal = document.getElementById('filterExtra').value;
+            const filterVal = document.getElementById('filterExtra').value.trim().toUpperCase();
             const filtered = allStudentsData.filter(student => {
                 const matchesSearch = student.name.includes(searchVal) || student.studentId.includes(searchVal);
-                const matchesFilter = filterVal === "" || student.extraInput === filterVal;
+                const matchesFilter = filterVal === "" || student.extraInput.includes(filterVal);
                 return matchesSearch && matchesFilter;
             });
             renderTable(filtered);
@@ -494,7 +485,7 @@
 
         window.downloadExcelFormat = function(event) {
             event.preventDefault();
-            const csvContent = "data:text/csv;charset=utf-8,Name,House,Class_Or_Ward,Fee_Type,Amount,Phone\nMUHAMMED,KURIKKAL,5th Standard,Monthly Fee,500,9876543210";
+            const csvContent = "data:text/csv;charset=utf-8,Name,House,Group_Or_Class,Fee_Type,Amount,Phone\nMUHAMMED,KURIKKAL,WARD 1,Monthly Fee,500,9876543210";
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
