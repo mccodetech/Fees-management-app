@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ml">
+<html lang="ml" id="htmlRoot">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ഫീസ് മാനേജ്‌‌മെന്റ് പോർട്ടൽ</title>
+    <title id="pageTitle">ഫീസ് മാനേജ്‌മെന്റ് പോർട്ടൽ</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -22,46 +22,58 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                     </svg>
                 </div>
-                <span class="text-sm sm:text-base font-bold tracking-wide text-white">ഫീസ് പോർട്ടൽ</span>
+                <span class="text-sm sm:text-base font-bold tracking-wide text-white" data-ml="ഫീസ് പോർട്ടൽ" data-en="Fee Portal">ഫീസ് പോർട്ടൽ</span>
             </div>
-            <div class="flex items-center space-x-2">
-                <a href="member-portal.html" class="text-[11px] sm:text-xs font-medium text-slate-300 hover:text-white bg-slate-800/80 border border-slate-700 px-2.5 py-1.5 rounded-lg transition">അംഗങ്ങളുടെ പോർട്ടൽ</a>
-                <a href="registration.html" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-medium transition shadow-md shadow-indigo-600/20">രജിസ്ട്രേഷൻ</a>
+            
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <!-- Language Selector -->
+                <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-slate-800 text-slate-200 text-xs px-2.5 py-1.5 rounded-lg border border-slate-700 focus:outline-none">
+                    <option value="ml">മലയാളം</option>
+                    <option value="en">English</option>
+                </select>
+
+                <!-- How it works button -->
+                <button onclick="openGuideModal()" class="text-[11px] sm:text-xs font-medium text-indigo-400 hover:text-indigo-300 bg-indigo-600/10 border border-indigo-500/30 px-2.5 py-1.5 rounded-lg transition" data-ml="എങ്ങനെ ഉപയോഗിക്കാം?" data-en="How it works?">
+                    എങ്ങനെ ഉപയോഗിക്കാം?
+                </button>
+
+                <a href="member-portal.html" class="text-[11px] sm:text-xs font-medium text-slate-300 hover:text-white bg-slate-800/80 border border-slate-700 px-2.5 py-1.5 rounded-lg transition" data-ml="അംഗങ്ങളുടെ പോർട്ടൽ" data-en="Members Portal">അംഗങ്ങളുടെ പോർട്ടൽ</a>
+                <a href="registration.html" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-medium transition shadow-md shadow-indigo-600/20" data-ml="രജിസ്ട്രേഷൻ" data-en="Registration">രജിസ്ട്രേഷൻ</a>
             </div>
         </div>
     </header>
 
-    <!-- Main Section (Flex-col-reverse ensures Login Card appears first on mobile screens) -->
+    <!-- Main Section -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12 flex flex-col-reverse lg:grid lg:grid-cols-12 gap-10 items-center my-auto w-full">
         
-        <!-- Left Content (Hero text) -->
+        <!-- Left Content -->
         <div class="lg:col-span-7 space-y-4 text-center lg:text-left">
             <div class="inline-flex items-center space-x-2 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-3 py-1 rounded-md text-xs font-medium">
                 <span class="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
-                <span>സുരക്ഷിത ഡിജിറ്റൽ ഫീസ് മാനേജ്‌മെന്റ് സിസ്റ്റം</span>
+                <span data-ml="സുരക്ഷിത ഡിജിറ്റൽ ഫീസ് മാനേജ്‌മെന്റ് സിസ്റ്റം" data-en="Secure Digital Fee Management System">സുരക്ഷിത ഡിജിറ്റൽ ഫീസ് മാനേജ്‌മെന്റ് സിസ്റ്റം</span>
             </div>
             
             <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight leading-tight text-white">
-                മദ്രസകൾ, സ്കൂളുകൾ, മഹല്ലുകൾ എന്നിവയ്ക്കായുള്ള <span class="text-indigo-400">സ്മാർട്ട് ഫീസ് മാനേജർ</span>
+                <span data-ml="മദ്രസകൾ, സ്കൂളുകൾ, മഹല്ലുകൾ എന്നിവയ്ക്കായുള്ള" data-en="Smart Fee Manager for Madrasas, Schools, and Mahalls">മദ്രസകൾ, സ്കൂളുകൾ, മഹല്ലുകൾ എന്നിവയ്ക്കായുള്ള</span> <span class="text-indigo-400" data-ml="സ്മാർട്ട് ഫീസ് മാനേജർ" data-en="Smart Fee Manager">സ്മാർട്ട് ഫീസ് മാനേജർ</span>
             </h1>
             
-            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto lg:mx-0">
+            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto lg:mx-0" data-ml="സ്ഥാപനങ്ങളുടെ ഫീസ് ശേഖരണവും വാട്‌‌സ്ആപ്പ് റിമൈൻഡറുകളും ഒരമരത്ത് എളുപ്പത്തിൽ കൈകാര്യം ചെയ്യൂ. സുരക്ഷിതവും ലളിതവുമായ ഡിജിറ്റൽ സംവിധാനം." data-en="Easily manage institutions' fee collection and WhatsApp reminders on one platform. A secure and simple digital system.">
                 സ്ഥാപനങ്ങളുടെ ഫീസ് ശേഖരണവും വാട്‌സ്ആപ്പ് റിമൈൻഡറുകളും ഒരമരത്ത് എളുപ്പത്തിൽ കൈകാര്യം ചെയ്യൂ. സുരക്ഷിതവും ലളിതവുമായ ഡിജിറ്റൽ സംവിധാനം.
             </p>
             
             <div class="flex flex-wrap justify-center lg:justify-start items-center gap-6 text-xs text-slate-400 pt-2">
                 <div class="flex items-center space-x-1.5">
                     <svg class="h-4 w-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                    <span>യൂണീക്ക് കോഡ് സുരക്ഷ</span>
+                    <span data-ml="യൂണീക്ക് കോഡ് സുരക്ഷ" data-en="Unique code security">യൂണീക്ക് കോഡ് സുരക്ഷ</span>
                 </div>
                 <div class="flex items-center space-x-1.5">
                     <svg class="h-4 w-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                    <span>വാട്‌സ്ആപ്പ് ഇന്റഗ്രേഷൻ</span>
+                    <span data-ml="വാട്‌സ്ആപ്പ് ഇന്റഗ്രേഷൻ" data-en="WhatsApp integration">വാട്‌സ്ആപ്പ് ഇന്റഗ്രേഷൻ</span>
                 </div>
             </div>
         </div>
 
-        <!-- Right Login Card (Appears FIRST on mobile view due to flex-col-reverse) -->
+        <!-- Right Login Card -->
         <div class="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl relative max-w-sm w-full mx-auto">
             <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-indigo-600 text-white p-2.5 rounded-xl shadow-md shadow-indigo-600/30">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -70,41 +82,56 @@
             </div>
 
             <div class="text-center mt-3 mb-5">
-                <h2 class="text-base font-bold text-white">സ്ഥാപന അഡ്മിൻ ലോഗിൻ</h2>
-                <p class="text-xs text-slate-400 mt-0.5">ലോഗിൻ വിവരങ്ങൾ നൽകി പ്രവേശിക്കുക</p>
+                <h2 class="text-base font-bold text-white" data-ml="സ്ഥാപന അഡ്മിൻ ലോഗിൻ" data-en="Institutional Admin Login">സ്ഥാപന അഡ്മിൻ ലോഗിൻ</h2>
+                <p class="text-xs text-slate-400 mt-0.5" data-ml="ലോഗിൻ വിവരങ്ങൾ നൽകി പ്രവേശിക്കുക" data-en="Enter your login details">ലോഗിൻ വിവരങ്ങൾ നൽകി പ്രവേശിക്കുക</p>
             </div>
 
             <form onsubmit="handleDirectLogin(event)" class="space-y-3.5">
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">ഇമെയിൽ വിലാസം</label>
+                    <label class="block text-xs font-medium text-slate-300 mb-1" data-ml="ഇമെയിൽ വിലാസം" data-en="Email Address">ഇമെയിൽ വിലാസം</label>
                     <input type="email" id="email" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none transition" placeholder="admin@example.com">
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">പാസ്‌വേഡ്</label>
+                    <label class="block text-xs font-medium text-slate-300 mb-1" data-ml="പാസ്‌വേഡ്" data-en="Password">പാസ്‌വേഡ്</label>
                     <input type="password" id="password" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none transition" placeholder="••••••••">
                 </div>
-                <button type="submit" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold transition shadow-md shadow-indigo-600/20 mt-1">
+                <button type="submit" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold transition shadow-md shadow-indigo-600/20 mt-1" data-ml="ലോഗിൻ ചെയ്യുക" data-en="Login">
                     ലോഗിൻ ചെയ്യുക
                 </button>
             </form>
 
             <div class="mt-5 text-center text-xs text-slate-400 border-t border-slate-800 pt-3.5">
-                <p>പുതിയ സ്ഥാപനമാണോ? <a href="registration.html" class="text-indigo-400 font-medium hover:underline">രജിസ്റ്റർ ചെയ്യുക</a></p>
+                <p><span data-ml="പുതിയ സ്ഥാപനമാണോ?" data-en="New institution?">പുതിയ സ്ഥാപനമാണോ?</span> <a href="registration.html" class="text-indigo-400 font-medium hover:underline" data-ml="രജിസ്റ്റർ ചെയ്യുക" data-en="Register here">രജിസ്റ്റർ ചെയ്യുക</a></p>
             </div>
         </div>
     </main>
 
+    <!-- Guide Modal (How it works) -->
+    <div id="guideModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl text-left space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="text-base font-bold text-white" data-ml="സിസ്റ്റം ഉപയോഗിക്കുന്ന വിധം" data-en="How to use the system">സിസ്റ്റം ഉപയോഗിക്കുന്ന വിധം</h3>
+                <button onclick="closeGuideModal()" class="text-slate-400 hover:text-white">&times;</button>
+            </div>
+            <div class="text-xs text-slate-300 space-y-2.5 leading-relaxed">
+                <p>1. <b>സ്ഥാപന രജിസ്ട്രേഷൻ:</b> മുകളിൽ കാണുന്ന 'രജിസ്ട്രേഷൻ' ബട്ടൺ വഴി നിങ്ങളുടെ സ്ഥാപനം (മദ്രസ, സ്കൂൾ, മഹല്ല്) രജിസ്റ്റർ ചെയ്യുക.</p>
+                <p>2. <b>അഡ്മിൻ ലോഗിൻ:</b> അഡ്മിൻ ഇമെയിലും പാസ്‌വേഡും നൽകി ഡാഷ്‌ബോർഡിൽ പ്രവേശിക്കുക.</p>
+                <p>3. <b>വിദ്യാർത്ഥികൾ / അംഗങ്ങൾ:</b> പുതിയ ആളുകളെ ചേർക്കുകയോ എക്സൽ വഴി അപ്‌ലോഡ് ചെയ്യുകയോ ചെയ്യാം.</p>
+                <p>4. <b>ഫീസ് കളക്ഷൻ:</b> ഫീസ് സ്വീകരിക്കുക, വാട്‌സ്ആപ്പ് വഴി റിമൈൻഡർ അയക്കുക.</p>
+                <p>5. <b>അംഗങ്ങളുടെ പോർട്ടൽ:</b> അംഗങ്ങൾക്ക് സ്വന്തം ഐഡിയും ഫോൺ നമ്പറും നൽകി ഫീസ് സ്റ്റാറ്റസ് പരിശോധിക്കാം.</p>
+            </div>
+            <button onclick="closeGuideModal()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold transition">
+                മനസ്സിലായി
+            </button>
+        </div>
+    </div>
+
     <!-- Custom Modal Popup -->
     <div id="customModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl text-center">
-            <div id="modalIcon" class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 bg-emerald-500/20 text-emerald-400">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-            </div>
             <h3 id="modalTitle" class="text-base font-bold text-white">വിജയം!</h3>
             <p id="modalMessage" class="text-xs text-slate-300 mt-1 mb-5">ലോഗിൻ വിജയം!</p>
-            <button onclick="closeModal()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold transition shadow-md shadow-indigo-600/30">
+            <button onclick="closeModal()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold transition shadow-md">
                 ശരി
             </button>
         </div>
@@ -135,6 +162,27 @@
 
         let redirectUrl = "";
 
+        window.openGuideModal = function() {
+            document.getElementById('guideModal').classList.remove('hidden');
+        }
+
+        window.closeGuideModal = function() {
+            document.getElementById('guideModal').classList.add('hidden');
+        }
+
+        window.changeLanguage = function(lang) {
+            localStorage.setItem('preferredLang', lang);
+            document.querySelectorAll('[data-ml]').forEach(el => {
+                el.innerText = el.getAttribute(`data-${lang}`);
+            });
+        }
+
+        window.onload = function() {
+            const savedLang = localStorage.getItem('preferredLang') || 'ml';
+            document.getElementById('langSelect').value = savedLang;
+            changeLanguage(savedLang);
+        }
+
         window.showCustomModal = function(title, message, url = "") {
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalMessage').innerText = message;
@@ -144,9 +192,7 @@
 
         window.closeModal = function() {
             document.getElementById('customModal').classList.add('hidden');
-            if (redirectUrl) {
-                window.location.href = redirectUrl;
-            }
+            if (redirectUrl) { window.location.href = redirectUrl; }
         }
 
         window.handleDirectLogin = async function(event) {
@@ -155,12 +201,7 @@
             const password = document.getElementById('password').value.trim();
 
             try {
-                const q = query(
-                    collection(db, "institutions"), 
-                    where("email", "==", email),
-                    where("password", "==", password)
-                );
-                
+                const q = query(collection(db, "institutions"), where("email", "==", email), where("password", "==", password));
                 const querySnapshot = await getDocs(q);
                 let found = false;
 
@@ -170,7 +211,6 @@
                         found = true;
                         localStorage.setItem('loggedInEmail', email);
                         localStorage.setItem('instCode', data.instCode);
-                        
                         showCustomModal("ലോഗിൻ വിജയം!", "നിങ്ങളുടെ അക്കൗണ്ടിലേക്ക് സ്വാഗതം.", 'institution-dashboard.html');
                     } else {
                         showCustomModal("ശ്രദ്ധിക്കുക", "നിങ്ങളുടെ അക്കൗണ്ട് സൂപ്പർ അഡ്മിൻ ഇതുവരെ സജീവമാക്കിയിട്ടില്ല.");
@@ -178,13 +218,8 @@
                     }
                 });
 
-                if (!found) {
-                    showCustomModal("പിശക്", "തെറ്റായ ഇമെയിൽ അല്ലെങ്കിൽ പാസ്‌വേഡ്.");
-                }
-            } catch (error) {
-                console.error("Login error: ", error);
-                showCustomModal("തടസ്സം", "ലോഗിൻ ചെയ്യുന്നതിൽ തടസ്സം നേരിട്ടു.");
-            }
+                if (!found) { showCustomModal("പിശക്", "തെറ്റായ ഇമെയിൽ അല്ലെങ്കിൽ പാസ്‌വേഡ്."); }
+            } catch (error) { showCustomModal("തടസ്സം", "ലോഗിൻ ചെയ്യുന്നതിൽ തടസ്സം നേരിട്ടു."); }
         }
     </script>
 </body>
