@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ml">
+<html lang="ml" id="htmlRoot">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>അംഗങ്ങളുടെ പോർട്ടൽ - ഫീസ് സിസ്റ്റം</title>
+    <title id="pageTitle">അംഗങ്ങളുടെ പോർട്ടൽ - ഫീസ് സിസ്റ്റം</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -23,15 +23,22 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                         </svg>
                     </div>
-                    <span class="text-sm sm:text-base font-bold tracking-wide text-white">ഫീസ് പോർട്ടൽ</span>
+                    <span class="text-sm sm:text-base font-bold tracking-wide text-white" data-ml="ഫീസ് പോർട്ടൽ" data-en="Fee Portal">ഫീസ് പോർട്ടൽ</span>
                 </a>
             </div>
-            <div>
+            
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <!-- Language Selector -->
+                <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-slate-800 text-slate-200 text-xs px-2.5 py-1.5 rounded-lg border border-slate-700 focus:outline-none">
+                    <option value="ml">മലയാളം</option>
+                    <option value="en">English</option>
+                </select>
+
                 <a href="index.html" class="text-[11px] sm:text-xs font-medium text-slate-300 hover:text-white bg-slate-800/80 border border-slate-700 px-3 py-1.5 rounded-lg transition flex items-center space-x-1.5">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
-                    <span>ഹോം പേജിലേക്ക്</span>
+                    <span data-ml="ഹോം പേജിലേക്ക്" data-en="Home">ഹോം പേജിലേക്ക്</span>
                 </a>
             </div>
         </div>
@@ -47,29 +54,29 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                 </div>
-                <h1 class="text-lg sm:text-xl font-bold tracking-wide">അംഗങ്ങളുടെ പോർട്ടൽ</h1>
-                <p class="text-slate-400 text-xs mt-1">ഫീസ് വിവരങ്ങൾ പരിശോധിക്കാൻ ലോഗിൻ ചെയ്യുക</p>
+                <h1 class="text-lg sm:text-xl font-bold tracking-wide" data-ml="അംഗങ്ങളുടെ പോർട്ടൽ" data-en="Members Portal">അംഗങ്ങളുടെ പോർട്ടൽ</h1>
+                <p class="text-slate-400 text-xs mt-1" data-ml="ഫീസ് വിവരങ്ങൾ പരിശോധിക്കാൻ ലോഗിൻ ചെയ്യുക" data-en="Login to check fee details">ഫീസ് വിവരങ്ങൾ പരിശോധിക്കാൻ ലോഗിൻ ചെയ്യുക</p>
             </div>
 
             <div id="messageBox" class="hidden mb-4 p-3 rounded-xl text-xs text-center"></div>
 
             <form onsubmit="handleMemberLogin(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1.5">അംഗത്തിന്റെ ഐഡി (ഉദാ: MD01-001)</label>
+                    <label class="block text-xs font-medium text-slate-300 mb-1.5" data-ml="അംഗത്തിന്റെ ഐഡി (ഉദാ: MD01-001)" data-en="Member ID (e.g: MD01-001)">അംഗത്തിന്റെ ഐഡി (ഉദാ: MD01-001)</label>
                     <input type="text" id="memberId" required 
                         class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-white uppercase placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
                         placeholder="INSTCODE-001">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1.5">മൊബൈൽ നമ്പർ</label>
+                    <label class="block text-xs font-medium text-slate-300 mb-1.5" data-ml="മൊബൈൽ നമ്പർ" data-en="Mobile Number">മൊബൈൽ നമ്പർ</label>
                     <input type="tel" id="memberPhone" required 
                         class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
                         placeholder="9876543210">
                 </div>
 
                 <button type="submit" id="submitBtn"
-                    class="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs shadow-md shadow-indigo-600/30 transition duration-200 mt-2">
+                    class="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-xs shadow-md shadow-indigo-600/30 transition duration-200 mt-2" data-ml="വിവരങ്ങൾ പരിശോധിക്കുക" data-en="Check Details">
                     വിവരങ്ങൾ പരിശോധിക്കുക
                 </button>
             </form>
@@ -81,9 +88,9 @@
                 <div>
                     <p class="text-[11px] text-indigo-400 font-bold" id="displayInstName">സ്ഥാപനത്തിന്റെ പേര്</p>
                     <h2 class="text-base font-bold uppercase mt-0.5" id="displayName">അംഗത്തിന്റെ പേര്</h2>
-                    <p class="text-[11px] text-slate-400">ID: <span id="displayId"></span> | വീട്: <span id="displayHouse"></span></p>
+                    <p class="text-[11px] text-slate-400">ID: <span id="displayId"></span> | <span data-ml="വീട്" data-en="House">വീട്</span>: <span id="displayHouse"></span></p>
                 </div>
-                <button onclick="logoutMember()" class="bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/30 px-3 py-1.5 rounded-xl text-xs font-medium transition">
+                <button onclick="logoutMember()" class="bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/30 px-3 py-1.5 rounded-xl text-xs font-medium transition" data-ml="പുറത്തു കടക്കുക" data-en="Logout">
                     പുറത്തു കടക്കുക
                 </button>
             </div>
@@ -91,17 +98,17 @@
             <div class="space-y-4">
                 <!-- Pending Fees Section -->
                 <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                    <p class="text-xs font-semibold text-amber-400 mb-2">അടയ്ക്കാനുള്ള ഫീസുകൾ (Pending Fees)</p>
+                    <p class="text-xs font-semibold text-amber-400 mb-2" data-ml="അടയ്ക്കാനുള്ള ഫീസുകൾ (Pending Fees)" data-en="Pending Fees">അടയ്ക്കാനുള്ള ഫീസുകൾ (Pending Fees)</p>
                     <div id="pendingFeesBox" class="space-y-2">
-                        <p class="text-xs text-slate-400">അടയ്ക്കാൻ ബാക്കി ഫീസുകൾ ഒന്നുമില്ല.</p>
+                        <p class="text-xs text-slate-400" data-ml="അടയ്ക്കാൻ ബാക്കി ഫീസുകൾ ഒന്നുമില്ല." data-en="No pending fees.">അടയ്ക്കാൻ ബാക്കി ഫീസുകൾ ഒന്നുമില്ല.</p>
                     </div>
                 </div>
 
                 <!-- Paid History Section -->
                 <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                    <p class="text-xs font-semibold text-emerald-400 mb-2">അടച്ച ഫീസുകളുടെ വിവരങ്ങൾ (Paid History)</p>
+                    <p class="text-xs font-semibold text-emerald-400 mb-2" data-ml="അടച്ച ഫീസുകളുടെ വിവരങ്ങൾ (Paid History)" data-en="Paid History">അടച്ച ഫീസുകളുടെ വിവരങ്ങൾ (Paid History)</p>
                     <div id="paidHistoryBox" class="space-y-2">
-                        <p class="text-xs text-slate-400">ഇതുവരെ ഫീസുകൾ ഒന്നും അടച്ചിട്ടില്ല.</p>
+                        <p class="text-xs text-slate-400" data-ml="ഇതുവരെ ഫീസുകൾ ഒന്നും അടച്ചിട്ടില്ല." data-en="No fees paid yet.">ഇതുവരെ ഫീസുകൾ ഒന്നും അടച്ചിട്ടില്ല.</p>
                     </div>
                 </div>
             </div>
@@ -113,7 +120,7 @@
         <p>© 2026 ഫീസ് മാനേജ്‌മെന്റ് പോർട്ടൽ. സർവ്വ അവകാശങ്ങളും സുരക്ഷിതം.</p>
     </footer>
 
-    <!-- Firebase Script Section -->
+    <!-- Scripting -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -131,7 +138,18 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        window.changeLanguage = function(lang) {
+            localStorage.setItem('preferredLang', lang);
+            document.querySelectorAll('[data-ml]').forEach(el => {
+                el.innerText = el.getAttribute(`data-${lang}`);
+            });
+        }
+
         window.onload = function() {
+            const savedLang = localStorage.getItem('preferredLang') || 'ml';
+            document.getElementById('langSelect').value = savedLang;
+            changeLanguage(savedLang);
+
             const savedId = localStorage.getItem('memberId');
             const savedPhone = localStorage.getItem('memberPhone');
             if (savedId && savedPhone) {
@@ -155,9 +173,11 @@
         async function fetchMemberData(memberId, phone) {
             const msgBox = document.getElementById('messageBox');
             const submitBtn = document.getElementById('submitBtn');
+            const lang = localStorage.getItem('preferredLang') || 'ml';
+
             if(submitBtn) {
                 submitBtn.disabled = true;
-                submitBtn.innerText = "പരിശോധിക്കുന്നു...";
+                submitBtn.innerText = lang === 'en' ? "Checking..." : "പരിശോധിക്കുന്നു...";
             }
 
             try {
@@ -190,7 +210,7 @@
                             <div class="bg-slate-900 border border-emerald-500/30 rounded-lg p-2.5 flex justify-between items-center text-xs">
                                 <div>
                                     <span class="font-semibold text-white">${data.feeType} (${data.extraInput || '-'})</span>
-                                    <p class="text-slate-400 text-[10px]">തീയതി: ${data.paidDate} | രസീത്: ${data.receiptNo}</p>
+                                    <p class="text-slate-400 text-[10px]">${lang === 'en' ? 'Date' : 'തീയതി'}: ${data.paidDate} | ${lang === 'en' ? 'Receipt' : 'രസീത്'}: ${data.receiptNo}</p>
                                 </div>
                                 <span class="text-emerald-400 font-bold">₹ ${data.amount} (Paid)</span>
                             </div>
@@ -201,7 +221,7 @@
                             <div class="bg-slate-900 border border-amber-500/30 rounded-lg p-2.5 flex justify-between items-center text-xs">
                                 <div>
                                     <span class="font-semibold text-white">${data.feeType} (${data.extraInput || '-'})</span>
-                                    <p class="text-amber-400 text-[10px]">അടയ്ക്കാനുണ്ട്</p>
+                                    <p class="text-amber-400 text-[10px]">${lang === 'en' ? 'To be paid' : 'അടയ്ക്കാനുണ്ട്'}</p>
                                 </div>
                                 <span class="text-amber-400 font-bold text-sm">₹ ${data.amount}</span>
                             </div>
@@ -223,14 +243,14 @@
                     document.getElementById('displayId').innerText = memberId;
                     document.getElementById('displayHouse').innerText = studentHouse ? studentHouse.toUpperCase() : '-';
 
-                    document.getElementById('pendingFeesBox').innerHTML = hasPending ? pendingHtml : `<p class="text-xs text-emerald-400">അടയ്ക്കാൻ ബാക്കി ഫീസുകൾ ഒന്നുമില്ല!</p>`;
-                    document.getElementById('paidHistoryBox').innerHTML = hasPaid ? paidHtml : `<p class="text-xs text-slate-400">ഇതുവരെ ഫീസുകൾ ഒന്നും അടച്ചിട്ടില്ല.</p>`;
+                    document.getElementById('pendingFeesBox').innerHTML = hasPending ? pendingHtml : `<p class="text-xs text-emerald-400">${lang === 'en' ? 'No pending fees!' : 'അടയ്ക്കാൻ ബാക്കി ഫീസുകൾ ഒന്നുമില്ല!'}</p>`;
+                    document.getElementById('paidHistoryBox').innerHTML = hasPaid ? paidHtml : `<p class="text-xs text-slate-400">${lang === 'en' ? 'No fees paid yet.' : 'ഇതുവരെ ഫീസുകൾ ഒന്നും അടച്ചിട്ടില്ല.'}</p>`;
 
                     document.getElementById('loginCard').classList.add('hidden');
                     document.getElementById('dashboardCard').classList.remove('hidden');
                 } else if (submitBtn) {
                     msgBox.className = "mb-4 p-3 rounded-xl text-xs text-center bg-rose-500/20 text-rose-300 border border-rose-500/30";
-                    msgBox.innerText = "നൽകിയ ഐഡിയും ഫോൺ നമ്പറും തമ്മിൽ പൊരുത്തപ്പെടുന്നില്ല.";
+                    msgBox.innerText = lang === 'en' ? "ID and phone number do not match." : "നൽകിയ ഐഡിയും ഫോൺ നമ്പറും തമ്മിൽ പൊരുത്തപ്പെടുന്നില്ല.";
                     msgBox.classList.remove('hidden');
                 }
             } catch (error) {
@@ -238,7 +258,7 @@
             } finally {
                 if(submitBtn) {
                     submitBtn.disabled = false;
-                    submitBtn.innerText = "വിവരങ്ങൾ പരിശോധിക്കുക";
+                    submitBtn.innerText = lang === 'en' ? "Check Details" : "വിവരങ്ങൾ പരിശോധിക്കുക";
                 }
             }
         }
