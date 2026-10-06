@@ -210,19 +210,38 @@
 
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
+                    found = true;
+                    
+                    // സ്റ്റാറ്റസ് Active ആണെങ്കിൽ മാത്രം ലോഗിൻ അനുവദിക്കുന്നു
                     if (data.status === "Active") {
-                        found = true;
                         localStorage.setItem('loggedInEmail', email);
                         localStorage.setItem('instCode', data.instCode);
-                        showCustomModal(lang === 'en' ? "Success!" : "വിജയം!", lang === 'en' ? "Welcome to your account." : "നിങ്ങളുടെ അക്കൗണ്ടിലേക്ക് സ്വാഗതം.", 'institution-dashboard.html');
+                        showCustomModal(
+                            lang === 'en' ? "Success!" : "വിജയം!", 
+                            lang === 'en' ? "Welcome to your account." : "നിങ്ങളുടെ അക്കൗണ്ടിലേക്ക് സ്വാഗതം.", 
+                            'institution-dashboard.html'
+                        );
                     } else {
-                        showCustomModal(lang === 'en' ? "Notice" : "ശ്രദ്ധിക്കുക", lang === 'en' ? "Your account has not been activated by the super admin yet." : "നിങ്ങളുടെ അക്കൗണ്ട് സൂപ്പർ അഡ്മിൻ ഇതുവരെ സജീവമാക്കിയിട്ടില്ല.");
-                        found = true;
+                        // Pending ആണെങ്കിൽ ഡാഷ്‌ബോർഡിലേക്ക് പോകില്ല
+                        showCustomModal(
+                            lang === 'en' ? "Notice" : "ശ്രദ്ധിക്കുക", 
+                            lang === 'en' ? "Your account has not been activated by the super admin yet. Please wait for approval." : "നിങ്ങളുടെ അക്കൗണ്ട് സൂപ്പർ അഡ്മിൻ ഇതുവരെ സജീവമാക്കിയിട്ടില്ല. അനുമതി ലഭിക്കുന്നതുവരെ കാത്തിരിക്കുക."
+                        );
                     }
                 });
 
-                if (!found) { showCustomModal(lang === 'en' ? "Error" : "പിശക്", lang === 'en' ? "Invalid email or password." : "തെറ്റായ ഇമെയിൽ അല്ലെങ്കിൽ പാസ്‌വേഡ്."); }
-            } catch (error) { showCustomModal(lang === 'en' ? "Error" : "തടസ്സം", lang === 'en' ? "An error occurred during login." : "ലോഗിൻ ചെയ്യുന്നതിൽ തടസ്സം നേരിട്ടു."); }
+                if (!found) { 
+                    showCustomModal(
+                        lang === 'en' ? "Error" : "പിശക്", 
+                        lang === 'en' ? "Invalid email or password." : "തെറ്റായ ഇമെയിൽ അല്ലെങ്കിൽ പാസ്‌വേഡ്."
+                    ); 
+                }
+            } catch (error) { 
+                showCustomModal(
+                    lang === 'en' ? "Error" : "തടസ്സം", 
+                    lang === 'en' ? "An error occurred during login." : "ലോഗിൻ ചെയ്യുന്നതിൽ തടസ്സം നേരിട്ടു."
+                ); 
+            }
         }
     </script>
 </body>
