@@ -35,7 +35,7 @@
     </header>
 
     <!-- Main Registration Section -->
-    <main class="max-w-lg w-full mx-auto px-4 py-8 sm:py-12 my-auto">
+    <main class="max-w-2xl w-full mx-auto px-4 py-8 sm:py-12 my-auto">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
             <div class="text-center mb-6">
                 <h1 class="text-lg sm:text-xl font-bold tracking-wide text-white" data-ml="സ്ഥാപന രജിസ്ട്രേഷൻ" data-en="Institution Registration">സ്ഥാപന രജിസ്ട്രേഷൻ</h1>
@@ -68,22 +68,39 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1" data-ml="കോൺടാക്റ്റ് നമ്പർ" data-en="Contact Number">കോൺടാക്റ്റ് നമ്പർ</label>
-                        <input type="tel" id="instPhone" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none transition" placeholder="9876543210">
+                        <label class="block text-xs font-medium text-slate-300 mb-1" data-ml="പഞ്ചായത്ത് / മുൻസിപ്പാലിറ്റി" data-en="Panchayath / Municipality">പഞ്ചായത്ത് / മുൻസിപ്പാലിറ്റി</label>
+                        <input type="text" id="instPanchayath" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none transition" data-placeholder-ml="പഞ്ചായത്ത്" data-placeholder-en="Panchayath" placeholder="പഞ്ചായത്ത്">
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1" data-ml="പ്രിഫിക്ക്സ് കോഡ് (ഉദാ: COL01)" data-en="Prefix Code (e.g: COL01)">പ്രിഫിക്ക്സ് കോഡ് (ഉദാ: COL01)</label>
-                        <input type="text" id="instCode" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-white uppercase focus:ring-2 focus:ring-indigo-500 focus:outline-none transition" placeholder="MD01 / COL01">
+                        <label class="block text-xs font-medium text-slate-300 mb-1" data-ml="ജില്ല" data-en="District">ജില്ല</label>
+                        <input type="text" id="instDistrict" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none transition" data-placeholder-ml="ജില്ല" data-placeholder-en="District" placeholder="ജില്ല">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1" data-ml="ചുമതലപ്പെട്ട ആളുടെ പേര് & തസ്തിക" data-en="In-charge Person Name & Designation">ചുമതലപ്പെട്ട ആളുടെ പേര് & തസ്തിക</label>
+                        <input type="text" id="inchargeName" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none transition" data-placeholder-ml="ഉദാ: സെക്രട്ടറി / പ്രസിഡന്റ്" data-en="e.g: Secretary / President" placeholder="ഉദാ: സെക്രട്ടറി / പ്രസിഡന്റ്">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1" data-ml="വ്യക്തിഗത മൊബൈൽ നമ്പർ" data-en="Personal Mobile Number">വ്യക്തിഗത മൊബൈൽ നമ്പർ</label>
+                        <input type="tel" id="inchargePhone" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none transition" placeholder="9876543210">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1" data-ml="സ്ഥാപനത്തിന്റെ ഇമെയിൽ ഐഡി" data-en="Institution Email ID">സ്ഥാപനത്തിന്റെ ഇമെയിൽ ഐഡി</label>
+                        <input type="email" id="instEmail" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none transition" placeholder="admin@example.com">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1" data-ml="വാട്‌സ്ആപ്പ് നമ്പർ" data-en="WhatsApp Number">വാട്‌സ്ആപ്പ് നമ്പർ</label>
+                        <input type="tel" id="instWhatsapp" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none transition" placeholder="9876543210">
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1" data-ml="ഇമെയിൽ വിലാസം (ലോഗിൻ ചെയ്യാൻ)" data-en="Email Address (for login)">ഇമെയിൽ വിലാസം (ലോഗിൻ ചെയ്യാൻ)</label>
-                    <input type="email" id="instEmail" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none transition" placeholder="admin@example.com">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1" data-ml="പാസ്‌വേഡ്" data-en="Password">പാസ്‌വേഡ്</label>
+                    <label class="block text-xs font-medium text-slate-300 mb-1" data-ml="പാസ്‌വേഡ് (ലോഗിൻ ചെയ്യാൻ)" data-en="Password (for login)">പാസ്‌വേഡ് (ലോഗിൻ ചെയ്യാൻ)</label>
                     <input type="password" id="instPassword" required class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none transition" placeholder="••••••••">
                 </div>
 
@@ -135,7 +152,6 @@
                 }
             });
 
-            // Placeholder text മാറ്റാൻ
             document.querySelectorAll('[data-placeholder-ml]').forEach(el => {
                 if(el.getAttribute(`data-placeholder-${lang}`)) {
                     el.placeholder = el.getAttribute(`data-placeholder-${lang}`);
@@ -155,14 +171,18 @@
             const type = document.getElementById('instType').value;
             const name = document.getElementById('instName').value.trim();
             const location = document.getElementById('instLocation').value.trim();
-            const phone = document.getElementById('instPhone').value.trim();
-            const instCode = document.getElementById('instCode').value.trim().toUpperCase();
+            const panchayath = document.getElementById('instPanchayath').value.trim();
+            const district = document.getElementById('instDistrict').value.trim();
+            const inchargeName = document.getElementById('inchargeName').value.trim();
+            const inchargePhone = document.getElementById('inchargePhone').value.trim();
             const email = document.getElementById('instEmail').value.trim();
+            const whatsapp = document.getElementById('instWhatsapp').value.trim();
             const password = document.getElementById('instPassword').value.trim();
 
             try {
                 await addDoc(collection(db, "institutions"), {
-                    type, name, location, phone, instCode, email, password,
+                    type, name, location, panchayath, district, inchargeName, inchargePhone, email, whatsapp, password,
+                    instCode: "", // സൂപ്പർ അഡ്മിൻ അപ്രൂവ് ചെയ്യുമ്പോൾ നൽകും
                     status: "Pending",
                     createdAt: new Date()
                 });
