@@ -68,20 +68,27 @@
                 <form onsubmit="addRecord(event)" class="space-y-4">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
+                            <label class="block text-xs font-medium text-slate-300 mb-1">ഐഡി നമ്പർ (ഉദാ: 001)</label>
+                            <input type="text" id="inputCustomId" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none uppercase transition" placeholder="001">
+                        </div>
+                        <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1" id="labelName">പേര്</label>
                             <input type="text" id="inputName" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none uppercase transition" placeholder="പേര്">
                         </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1" id="labelHouse">വീട്ടുപേര് (House Name)</label>
                             <input type="text" id="inputHouse" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none uppercase transition" placeholder="വീട്ടുപേര്">
                         </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1" id="extraLabel">ഗ്രൂപ്പ് / ക്ലാസ്</label>
                             <input type="text" id="inputExtra" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none uppercase transition" placeholder="ഉദാ: WARD 1">
                         </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1">ഫീസ് ഇനം</label>
                             <select id="feeType" class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
@@ -92,17 +99,15 @@
                                 <option>മറ്റു ഇനങ്ങൾ (Other Fees)</option>
                             </select>
                         </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1">തുക (₹)</label>
                             <input type="number" id="feeAmount" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none transition" placeholder="500">
                         </div>
-                        <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1">വാട്‌സ്ആപ്പ് നമ്പർ</label>
-                            <input type="tel" id="parentPhone" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none transition" placeholder="9876543210">
-                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">വാട്‌സ്ആപ്പ് നമ്പർ</label>
+                        <input type="tel" id="parentPhone" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none transition" placeholder="9876543210">
                     </div>
 
                     <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-semibold transition shadow-lg shadow-indigo-600/30">
@@ -307,7 +312,6 @@
                     document.getElementById('instTitleName').innerText = `${data.name.toUpperCase()} (${currentInstCode})`;
                     document.getElementById('instTypeSub').innerText = `${data.type} അഡ്മിൻ പാനൽ`;
 
-                    // ഇവിടെ തെറ്റായ രീതിയിലുള്ള ബഹുവചനം ഒഴിവാക്കി കൃത്യമായ ലേബലുകൾ നൽകുന്നു
                     document.getElementById('statCountLabel').innerText = `ആകെ ${pLabel}കൾ`;
                     document.getElementById('formHeading').innerText = `പുതിയ ${pLabel} / ഫീസ് ചേർക്കുക`;
                     document.getElementById('labelName').innerText = `${pLabel}യുടെ പേര്`;
@@ -327,6 +331,7 @@
 
         window.addRecord = async function(event) {
             event.preventDefault();
+            const customIdSuffix = document.getElementById('inputCustomId').value.trim().toUpperCase();
             const name = document.getElementById('inputName').value.trim().toUpperCase();
             const house = document.getElementById('inputHouse').value.trim().toUpperCase();
             const extraInput = document.getElementById('inputExtra').value.trim().toUpperCase();
@@ -334,14 +339,17 @@
             const amount = Number(document.getElementById('feeAmount').value);
             const phone = document.getElementById('parentPhone').value;
 
+            // സ്ഥാപനത്തിന്റെ കോഡും അഡ്മിൻ നൽകുന്ന നമ്പറും ചേർത്ത് ഫുൾ ഐഡി ഉണ്ടാക്കുന്നു (ഉദാ: CSC41-001)
+            const studentId = `${currentInstCode}-${customIdSuffix}`;
+
             try {
-                const q = query(collection(db, "students"), where("instCode", "==", currentInstCode));
+                const q = query(collection(db, "students"), where("instCode", "==", currentInstCode), where("studentId", "==", studentId));
                 const querySnapshot = await getDocs(q);
-                
-                const uniqueIds = new Set();
-                querySnapshot.forEach(docSnap => uniqueIds.add(docSnap.data().studentId));
-                
-                const studentId = `${currentInstCode}-${String(uniqueIds.size + 1).padStart(3, '0')}`;
+
+                if (!querySnapshot.empty) {
+                    alert(`ശ്രദ്ധിക്കുക: '${studentId}' എന്ന ഐഡി നമ്പറിൽ ഈ സ്ഥാപനത്തിൽAlready ഒരാൾ രജിസ്റ്റർ ചെയ്തിട്ടുണ്ട്.`);
+                    return;
+                }
 
                 await addDoc(collection(db, "students"), {
                     name, house, studentId, extraInput, feeType, amount, phone,
@@ -351,7 +359,10 @@
                 alert(`വിവരം വിജയകരമായി സേവ് ചെയ്തു! ഐഡി: ${studentId}`);
                 event.target.reset();
                 loadStudents();
-            } catch (error) { alert("ഡാറ്റ സേവ് ചെയ്യുന്നതിൽ പിശക് സംഭവിച്ചു."); }
+            } catch (error) { 
+                console.error("Error adding record: ", error);
+                alert("ഡാറ്റ സേവ് ചെയ്യുന്നതിൽ പിശക് സംഭവിച്ചു."); 
+            }
         }
 
         window.addBulkFee = async function(event) {
@@ -459,10 +470,9 @@
                     ? `<span class="text-xs text-emerald-400 font-medium">രസീത്: ${data.receiptNo}</span>`
                     : `<button onclick="markAsPaid('${data.id}')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition">ഫീസ് സ്വീകരിക്കുക</button>`;
 
-                const whatsappUrl = `https://wa.me/91${data.phone}?text=` + encodeURIComponent(`അസ്സലാമു അലൈക്കും, ${data.name} (${data.house}) - ID:${data.studentId} -ന്റെ ${data.feeType} തുക ₹${data.amount} അടയ്ക്കാൻ ബാക്കിയുണ്ട്.`);
+                const whatsappUrl = `https://wa.me/91${data.phone}?text=` + encodeURIComponent(`അസ്സലാമു അലൈക്കും, ${data.name} (${data.house}) - ID: ${data.studentId} -ന്റെ ${data.feeType} തുക ₹${data.amount} അടയ്ക്കാൻ ബാക്കിയുണ്ട്.`);
 
                 rows += `
-                    rows += \`
                     <tr>
                         <td class="p-4"><div class="font-semibold text-white">${data.name}</div><div class="text-xs text-slate-400">വീട്: ${data.house}</div></td>
                         <td class="p-4"><span class="bg-indigo-500/20 text-indigo-300 px-2.5 py-1 rounded-lg text-xs font-bold">${data.studentId}</span></td>
