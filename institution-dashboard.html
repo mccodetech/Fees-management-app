@@ -134,7 +134,7 @@
                         <input type="file" accept=".xlsx, .csv" class="hidden" id="excelFile">
                     </div>
                 </div>
-                <button onclick="alert('എക്സൽ ഫയൽ അപ്‌ലോഡ് വിജയം!')" class="mt-4 w-full py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-sm font-semibold transition border border-slate-700">
+                <button onclick="showCustomModal('വിജയം!', 'എക്സൽ ഫയൽ അപ്‌ലോഡ് വിജയം!')" class="mt-4 w-full py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-sm font-semibold transition border border-slate-700">
                     ഫയൽ അപ്‌ലോഡ് ചെയ്യുക
                 </button>
             </div>
@@ -249,6 +249,22 @@
         </div>
     </main>
 
+    <!-- Custom Modal Popup -->
+    <div id="customModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl text-center">
+            <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 bg-emerald-500/20 text-emerald-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <h3 id="modalTitle" class="text-base font-bold text-white">വിജയം!</h3>
+            <p id="modalMessage" class="text-xs text-slate-300 mt-1 mb-5">സന്ദേശം</p>
+            <button onclick="closeCustomModal()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold transition shadow-md shadow-indigo-600/30">
+                ശരി (OK)
+            </button>
+        </div>
+    </div>
+
     <!-- Script Section -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -271,6 +287,16 @@
         let allStudentsData = [];
         let pLabel = "വിദ്യാർത്ഥി";
         let gLabel = "ക്ലാസ്";
+
+        window.showCustomModal = function(title, message) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalMessage').innerText = message;
+            document.getElementById('customModal').classList.remove('hidden');
+        }
+
+        window.closeCustomModal = function() {
+            document.getElementById('customModal').classList.add('hidden');
+        }
 
         window.switchTab = function(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
@@ -339,7 +365,6 @@
             const amount = Number(document.getElementById('feeAmount').value);
             const phone = document.getElementById('parentPhone').value;
 
-            // സ്ഥാപനത്തിന്റെ കോഡും അഡ്മിൻ നൽകുന്ന നമ്പറും ചേർത്ത് ഫുൾ ഐഡി ഉണ്ടാക്കുന്നു (ഉദാ: CSC41-001)
             const studentId = `${currentInstCode}-${customIdSuffix}`;
 
             try {
@@ -347,7 +372,7 @@
                 const querySnapshot = await getDocs(q);
 
                 if (!querySnapshot.empty) {
-                    alert(`ശ്രദ്ധിക്കുക: '${studentId}' എന്ന ഐഡി നമ്പറിൽ ഈ സ്ഥാപനത്തിൽAlready ഒരാൾ രജിസ്റ്റർ ചെയ്തിട്ടുണ്ട്.`);
+                    showCustomModal("ശ്രദ്ധിക്കുക", `'${studentId}' എന്ന ഐഡി നമ്പറിൽ ഈ സ്ഥാപനത്തിൽAlready ഒരാൾ രജിസ്റ്റർ ചെയ്തിട്ടുണ്ട്.`);
                     return;
                 }
 
@@ -356,12 +381,12 @@
                     status: "Pending", paidDate: "", receiptNo: "", instCode: currentInstCode, createdAt: new Date()
                 });
 
-                alert(`വിവരം വിജയകരമായി സേവ് ചെയ്തു! ഐഡി: ${studentId}`);
+                showCustomModal("വിജയം!", `വിവരം വിജയകരമായി സേവ് ചെയ്തു! ഐഡി: ${studentId}`);
                 event.target.reset();
                 loadStudents();
             } catch (error) { 
                 console.error("Error adding record: ", error);
-                alert("ഡാറ്റ സേവ് ചെയ്യുന്നതിൽ പിശക് സംഭവിച്ചു."); 
+                showCustomModal("പിശക്", "ഡാറ്റ സേവ് ചെയ്യുന്നതിൽ പിശക് സംഭവിച്ചു."); 
             }
         }
 
@@ -391,10 +416,10 @@
                     }
                 }
 
-                alert(`${targetClass}-ലെ ${count} പേർക്ക് ${feeType} (₹${amount}) വിജയകരമായി ചേർത്തു!`);
+                showCustomModal("വിജയം!", `${targetClass}-ലെ ${count} പേർക്ക് ${feeType} (₹${amount}) വിജയകരമായി ചേർത്തു!`);
                 event.target.reset();
                 loadStudents();
-            } catch (error) { alert("ഫീസ് ചേർക്കുന്നതിൽ പിശക് സംഭവിച്ചു."); }
+            } catch (error) { showCustomModal("പിശക്", "ഫീസ് ചേർക്കുന്നതിൽ പിശക് സംഭവിച്ചു."); }
         }
 
         window.markAsPaid = async function(docId) {
@@ -404,9 +429,9 @@
             const today = new Date().toLocaleDateString('en-GB');
             try {
                 await updateDoc(doc(db, "students", docId), { status: "Paid", paidDate: today, receiptNo });
-                alert("ഫീസ് വിജയകരമായി സ്വീകരിച്ചു!");
+                showCustomModal("വിജയം!", "ഫീസ് വിജയകരമായി സ്വീകരിച്ചു!");
                 loadStudents();
-            } catch (error) { alert("അപ്ഡേറ്റ് ചെയ്യുന്നതിൽ പിശക് സംഭവിച്ചു."); }
+            } catch (error) { showCustomModal("പിശക്", "അപ്ഡേറ്റ് ചെയ്യുന്നതിൽ പിശക് സംഭവിച്ചു."); }
         }
 
         async function loadStudents() {
