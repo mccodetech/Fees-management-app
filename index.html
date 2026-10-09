@@ -212,7 +212,7 @@
                     const data = doc.data();
                     found = true;
                     
-                    // സ്റ്റാറ്റസ് Active ആണെങ്കിൽ മാത്രം ലോഗിൻ അനുവദിക്കുന്നു
+                    // സ്റ്റാറ്റസ് Active ആണെങ്കിൽ മാത്രം ലോഗിൻ അനുവദിക്കുക
                     if (data.status === "Active") {
                         localStorage.setItem('loggedInEmail', email);
                         localStorage.setItem('instCode', data.instCode);
@@ -222,10 +222,10 @@
                             'institution-dashboard.html'
                         );
                     } else {
-                        // Pending ആണെങ്കിൽ ഡാഷ്‌ബോർഡിലേക്ക് പോകില്ല
+                        // Pending ആണെങ്കിൽ ലോഗിൻ തടയുക
                         showCustomModal(
                             lang === 'en' ? "Notice" : "ശ്രദ്ധിക്കുക", 
-                            lang === 'en' ? "Your account has not been activated by the super admin yet. Please wait for approval." : "നിങ്ങളുടെ അക്കൗണ്ട് സൂപ്പർ അഡ്മിൻ ഇതുവരെ സജീവമാക്കിയിട്ടില്ല. അനുമതി ലഭിക്കുന്നതുവരെ കാത്തിരിക്കുക."
+                            lang === 'en' ? "Your account is pending approval by the super admin." : "നിങ്ങളുടെ അക്കൗണ്ടിന്റെ അനുമതി സൂപ്പർ അഡ്മിൻ ഇതുവരെ നൽകിയിട്ടില്ല."
                         );
                     }
                 });
