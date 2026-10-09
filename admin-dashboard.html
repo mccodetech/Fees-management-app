@@ -52,11 +52,25 @@
             </div>
         </div>
 
-        <!-- Institutions List Table -->
+        <!-- Filter & Institutions List Table -->
         <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
-            <div class="p-6 border-b border-slate-800 flex justify-between items-center">
+            <div class="p-6 border-b border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4">
                 <h2 class="text-lg font-semibold">സ്ഥാപനങ്ങളുടെ മാനേജ്‌മെന്റും കോഡ് നിയന്ത്രണവും</h2>
+                
+                <!-- Filter Dropdown -->
+                <div class="flex items-center space-x-2">
+                    <span class="text-xs text-slate-400">ഫിൽട്ടർ ചെയ്യുക:</span>
+                    <select id="filterType" onchange="filterInstitutions()" class="bg-slate-950 border border-slate-700 text-xs text-white px-3 py-2 rounded-xl focus:outline-none">
+                        <option value="ALL">എല്ലാ സ്ഥാപനങ്ങളും</option>
+                        <option value="മദ്രസ">മദ്രസ (Madrasa)</option>
+                        <option value="സ്കൂൾ">സ്കൂൾ (School)</option>
+                        <option value="കോളേജ്">കോളേജ് (College)</option>
+                        <option value="മഹല്ല്">മഹല്ല് (Mahall)</option>
+                        <option value="മറ്റ് കമ്മറ്റികൾ">മറ്റ് കമ്മറ്റികൾ (Other)</option>
+                    </select>
+                </div>
             </div>
+
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
@@ -94,6 +108,8 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        let allInstitutions = [];
+
         window.onload = async function() {
             await loadInstitutions();
         }
@@ -101,68 +117,105 @@
         async function loadInstitutions() {
             try {
                 const querySnapshot = await getDocs(collection(db, "institutions"));
-                let rows = "";
+                allInstitutions = [];
                 let total = 0, pending = 0, active = 0;
 
                 querySnapshot.forEach((docSnap) => {
-                    const data = docSnap.data();
-                    const id = docSnap.id;
-                    total++;
-
-                    if (data.status === "Active") active++;
-                    else pending++;
-
-                    // 2 അക്ഷരങ്ങൾ മാത്രമുള്ള പ്രിഫിക്സ് കോഡുകൾ സെറ്റ് ചെയ്യുന്നു
-                    let defaultPrefix = "IN01";
-                    if (data.type === "മദ്രസ") defaultPrefix = "MD01";
-                    else if (data.type === "സ്കൂൾ") defaultPrefix = "SC01";
-                    else if (data.type === "കോളേജ്") defaultPrefix = "CL01";
-                    else if (data.type === "മഹല്ല്") defaultPrefix = "MH01";
-                    else if (data.type === "മറ്റ് കമ്മറ്റികൾ") defaultPrefix = "CO01";
-
-                    const currentCode = data.instCode || defaultPrefix;
-
-                    rows += `
-                        <tr>
-                            <td class="p-4">
-                                <div class="font-semibold text-white">${data.name}</div>
-                                <div class="text-xs text-indigo-400 font-medium">${data.type}</div>
-                                <div class="text-slate-400 text-[11px] mt-0.5">സ്ഥലം: ${data.location || '-'}</div>
-                            </td>
-                            <td class="p-4">
-                                <div class="text-slate-300 text-xs">${data.email}</div>
-                                <div class="text-slate-400 text-xs">${data.phone}</div>
-                            </td>
-                            <td class="p-4">
-                                <div class="flex items-center space-x-2">
-                                    <input type="text" id="code_${id}" value="${currentCode}" class="px-3 py-1.5 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white uppercase font-bold w-28 text-center">
-                                    <button onclick="updateInstCode('${id}')" class="text-xs bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-xl transition font-semibold">കോഡ് മാറ്റുക</button>
-                                </div>
-                            </td>
-                            <td class="p-4">
-                                <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${data.status === 'Active' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'}">
-                                    ${data.status || 'Pending'}
-                                </span>
-                            </td>
-                            <td class="p-4 text-right space-x-2">
-                                <button onclick="toggleStatus('${id}', '${data.status}')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-xl transition font-medium">
-                                    ${data.status === 'Active' ? 'പെൻഡിങ് ആക്കുക' : 'സജീവമാക്കുക'}
-                                </button>
-                                <button onclick="deleteInst('${id}')" class="text-xs bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 px-3 py-1.5 rounded-xl transition font-medium">
-                                    ഡിലീറ്റ്
-                                </button>
-                            </td>
-                        </tr>
-                    `;
+                    const data = docSnap.id ? { id: docSnap.id, ...docSnap.data() } : null;
+                    if (data) {
+                        allInstitutions.push(data);
+                        total++;
+                        if (data.status === "Active") active++;
+                        else pending++;
+                    }
                 });
 
-                document.getElementById('institutionsTableBody').innerHTML = rows || `<tr><td colspan="5" class="p-4 text-center text-slate-400">സ്ഥാപനങ്ങൾ ഒന്നും രജിസ്റ്റർ ചെയ്തിട്ടില്ല.</td></tr>`;
                 document.getElementById('totalInstCount').innerText = total;
                 document.getElementById('pendingInstCount').innerText = pending;
                 document.getElementById('activeInstCount').innerText = active;
+
+                renderTable(allInstitutions);
             } catch (error) {
                 console.error("Error loading institutions: ", error);
             }
+        }
+
+        window.filterInstitutions = function() {
+            const selectedType = document.getElementById('filterType').value;
+            if (selectedType === "ALL") {
+                renderTable(allInstitutions);
+            } else {
+                const filtered = allInstitutions.filter(inst => inst.type === selectedType);
+                renderTable(filtered);
+            }
+        }
+
+        function getNextAutoCode(instType) {
+            let prefix = "IN";
+            if (instType === "മദ്രസ") prefix = "MD";
+            else if (instType === "സ്കൂൾ") prefix = "SC";
+            else if (instType === "കോളേജ്") prefix = "CL";
+            else if (instType === "മഹല്ല്") prefix = "MH";
+            else if (instType === "മറ്റ് കമ്മറ്റികൾ") prefix = "CO";
+
+            // നിലവിലുള്ള അതേ തരം സ്ഥാപനങ്ങളുടെ കോഡുകൾ പരിശോധിക്കുന്നു
+            let maxNum = 0;
+            allInstitutions.forEach(inst => {
+                if (inst.type === instType && inst.instCode && inst.instCode.startsWith(prefix)) {
+                    let num = parseInt(inst.instCode.replace(prefix, ""));
+                    if (!isNaN(num) && num > maxNum) {
+                        maxNum = num;
+                    }
+                }
+            });
+
+            const nextNum = String(maxNum + 1).padStart(2, '0');
+            return `${prefix}${nextNum}`;
+        }
+
+        function renderTable(dataList) {
+            let rows = "";
+            dataList.forEach((data) => {
+                const id = data.id;
+                
+                // കോഡ് ഇല്ലെങ്കിൽ അടുത്ത ഓട്ടോമാറ്റിക് കോഡ് ജനറേറ്റ് ചെയ്യുന്നു
+                const autoCode = data.instCode || getNextAutoCode(data.type);
+
+                rows += `
+                    <tr>
+                        <td class="p-4">
+                            <div class="font-semibold text-white">${data.name}</div>
+                            <div class="text-xs text-indigo-400 font-medium">${data.type}</div>
+                            <div class="text-slate-400 text-[11px] mt-0.5">സ്ഥലം: ${data.location || data.panchayath || '-'}</div>
+                        </td>
+                        <td class="p-4">
+                            <div class="text-slate-300 text-xs">${data.email}</div>
+                            <div class="text-slate-400 text-xs">${data.phone || data.whatsapp || '-'}</div>
+                        </td>
+                        <td class="p-4">
+                            <div class="flex items-center space-x-2">
+                                <input type="text" id="code_${id}" value="${autoCode}" class="px-3 py-1.5 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white uppercase font-bold w-28 text-center">
+                                <button onclick="updateInstCode('${id}', '${data.type}')" class="text-xs bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-xl transition font-semibold">കോഡ് നൽകി ആക്ടീവ് ആക്കുക</button>
+                            </div>
+                        </td>
+                        <td class="p-4">
+                            <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${data.status === 'Active' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'}">
+                                ${data.status || 'Pending'}
+                            </span>
+                        </td>
+                        <td class="p-4 text-right space-x-2">
+                            <button onclick="toggleStatus('${id}', '${data.status}')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-xl transition font-medium">
+                                ${data.status === 'Active' ? 'പെൻഡിങ് ആക്കുക' : 'സജീവമാക്കുക'}
+                            </button>
+                            <button onclick="deleteInst('${id}')" class="text-xs bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 px-3 py-1.5 rounded-xl transition font-medium">
+                                ഡിലീറ്റ്
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('institutionsTableBody').innerHTML = rows || `<tr><td colspan="5" class="p-4 text-center text-slate-400">സ്ഥാപനങ്ങൾ ഒന്നും ലഭ്യമല്ല.</td></tr>`;
         }
 
         window.updateInstCode = async function(id) {
@@ -177,7 +230,7 @@
                     instCode: newCode,
                     status: "Active"
                 });
-                alert(`സ്ഥാപനത്തിന്റെ കോഡ് '${newCode}' എന്ന് വിജയകരമായി മാറ്റി അക്കൗണ്ട് സജീവമാക്കിയിരിക്കുന്നു!`);
+                alert(`സ്ഥാപനത്തിന്റെ കോഡ് '${newCode}' എന്ന് സെറ്റ് ചെയ്ത് അക്കൗണ്ട് സജീവമാക്കിയിരിക്കുന്നു!`);
                 loadInstitutions();
             } catch (error) {
                 alert("കോഡ് അപ്ഡേറ്റ് ചെയ്യുന്നതിൽ പിശക് സംഭവിച്ചു.");
