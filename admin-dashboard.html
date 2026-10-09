@@ -77,7 +77,7 @@
                         <tr class="bg-slate-950/50 text-slate-400 text-xs uppercase tracking-wider border-b border-slate-800">
                             <th class="p-4">സ്ഥാപനം & തരം</th>
                             <th class="p-4">കോൺടാക്റ്റ് വിവരങ്ങൾ</th>
-                            <th class="p-4">സ്ഥാപന കോഡ് (Prefix Code)</th>
+                            <th class="p-4">സ്ഥാപന കോഡ് (PREFIX CODE)</th>
                             <th class="p-4">സ്റ്റാറ്റസ്</th>
                             <th class="p-4 text-right">നടപടികൾ</th>
                         </tr>
@@ -158,7 +158,6 @@
             else if (instType === "മഹല്ല്") prefix = "MH";
             else if (instType === "മറ്റ് കമ്മറ്റികൾ") prefix = "CO";
 
-            // നിലവിലുള്ള അതേ തരം സ്ഥാപനങ്ങളുടെ കോഡുകൾ പരിശോധിക്കുന്നു
             let maxNum = 0;
             allInstitutions.forEach(inst => {
                 if (inst.type === instType && inst.instCode && inst.instCode.startsWith(prefix)) {
@@ -177,9 +176,12 @@
             let rows = "";
             dataList.forEach((data) => {
                 const id = data.id;
-                
-                // കോഡ് ഇല്ലെങ്കിൽ അടുത്ത ഓട്ടോമാറ്റിക് കോഡ് ജനറേറ്റ് ചെയ്യുന്നു
                 const autoCode = data.instCode || getNextAutoCode(data.type);
+                const phoneNum = data.phone || data.whatsapp || '';
+
+                // വാട്‌സ്ആപ്പ് മെസ്സേജ് ടെംപ്ലേറ്റ്
+                const whatsappMsg = `അസ്സലാമു അലൈക്കും, ${data.name} -ന്റെ ഫീസ് മാനേജ്‌മെന്റ് പോർട്ടൽ അക്കൗണ്ട് സജീവമാക്കിയിരിക്കുന്നു.\n\nസ്ഥാപന കോഡ് (ID Code): ${autoCode}\nഇമെയിൽ: ${data.email}\nപാസ്‌വേഡ്: ${data.password || 'നിങ്ങൾ നൽകിയത്'}\n\nപോർട്ടലിൽ ലോഗിൻ ചെയ്യാൻ ഈ ലിങ്ക് ഉപയോഗിക്കുക: https://mccodetech.github.io/Fees-management-app/index.html`;
+                const whatsappUrl = phoneNum ? `https://wa.me/91${phoneNum}?text=` + encodeURIComponent(whatsappMsg) : '#';
 
                 rows += `
                     <tr>
@@ -190,12 +192,12 @@
                         </td>
                         <td class="p-4">
                             <div class="text-slate-300 text-xs">${data.email}</div>
-                            <div class="text-slate-400 text-xs">${data.phone || data.whatsapp || '-'}</div>
+                            <div class="text-slate-400 text-xs">${phoneNum || '-'}</div>
                         </td>
                         <td class="p-4">
                             <div class="flex items-center space-x-2">
                                 <input type="text" id="code_${id}" value="${autoCode}" class="px-3 py-1.5 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white uppercase font-bold w-28 text-center">
-                                <button onclick="updateInstCode('${id}', '${data.type}')" class="text-xs bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-xl transition font-semibold">കോഡ് നൽകി ആക്ടീവ് ആക്കുക</button>
+                                <button onclick="updateInstCode('${id}', '${phoneNum}', '${autoCode}', '${data.email}', '${data.name}')" class="text-xs bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-xl transition font-semibold">കോഡ് നൽകി ആക്ടീവ് ആക്കുക</button>
                             </div>
                         </td>
                         <td class="p-4">
@@ -204,6 +206,7 @@
                             </span>
                         </td>
                         <td class="p-4 text-right space-x-2">
+                            ${data.status === 'Active' && phoneNum ? `<a href="${whatsappUrl}" target="_blank" class="text-xs bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 px-3 py-1.5 rounded-xl transition font-medium inline-block">വാട്‌സ്ആപ്പ് അയക്കുക</a>` : ''}
                             <button onclick="toggleStatus('${id}', '${data.status}')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-xl transition font-medium">
                                 ${data.status === 'Active' ? 'പെൻഡിങ് ആക്കുക' : 'സജീവമാക്കുക'}
                             </button>
@@ -218,7 +221,7 @@
             document.getElementById('institutionsTableBody').innerHTML = rows || `<tr><td colspan="5" class="p-4 text-center text-slate-400">സ്ഥാപനങ്ങൾ ഒന്നും ലഭ്യമല്ല.</td></tr>`;
         }
 
-        window.updateInstCode = async function(id) {
+        window.updateInstCode = async function(id, phoneNum, code, email, name) {
             const newCode = document.getElementById(`code_${id}`).value.trim().toUpperCase();
             if (!newCode) {
                 alert("ദയവായി ഒരു കോഡ് നൽകുക.");
@@ -230,7 +233,15 @@
                     instCode: newCode,
                     status: "Active"
                 });
+                
                 alert(`സ്ഥാപനത്തിന്റെ കോഡ് '${newCode}' എന്ന് സെറ്റ് ചെയ്ത് അക്കൗണ്ട് സജീവമാക്കിയിരിക്കുന്നു!`);
+                
+                // വാട്‌സ്ആപ്പിലേക്ക് സന്ദേശം അയക്കാൻ ചോദിക്കുന്നു
+                if(phoneNum) {
+                    const msg = `അസ്സലാമു അലൈക്കും, ${name} -ന്റെ ഫീസ് മാനേജ്‌മെന്റ് പോർട്ടൽ അക്കൗണ്ട് സജീവമാക്കിയിരിക്കുന്നു.\n\nസ്ഥാപന കോഡ് (ID Code): ${newCode}\nഇമെയിൽ: ${email}\n\nപോർട്ടലിൽ ലോഗിൻ ചെയ്യാൻ ഈ ലിങ്ക് ഉപയോഗിക്കുക: https://mccodetech.github.io/Fees-management-app/index.html`;
+                    window.open(`https://wa.me/91${phoneNum}?text=` + encodeURIComponent(msg), '_blank');
+                }
+
                 loadInstitutions();
             } catch (error) {
                 alert("കോഡ് അപ്ഡേറ്റ് ചെയ്യുന്നതിൽ പിശക് സംഭവിച്ചു.");
