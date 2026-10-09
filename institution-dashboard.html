@@ -77,18 +77,23 @@
                         </div>
                     </div>
 
+                    <!-- വീട്ടുപേരും പിതാവിന്റെ പേരും -->
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1" id="labelHouse">വീട്ടുപേര് (House Name)</label>
                             <input type="text" id="inputHouse" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none uppercase transition" placeholder="വീട്ടുപേര്">
                         </div>
                         <div>
+                            <label class="block text-xs font-medium text-slate-300 mb-1">പിതാവിന്റെ പേര് (Father's Name)</label>
+                            <input type="text" id="inputFather" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none uppercase transition" placeholder="പിതാവിന്റെ പേര്">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1" id="extraLabel">ഗ്രൂപ്പ് / ക്ലാസ്</label>
                             <input type="text" id="inputExtra" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none uppercase transition" placeholder="ഉദാ: WARD 1">
                         </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1">ഫീസ് ഇനം</label>
                             <select id="feeType" class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
@@ -99,15 +104,17 @@
                                 <option>മറ്റു ഇനങ്ങൾ (Other Fees)</option>
                             </select>
                         </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1">തുക (₹)</label>
                             <input type="number" id="feeAmount" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none transition" placeholder="500">
                         </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1">വാട്‌സ്ആപ്പ് നമ്പർ</label>
-                        <input type="tel" id="parentPhone" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none transition" placeholder="9876543210">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-300 mb-1">വാട്‌സ്ആപ്പ് നമ്പർ</label>
+                            <input type="tel" id="parentPhone" required class="w-full px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none transition" placeholder="9876543210">
+                        </div>
                     </div>
 
                     <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-semibold transition shadow-lg shadow-indigo-600/30">
@@ -148,7 +155,7 @@
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-slate-950/50 text-slate-400 text-xs uppercase tracking-wider border-b border-slate-800">
-                                <th class="p-4">പേര് & വീട്</th>
+                                <th class="p-4">പേര് & വീട് / പിതാവ്</th>
                                 <th class="p-4">ഐഡി നമ്പർ</th>
                                 <th class="p-4" id="thDirGroup">ഗ്രൂപ്പ്</th>
                                 <th class="p-4">ഫോൺ നമ്പർ</th>
@@ -360,6 +367,7 @@
             const customIdSuffix = document.getElementById('inputCustomId').value.trim().toUpperCase();
             const name = document.getElementById('inputName').value.trim().toUpperCase();
             const house = document.getElementById('inputHouse').value.trim().toUpperCase();
+            const father = document.getElementById('inputFather').value.trim().toUpperCase();
             const extraInput = document.getElementById('inputExtra').value.trim().toUpperCase();
             const feeType = document.getElementById('feeType').value;
             const amount = Number(document.getElementById('feeAmount').value);
@@ -377,7 +385,7 @@
                 }
 
                 await addDoc(collection(db, "students"), {
-                    name, house, studentId, extraInput, feeType, amount, phone,
+                    name, house, father, studentId, extraInput, feeType, amount, phone,
                     status: "Pending", paidDate: "", receiptNo: "", instCode: currentInstCode, createdAt: new Date()
                 });
 
@@ -408,7 +416,7 @@
                     if (!processedStudents.has(studentData.studentId)) {
                         processedStudents.add(studentData.studentId);
                         await addDoc(collection(db, "students"), {
-                            name: studentData.name, house: studentData.house, studentId: studentData.studentId,
+                            name: studentData.name, house: studentData.house, father: studentData.father || '', studentId: studentData.studentId,
                             extraInput: studentData.extraInput, feeType, amount, phone: studentData.phone,
                             status: "Pending", paidDate: "", receiptNo: "", instCode: currentInstCode, createdAt: new Date()
                         });
@@ -465,7 +473,7 @@
             uniqueMap.forEach((student) => {
                 rows += `
                     <tr>
-                        <td class="p-4"><div class="font-semibold text-white">${student.name}</div><div class="text-xs text-slate-400">വീട്: ${student.house}</div></td>
+                        <td class="p-4"><div class="font-semibold text-white">${student.name}</div><div class="text-xs text-slate-400">വീട്: ${student.house} | പിതാവ്: ${student.father || '-'}</div></td>
                         <td class="p-4"><span class="bg-indigo-500/20 text-indigo-300 px-2.5 py-1 rounded-lg text-xs font-bold">${student.studentId}</span></td>
                         <td class="p-4 text-slate-300">${student.extraInput || '-'}</td>
                         <td class="p-4 text-slate-300">${student.phone}</td>
@@ -499,7 +507,7 @@
 
                 rows += `
                     <tr>
-                        <td class="p-4"><div class="font-semibold text-white">${data.name}</div><div class="text-xs text-slate-400">വീട്: ${data.house}</div></td>
+                        <td class="p-4"><div class="font-semibold text-white">${data.name}</div><div class="text-xs text-slate-400">വീട്: ${data.house} | പിതാവ്: ${data.father || '-'}</div></td>
                         <td class="p-4"><span class="bg-indigo-500/20 text-indigo-300 px-2.5 py-1 rounded-lg text-xs font-bold">${data.studentId}</span></td>
                         <td class="p-4 text-slate-300">${data.extraInput || '-'}</td>
                         <td class="p-4"><div class="text-white">${data.feeType}</div><div class="text-xs font-semibold text-amber-400">₹ ${data.amount}</div></td>
@@ -522,7 +530,7 @@
 
         window.downloadExcelFormat = function(event) {
             event.preventDefault();
-            const csvContent = "data:text/csv;charset=utf-8,Name,House,Group_Or_Class,Fee_Type,Amount,Phone\nMUHAMMED,KURIKKAL,WARD 1,Monthly Fee,500,9876543210";
+            const csvContent = "data:text/csv;charset=utf-8,Name,House,Father,Group_Or_Class,Fee_Type,Amount,Phone\nMUHAMMED,KURIKKAL,AHAMMED,WARD 1,Monthly Fee,500,9876543210";
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
